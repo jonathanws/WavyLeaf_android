@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <fragment
+        android:id="@+id/mapview_checkin"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="96dp" />
+    
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="3dp"
+        android:background="@drawable/drop_shadow" />
+
+    <!-- #E8E3DC -->
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#E5E5E5"
+            android:orientation="vertical"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="16dp" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#F2F2F2"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/tv_picturenotes"
+                    android:layout_width="match_parent"
+                    android:layout_height="24dp"
+                    android:background="#FFFFFF"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="8dp"
+                    android:text="PICTURE/NOTES"
+                    android:textColor="@android:color/secondary_text_light" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="4dp" >
+
+                    <ImageButton
+                        android:layout_width="120dp"
+                        android:layout_height="120dp"
+                        android:layout_marginRight="4dp"
+                        android:src="@drawable/camera" />
+
+                    <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ems="10"
+                        android:inputType="textMultiLine"
+                        android:maxHeight="120dp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="3dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/drop_shadow" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#F2F2F2"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/tv_percentageseen"
+                    android:layout_width="match_parent"
+                    android:layout_height="24dp"
+                    android:background="#FFFFFF"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="8dp"
+                    android:text="Percentage Seen"
+                    android:textColor="@android:color/secondary_text_light" />
+
+                <RadioGroup
+                    android:id="@+id/toggleGroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" >
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="4dp" >
+
+                        <ToggleButton
+                            android:id="@+id/bu_1"
+                            android:layout_width="0dp"
+                            android:layout_height="48dp"
+                            android:layout_weight="1"
+                            android:onClick="onToggle"
+                            android:textOff="0%"
+                            android:textOn="0%"
+                            android:textSize="20sp" />
+
+                        <ToggleButton
+                            android:id="@+id/bu_2"
+                            android:layout_width="0dp"
+                            android:layout_height="48dp"
+                            android:layout_weight="1"
+                            android:onClick="onToggle"
+                            android:textOff="1-10%"
+                            android:textOn="1-10%"
+                            android:textSize="20sp" />
+
+                        <ToggleButton
+                            android:id="@+id/bu_3"
+                            android:layout_width="0dp"
+                            android:layout_height="48dp"
+                            android:layout_weight="1"
+                            android:onClick="onToggle"
+                            android:textOff="10-25%"
+                            android:textOn="10-25%"
+                            android:textSize="20sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="4dp" >
+
+                        <ToggleButton
+                            android:id="@+id/bu_4"
+                            android:layout_width="0dp"
+                            android:layout_height="48dp"
+                            android:layout_weight="1"
+                            android:onClick="onToggle"
+                            android:textOff="25-50%"
+                            android:textOn="25-50%"
+                            android:textSize="20sp" />
+
+                        <ToggleButton
+                            android:id="@+id/bu_5"
+                            android:layout_width="0dp"
+                            android:layout_height="48dp"
+                            android:layout_weight="1"
+                            android:onClick="onToggle"
+                            android:textOff="50-75%"
+                            android:textOn="50-75%"
+                            android:textSize="20sp" />
+
+                        <ToggleButton
+                            android:id="@+id/bu_6"
+                            android:layout_width="0dp"
+                            android:layout_height="48dp"
+                            android:layout_weight="1"
+                            android:onClick="onToggle"
+                            android:textOff="75-100%"
+                            android:textOn="75-100%"
+                            android:textSize="20sp" />
+                    </LinearLayout>
+                </RadioGroup>
+            </LinearLayout>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="3dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/drop_shadow" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#F2F2F2"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/tv_coordinates"
+                    android:layout_width="match_parent"
+                    android:layout_height="24dp"
+                    android:background="#FFFFFF"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="8dp"
+                    android:text="Coordinates"
+                    android:textColor="@android:color/secondary_text_light" />
+
+                <TextView
+                    android:id="@+id/tv_latitude"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="12dp"
+                    android:paddingLeft="8dp"
+                    android:paddingTop="12dp"
+                    android:text="Latitude"
+                    android:textColor="@android:color/black" />
+                
+                <TextView
+                    android:id="@+id/tv_longitude"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="12dp"
+                    android:paddingLeft="8dp"
+                    android:paddingTop="12dp"
+                    android:text="Longitude"
+                    android:textColor="@android:color/black" />
+                
+            </LinearLayout>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="3dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/drop_shadow" />
+            
+        </LinearLayout>
+        
+    </ScrollView>
+
+</LinearLayout>
