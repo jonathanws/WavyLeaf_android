@@ -3,7 +3,6 @@ package com.towson.wavyleaf;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Typeface;
 import android.location.Location;
 import android.location.LocationManager;
@@ -26,6 +25,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.CancelableCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -52,6 +52,7 @@ public class Report extends SherlockFragmentActivity {
 	
 	public static final int LEGAL = 1;
 	protected GoogleMap mMap;
+	private UiSettings mUiSettings;
 	protected TextView tvlat, tvlong, tvpic, tvper, tvcoor;
 	protected ToggleButton b1, b2, b3, b4, b5, b6;
 	protected RadioGroup rg;
@@ -62,7 +63,7 @@ public class Report extends SherlockFragmentActivity {
 	protected void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
 		setContentView(R.layout.layout_report);
-//		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		init();
 		// Most setup methods are in onResume()
 	}
@@ -188,6 +189,9 @@ public class Report extends SherlockFragmentActivity {
 	
 	private void setUpMap() {
         updateMyLocation();
+        mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+        mUiSettings = mMap.getUiSettings();
+        mUiSettings.setMyLocationButtonEnabled(false); // Currently overlapped by zoom buttons
     }
 	
 	private void updateMyLocation() {
