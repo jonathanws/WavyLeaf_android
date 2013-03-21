@@ -3,6 +3,7 @@ package com.towson.wavyleaf;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Typeface;
 import android.location.Location;
 import android.location.LocationManager;
@@ -50,7 +51,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 public class Report extends SherlockFragmentActivity {
 	
-	public static final int LEGAL = 1;
+	public static final int LEGAL = 1, MAPTYPE = 2; // Used for calling dialogs. arbitrary numbers
 	protected GoogleMap mMap;
 	private UiSettings mUiSettings;
 	protected TextView tvlat, tvlong, tvpic, tvper, tvcoor;
@@ -150,8 +151,10 @@ public class Report extends SherlockFragmentActivity {
 //            startActivity(mainIntent);
 //            finish();
 //            return true;
+		case R.id.menu_maptype:
+			showDialog(MAPTYPE);
+			return true;
         case R.id.menu_submit:
-        	Toast.makeText(getApplicationContext(), "Submit", Toast.LENGTH_SHORT).show();
         	return true;
         case R.id.menu_legal:
         	showDialog(LEGAL);
@@ -278,13 +281,24 @@ public class Report extends SherlockFragmentActivity {
 	@Override
 	protected Dialog onCreateDialog(int id) {
 		switch(id) {
-		case LEGAL:
-			return new AlertDialog.Builder(this)
-			.setTitle("Legal Notice")
-			.setMessage(GooglePlayServicesUtil.getOpenSourceSoftwareLicenseInfo(getApplicationContext()))
-			.setPositiveButton("Got it", null)
-			.setNegativeButton("Cancel", null)
-			.create();
+			case LEGAL:
+				return new AlertDialog.Builder(this)
+				.setTitle("Legal Notice")
+				.setMessage(GooglePlayServicesUtil.getOpenSourceSoftwareLicenseInfo(getApplicationContext()))
+				.setPositiveButton("Got it", null)
+				.setNegativeButton("Cancel", null)
+				.create();
+			case MAPTYPE:
+				return new AlertDialog.Builder(this)
+				.setItems(R.array.maptype_array, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int item) {
+						if (item == 0)
+							mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+						else if (item == 1)
+							mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+					}
+				})
+				.create();
 		}
 		return super.onCreateDialog(id);
 		//http://stackoverflow.com/questions/3326366/what-context-should-i-use-alertdialog-builder-in
