@@ -1,0 +1,39 @@
+<com.towson.wavyleaf.DashboardLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_weight="1"
+    android:background="#eeeeee" >
+
+    <Button
+        android:id="@+id/button_new"
+        style="@style/DashboardButton"
+        android:background="?android:selectableItemBackground"
+        android:drawableTop="@drawable/temp_144x96"
+        android:text="New\nRecord"
+        android:textColor="#db4437" />
+
+    <Button
+        android:id="@+id/button_edit"
+        style="@style/DashboardButton"
+        android:background="?android:selectableItemBackground"
+        android:drawableTop="@drawable/temp_144x96"
+        android:text="Edit\nRecord"
+        android:textColor="#489935" />
+
+    <Button
+        android:id="@+id/button_session"
+        style="@style/DashboardButton"
+        android:background="?android:selectableItemBackground"
+        android:drawableTop="@drawable/temp_144x96"
+        android:text="Start\nSession"
+        android:textColor="#7f00ff" />
+
+    <Button
+        android:id="@+id/button_upload"
+        style="@style/DashboardButton"
+        android:background="?android:selectableItemBackground"
+        android:drawableTop="@drawable/temp_144x96"
+        android:text="Upload\nRecords"
+        android:textColor="#0000ff" />
+    
+</com.towson.wavyleaf.DashboardLayout>

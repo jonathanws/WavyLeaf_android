@@ -53,12 +53,14 @@
                     android:padding="4dp" >
 
                     <ImageButton
+                        android:id="@+id/report_imagebutton"
                         android:layout_width="120dp"
                         android:layout_height="120dp"
                         android:layout_marginRight="4dp"
                         android:src="@drawable/camera" />
 
                     <EditText
+                        android:id="@+id/notes"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"

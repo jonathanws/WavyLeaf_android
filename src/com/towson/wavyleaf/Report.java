@@ -4,12 +4,17 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -32,7 +37,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-//TODO obtain debug map key
 //TODO (later) obtain signature map key
 //TODO Do we want each marker to have a bubble? I'd say no (JS)
 //TODO Decide which text to use in layout (compare "picture/notes" to "percentage seen"
@@ -51,12 +55,15 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 public class Report extends SherlockFragmentActivity {
 	
-	public static final int LEGAL = 1, MAPTYPE = 2; // Used for calling dialogs. arbitrary numbers
+	public static final int LEGAL = 1, MAPTYPE = 2, CAMERA = 3; // Used for calling dialogs. arbitrary numbers
+	public static final int CAMERA_REQUEST = 1337;
 	protected GoogleMap mMap;
 	private UiSettings mUiSettings;
-	protected TextView tvlat, tvlong, tvpic, tvper, tvcoor;
-	protected ToggleButton b1, b2, b3, b4, b5, b6;
+	protected ImageButton ib;
 	protected RadioGroup rg;
+	protected TextView tvlat, tvlong, tvpic, tvper, tvcoor;
+	protected EditText notes;
+	protected ToggleButton b1, b2, b3, b4, b5, b6;
 	protected LocationManager lm;
 	protected CameraPosition userCurrentPosition;
 	
@@ -67,9 +74,16 @@ public class Report extends SherlockFragmentActivity {
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		init();
 		// Most setup methods are in onResume()
+		
+//		if (bundle != null) {
+//			Bitmap icon = bundle.getParcelable("imagebuttonbitmap");
+////			Toast.makeText(getApplicationContext(), icon.getConfig() + "", Toast.LENGTH_SHORT).show();
+//			ib.setImageBitmap( (Bitmap) icon);
+//		}
 	}
 	
 	protected void init() {
+		getWindow().setBackgroundDrawable(null);
 		Typeface tf_light = Typeface.createFromAsset(getAssets(), "fonts/roboto_light.ttf");
 		Typeface tf_bold = Typeface.createFromAsset(getAssets(), "fonts/roboto_bold.ttf");
 		
@@ -78,6 +92,7 @@ public class Report extends SherlockFragmentActivity {
 		tvpic = (TextView) findViewById(R.id.tv_picturenotes);
 		tvper = (TextView) findViewById(R.id.tv_percentageseen);
 		tvcoor = (TextView) findViewById(R.id.tv_coordinates);
+		notes = (EditText) findViewById(R.id.notes);
 		b1 = (ToggleButton) findViewById(R.id.bu_1);
 		b2 = (ToggleButton) findViewById(R.id.bu_2);
 		b3 = (ToggleButton) findViewById(R.id.bu_3);
@@ -85,6 +100,13 @@ public class Report extends SherlockFragmentActivity {
 		b5 = (ToggleButton) findViewById(R.id.bu_5);
 		b6 = (ToggleButton) findViewById(R.id.bu_6);
 		rg = ((RadioGroup) findViewById(R.id.toggleGroup));
+		ib = (ImageButton) findViewById(R.id.report_imagebutton);
+		
+		ib.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                showDialog(CAMERA);
+            }
+        });
 		
 		//set all the beautiful typefaces
 		tvlat.setTypeface(tf_light);
@@ -103,13 +125,27 @@ public class Report extends SherlockFragmentActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		setUpMapIfNeeded();
 		if (doesDeviceHaveGooglePlayServices()) {
+			setUpMapIfNeeded();
 			wheresWaldo(true);
 			setDragListener();
 		}
 	}
 	
+	// On phone rotate
+//	@Override
+//	protected void onSaveInstanceState(Bundle outState) {
+//		super.onSaveInstanceState(outState);
+//		// store text in edittext
+//		if (notes.getText() != null)
+//			outState.putString("notes", notes.getText().toString());
+//		// store bitmap
+//		if (true) { // TODO if imagebutton has bitmap
+//			Bitmap bm = ib.getDrawingCache();
+//			outState.putParcelable("imagebuttonbitmap", bm);
+//		}
+//	}
+
 	protected boolean doesDeviceHaveGooglePlayServices() {
 		int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getApplicationContext());
 		//If user doesn't have the apk, then it prompts them to download it
@@ -205,18 +241,18 @@ public class Report extends SherlockFragmentActivity {
 		lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		Location location = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER); //TODO network or gps?
 		
-		// Own method so they can be updated in real time
-		setEditTexts(location.getLatitude(), location.getLongitude());
-		
 		if (hasPlayAPK) { // Crashes otherwise
+			// Own method so they can be updated in real time
+			setEditTexts(location.getLatitude(), location.getLongitude());
+			
 			goToCurrentPosition(location.getLatitude(), location.getLongitude());
 			setCurrentPositionMarker(location.getLatitude(), location.getLongitude());
 		}
 	}
 	
 	private void setEditTexts(double latitude, double longitude) {
-		tvlat.setText("Latitude:\t" + latitude);
-		tvlong.setText("Longitude:\t" + longitude);
+		tvlat.setText("Latitude:\t\t" + latitude);
+		tvlong.setText("Longitude:\t\t" + longitude);
 	}
 	
 	public void goToCurrentPosition(double latitude, double longitude) {
@@ -299,9 +335,29 @@ public class Report extends SherlockFragmentActivity {
 					}
 				})
 				.create();
+			case CAMERA:
+				return new AlertDialog.Builder(this)
+				.setItems(R.array.camera_array, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int item) {
+						if (item == 0) {
+							Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE); 
+			                startActivityForResult(cameraIntent, CAMERA_REQUEST); 
+						}
+						else if (item == 1)
+							Toast.makeText(getApplicationContext(), "Choose from gallery", Toast.LENGTH_SHORT).show();
+					}
+				})
+				.create();
 		}
 		return super.onCreateDialog(id);
 		//http://stackoverflow.com/questions/3326366/what-context-should-i-use-alertdialog-builder-in
 	}
+	
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {  
+        if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {  
+            Bitmap photo = (Bitmap) data.getExtras().get("data"); 
+            ib.setImageBitmap(photo);
+        }  
+    }
 
 }

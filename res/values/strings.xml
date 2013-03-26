@@ -3,6 +3,11 @@
 
     <string name="app_name">Wavy Leaf</string>
     
+    <string-array name="camera_array">
+        <item>Take Picture</item>
+        <item>Choose From Gallery</item>
+    </string-array>
+    
     <string-array name="maptype_array">
         <item>Satellite</item>
         <item>Terrain</item>
