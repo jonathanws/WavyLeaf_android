@@ -13,10 +13,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -39,8 +41,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 //TODO (later) obtain signature map key
 //TODO Do we want each marker to have a bubble? I'd say no (JS)
-//TODO Decide which text to use in layout (compare "picture/notes" to "percentage seen"
-//TODO Use network or GPS?
 
 /*
 * This class requires the Google Play Services apk, and provides access to Google Maps v2.
@@ -55,17 +55,21 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 public class Report extends SherlockFragmentActivity {
 	
-	public static final int LEGAL = 1, MAPTYPE = 2, CAMERA = 3; // Used for calling dialogs. arbitrary numbers
-	public static final int CAMERA_REQUEST = 1337;
+	private static final int LEGAL = 1, MAPTYPE = 2, CAMERA = 3, NO_GPS = 4; // Used for calling dialogs. arbitrary numbers
+	private static final int CAMERA_REQUEST = 1337;
+	private boolean gpsEnabled = false;
+	private boolean playAPKEnabled = false;
+	private boolean mapHasMarker = false; // onResume keeps adding markers to map, this should stop it
 	protected GoogleMap mMap;
 	private UiSettings mUiSettings;
 	protected ImageButton ib;
 	protected RadioGroup rg;
-	protected TextView tvlat, tvlong, tvpic, tvper, tvcoor;
+	protected TextView tvlat, tvlong, tvpicnotes, tvper, tvcoor, tvarea;
 	protected EditText notes;
 	protected ToggleButton b1, b2, b3, b4, b5, b6;
-	protected LocationManager lm;
+	protected LocationManager mLocationManager;
 	protected CameraPosition userCurrentPosition;
+	protected Spinner sp;
 	
 	@Override
 	protected void onCreate(Bundle bundle) {
@@ -74,12 +78,6 @@ public class Report extends SherlockFragmentActivity {
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		init();
 		// Most setup methods are in onResume()
-		
-//		if (bundle != null) {
-//			Bitmap icon = bundle.getParcelable("imagebuttonbitmap");
-////			Toast.makeText(getApplicationContext(), icon.getConfig() + "", Toast.LENGTH_SHORT).show();
-//			ib.setImageBitmap( (Bitmap) icon);
-//		}
 	}
 	
 	protected void init() {
@@ -89,9 +87,10 @@ public class Report extends SherlockFragmentActivity {
 		
 		tvlat = (TextView) findViewById(R.id.tv_latitude);
 		tvlong = (TextView) findViewById(R.id.tv_longitude);
-		tvpic = (TextView) findViewById(R.id.tv_picturenotes);
+		tvpicnotes = (TextView) findViewById(R.id.tv_picturenotes);
 		tvper = (TextView) findViewById(R.id.tv_percentageseen);
 		tvcoor = (TextView) findViewById(R.id.tv_coordinates);
+		tvarea = (TextView) findViewById(R.id.tv_areainfested);
 		notes = (EditText) findViewById(R.id.notes);
 		b1 = (ToggleButton) findViewById(R.id.bu_1);
 		b2 = (ToggleButton) findViewById(R.id.bu_2);
@@ -99,8 +98,10 @@ public class Report extends SherlockFragmentActivity {
 		b4 = (ToggleButton) findViewById(R.id.bu_4);
 		b5 = (ToggleButton) findViewById(R.id.bu_5);
 		b6 = (ToggleButton) findViewById(R.id.bu_6);
-		rg = ((RadioGroup) findViewById(R.id.toggleGroup));
+		rg = (RadioGroup) findViewById(R.id.toggleGroup);
+		sp = (Spinner) findViewById(R.id.sp_areainfested);
 		ib = (ImageButton) findViewById(R.id.report_imagebutton);
+		mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		
 		ib.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
@@ -108,12 +109,17 @@ public class Report extends SherlockFragmentActivity {
             }
         });
 		
+		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.areainfested_array, android.R.layout.simple_spinner_item);
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		sp.setAdapter(adapter);
+		
 		//set all the beautiful typefaces
 		tvlat.setTypeface(tf_light);
 		tvlong.setTypeface(tf_light);
-		tvpic.setTypeface(tf_bold);
-		tvper.setTypeface(tf_bold);
 		tvcoor.setTypeface(tf_bold);
+		tvarea.setTypeface(tf_bold);
+		tvper.setTypeface(tf_bold);
+		tvpicnotes.setTypeface(tf_bold);
 		b1.setTypeface(tf_light);
 		b2.setTypeface(tf_light);
 		b3.setTypeface(tf_light);
@@ -125,26 +131,22 @@ public class Report extends SherlockFragmentActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		if (doesDeviceHaveGooglePlayServices()) {
-			setUpMapIfNeeded();
-			wheresWaldo(true);
-			setDragListener();
+		// Check for GPS
+		LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+		gpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+		playAPKEnabled = doesDeviceHaveGooglePlayServices();
+		
+		// If GPS is disabled
+		if (!gpsEnabled) {
+			buildAlertMessageNoGps();
+		} else if(gpsEnabled) {
+			if (playAPKEnabled) {
+				setUpMapIfNeeded();
+				wheresWaldo();
+				setDragListener();
+			}
 		}
 	}
-	
-	// On phone rotate
-//	@Override
-//	protected void onSaveInstanceState(Bundle outState) {
-//		super.onSaveInstanceState(outState);
-//		// store text in edittext
-//		if (notes.getText() != null)
-//			outState.putString("notes", notes.getText().toString());
-//		// store bitmap
-//		if (true) { // TODO if imagebutton has bitmap
-//			Bitmap bm = ib.getDrawingCache();
-//			outState.putParcelable("imagebuttonbitmap", bm);
-//		}
-//	}
 
 	protected boolean doesDeviceHaveGooglePlayServices() {
 		int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getApplicationContext());
@@ -181,12 +183,12 @@ public class Report extends SherlockFragmentActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-//        case android.R.id.home:
-//        	Intent mainIntent = new Intent(this, Main.class);
-//            mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-//            startActivity(mainIntent);
-//            finish();
-//            return true;
+        case android.R.id.home:
+        	Intent mainIntent = new Intent(this, Main.class);
+            mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(mainIntent);
+            finish();
+            return true;
 		case R.id.menu_maptype:
 			showDialog(MAPTYPE);
 			return true;
@@ -230,24 +232,39 @@ public class Report extends SherlockFragmentActivity {
         updateMyLocation();
         mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
         mUiSettings = mMap.getUiSettings();
-        mUiSettings.setMyLocationButtonEnabled(false); // Currently overlapped by zoom buttons
+        mUiSettings.setMyLocationButtonEnabled(true); // Currently overlapped by zoom buttons
     }
 	
 	private void updateMyLocation() {
 		mMap.setMyLocationEnabled(true);
 	}
 	
-	public void wheresWaldo(boolean hasPlayAPK) {
-		lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-		Location location = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER); //TODO network or gps?
+	private void updateUILocation(Location location) {
+		goToCurrentPosition(location);
+		setEditTexts(location.getLatitude(), location.getLongitude());
+		if (!mapHasMarker)
+			setCurrentPositionMarker(location);
+	}
+	
+	// Method won't be called unless Play APK in installed
+	public void wheresWaldo() {
+		Location gpsLocation = null;
+		gpsLocation = requestUpdatesFromProvider();
 		
-		if (hasPlayAPK) { // Crashes otherwise
-			// Own method so they can be updated in real time
-			setEditTexts(location.getLatitude(), location.getLongitude());
-			
-			goToCurrentPosition(location.getLatitude(), location.getLongitude());
-			setCurrentPositionMarker(location.getLatitude(), location.getLongitude());
-		}
+		if (gpsLocation != null)
+			updateUILocation(gpsLocation);
+	}
+	
+	private Location requestUpdatesFromProvider() {
+		Location location = null;
+		if (mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            location = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        }
+		return location;
+	}
+	
+	private void buildAlertMessageNoGps() {
+		showDialog(NO_GPS);
 	}
 	
 	private void setEditTexts(double latitude, double longitude) {
@@ -255,16 +272,31 @@ public class Report extends SherlockFragmentActivity {
 		tvlong.setText("Longitude:\t\t" + longitude);
 	}
 	
-	public void goToCurrentPosition(double latitude, double longitude) {
-		if (!checkReady()) {
-			return;
-		}
+	public void setCurrentPositionMarker(Location location) {
+		// Create new LatLng object
+        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+		
+		// Creating a marker
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.position(latLng);
+        markerOptions.draggable(true);
+        markerOptions.title("3/18/13 - nth entry");
+
+        // Placing a marker on the touched position
+        mMap.addMarker(markerOptions);
+        mapHasMarker = true;
+	}
+	
+	public void goToCurrentPosition(Location location) {
+//		if (!checkReady()) {
+//			return;
+//		}
 		
 		// Taken from google sample code
 		userCurrentPosition =
 	            new CameraPosition.Builder()
-						.target(new LatLng(latitude, longitude))
-	                    .zoom(13f) //arbitrary
+						.target(new LatLng(location.getLatitude(), location.getLongitude()))
+	                    .zoom(18f) //arbitrary
 	                    .bearing(0)
 	                    .tilt(35) //arbitrary
 	                    .build();
@@ -289,30 +321,6 @@ public class Report extends SherlockFragmentActivity {
 		mMap.animateCamera(update, callback);
 //		mMap.moveCamera(update); //for the less fun people
     }
-	
-	public void setCurrentPositionMarker(double latitude, double longitude) {		
-		// Creating a marker
-        MarkerOptions markerOptions = new MarkerOptions();
-        
-        // Create new LatLng object
-        LatLng latLng = new LatLng(latitude, longitude);
-
-        // Setting the position for the marker
-        markerOptions.position(latLng);
-        
-        // So user can edit marker
-        markerOptions.draggable(true);
-
-        // Setting the title for the marker.
-        // This will be displayed on taping the marker
-        
-        // TODO - Do we need this?  Won't all entries need a title?
-        // Maybe this could be date?  (JS)
-        markerOptions.title("3/18/13 - nth entry");
-
-        // Placing a marker on the touched position
-        mMap.addMarker(markerOptions);
-	}
 	
 	@Override
 	protected Dialog onCreateDialog(int id) {
@@ -345,6 +353,18 @@ public class Report extends SherlockFragmentActivity {
 						}
 						else if (item == 1)
 							Toast.makeText(getApplicationContext(), "Choose from gallery", Toast.LENGTH_SHORT).show();
+					}
+				})
+				.create();
+			case NO_GPS:
+				return new AlertDialog.Builder(this)
+				.setTitle("GPS is diabled")
+				.setMessage("Show location settings?")
+				.setCancelable(false)
+				.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
 					}
 				})
 				.create();

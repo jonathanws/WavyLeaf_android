@@ -12,5 +12,11 @@
         <item>Satellite</item>
         <item>Terrain</item>
     </string-array>
+    
+    <string-array name="areainfested_array">
+        <item>Square Miles</item>
+        <item>Square Acres</item>
+        <item>Square Feet</item>
+    </string-array>
 
 </resources>

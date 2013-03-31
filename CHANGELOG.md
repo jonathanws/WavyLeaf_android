@@ -1,6 +1,18 @@
 Change Log
 ===============================================================================
 
+Version 1.0.3 *(3-30-2013)*
+----------------------------
+* Deleted Edit Record, intents, and buttons from Main
+* Added Area Infested attribute to New Report
+* Added edit drawable
+* Edited Strings.xml
+* Edited New Report to be much better at obtaining position
+* Edited New Report to be portrait only
+* Edited New Report to use only GPS
+* Edited New Report to have mapview at bottom
+
+
 Version 1.0.2 *(3-26-2013)*
 ----------------------------
 * added DashboardLayout.java

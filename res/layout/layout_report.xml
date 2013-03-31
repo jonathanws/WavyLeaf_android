@@ -4,31 +4,23 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <fragment
-        android:id="@+id/mapview_checkin"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_width="match_parent"
-        android:layout_height="96dp" />
-    
-    <View
-        android:layout_width="fill_parent"
-        android:layout_height="3dp"
-        android:background="@drawable/drop_shadow" />
-
-    <!-- #E8E3DC -->
-
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="0dp"
+        android:layout_weight="1" >
+
+        <!-- #E8E3DC -->
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:background="#E5E5E5"
             android:orientation="vertical"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:paddingTop="16dp" >
+
+<!-- ================================================== Picture/notes ================================================== -->
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -43,8 +35,7 @@
                     android:background="#FFFFFF"
                     android:gravity="center_vertical"
                     android:paddingLeft="8dp"
-                    android:text="PICTURE/NOTES"
-                    android:textColor="@android:color/secondary_text_light" />
+                    android:text="PICTURE/NOTES" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -57,17 +48,20 @@
                         android:layout_width="120dp"
                         android:layout_height="120dp"
                         android:layout_marginRight="4dp"
-                        android:src="@drawable/camera" />
+                        android:src="@drawable/camera"
+                        android:contentDescription="Choose a picture" />
 
                     <EditText
                         android:id="@+id/notes"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:ems="10"
                         android:inputType="textMultiLine"
                         android:maxHeight="120dp" />
+                    
                 </LinearLayout>
+                
             </LinearLayout>
 
             <View
@@ -75,6 +69,8 @@
                 android:layout_height="3dp"
                 android:layout_marginBottom="16dp"
                 android:background="@drawable/drop_shadow" />
+            
+<!--================================================== Percentage Seen ==================================================-->
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -89,8 +85,7 @@
                     android:background="#FFFFFF"
                     android:gravity="center_vertical"
                     android:paddingLeft="8dp"
-                    android:text="Percentage Seen"
-                    android:textColor="@android:color/secondary_text_light" />
+                    android:text="PERCENTAGE SEEN" />
 
                 <RadioGroup
                     android:id="@+id/toggleGroup"
@@ -169,8 +164,11 @@
                             android:textOff="75-100%"
                             android:textOn="75-100%"
                             android:textSize="20sp" />
+                        
                     </LinearLayout>
+                    
                 </RadioGroup>
+                
             </LinearLayout>
 
             <View
@@ -178,6 +176,53 @@
                 android:layout_height="3dp"
                 android:layout_marginBottom="16dp"
                 android:background="@drawable/drop_shadow" />
+            
+<!--================================================== Area Infested ==================================================-->
+            
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#F2F2F2"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/tv_areainfested"
+                    android:layout_width="match_parent"
+                    android:layout_height="24dp"
+                    android:background="#FFFFFF"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="8dp"
+                    android:text="AREA INFESTED" />
+                
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:paddingLeft="4dp"
+                    android:paddingRight="4dp" >
+                    
+                    <EditText
+                        android:id="@+id/et_areainfested"
+                        android:layout_width="96dp"
+                        android:layout_height="48dp"
+                        android:inputType="number" />
+                    
+                    <Spinner 
+                        android:id="@+id/sp_areainfested"
+                        android:layout_alignParentRight="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="48dp" />
+                    	
+                </RelativeLayout>
+                
+            </LinearLayout>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="3dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/drop_shadow" />
+            
+<!--================================================== Coordinates ==================================================-->
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -192,28 +237,58 @@
                     android:background="#FFFFFF"
                     android:gravity="center_vertical"
                     android:paddingLeft="8dp"
-                    android:text="Coordinates"
-                    android:textColor="@android:color/secondary_text_light" />
+                    android:text="COORDINATES" />
 
-                <TextView
-                    android:id="@+id/tv_latitude"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="12dp"
-                    android:paddingLeft="8dp"
-                    android:paddingTop="12dp"
-                    android:text="Latitude"
-                    android:textColor="@android:color/black" />
+                    android:orientation="horizontal"
+                    android:paddingLeft="4dp" >
                 
-                <TextView
-                    android:id="@+id/tv_longitude"
+                	<LinearLayout
+	                    android:layout_width="0dp"
+                    	android:layout_height="wrap_content"
+	                    android:layout_weight="1"
+	                    android:orientation="vertical" >
+                
+                		<TextView
+		                    android:id="@+id/tv_latitude"
+                    		android:layout_width="match_parent"
+                    		android:layout_height="wrap_content"
+                    		android:paddingBottom="12dp"
+                    		android:paddingLeft="8dp"
+                    		android:paddingTop="12dp"
+                    		android:text="Latitude"
+                    		android:textSize="14sp"
+                    		android:textColor="@android:color/black" />
+                
+                		<TextView
+		                    android:id="@+id/tv_longitude"
+                    		android:layout_width="match_parent"
+                    		android:layout_height="wrap_content"
+                    		android:paddingBottom="12dp"
+                    		android:paddingLeft="8dp"
+                    		android:paddingTop="12dp"
+                    		android:text="Longitude"
+                    		android:textSize="14sp"
+                    		android:textColor="@android:color/black" />
+                	
+	                </LinearLayout>
+	                
+                	<Button
+                	    android:layout_width="32dp"
+                	    android:layout_height="32dp"
+                	    android:layout_gravity="center_vertical"
+                	    android:layout_marginRight="8dp"
+                	    android:background="@drawable/ic_edit" />
+                
+                </LinearLayout>
+                
+                <fragment
+                    android:id="@+id/mapview_checkin"
+                    android:name="com.google.android.gms.maps.SupportMapFragment"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingBottom="12dp"
-                    android:paddingLeft="8dp"
-                    android:paddingTop="12dp"
-                    android:text="Longitude"
-                    android:textColor="@android:color/black" />
+                    android:layout_height="144dp" />
                 
             </LinearLayout>
 
@@ -226,5 +301,7 @@
         </LinearLayout>
         
     </ScrollView>
+
+    
 
 </LinearLayout>

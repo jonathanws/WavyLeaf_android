@@ -15,7 +15,7 @@ import com.actionbarsherlock.view.MenuItem;
 
 public class Main extends SherlockActivity implements OnClickListener {
 	
-	Button bu_new, bu_edit, bu_upload, bu_session;
+	Button bu_new, bu_upload, bu_session;
 	
 	@Override
 	public void onCreate(Bundle bundle) {
@@ -29,15 +29,11 @@ public class Main extends SherlockActivity implements OnClickListener {
 	protected void initLayout() {
 		Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/roboto_bold.ttf");
 		bu_new = (Button) findViewById(R.id.button_new);
-		bu_edit = (Button) findViewById(R.id.button_edit);
 		bu_upload = (Button) findViewById(R.id.button_upload);
 		bu_session = (Button) findViewById(R.id.button_session);
 		bu_new.setOnClickListener(this);
-//		bu_edit.setOnClickListener(this);
 //		bu_upload.setOnClickListener(this);
 //		bu_session.setOnClickListener(this);
-		bu_new.setTypeface(tf);
-		bu_edit.setTypeface(tf);
 		bu_upload.setTypeface(tf);
 		bu_session.setTypeface(tf);
 	}
@@ -67,10 +63,7 @@ public class Main extends SherlockActivity implements OnClickListener {
 			Intent newReportIntent = new Intent(this, Report.class);
 			this.startActivity(newReportIntent);
 			
-		} //else if (view == this.bu_edit) {
-//			Intent EditIntent = new Intent(this, Edit.class);
-//			this.startActivity(EditIntent);
-//		} else if (view == this.bu_upload) {
+		} //else if (view == this.bu_upload) {
 //			Intent uploadIntent = new Intent(this, Upload.class);
 //			this.startActivity(uploadIntent);
 //		} else if (view == this.bu_session) {
