@@ -36,11 +36,9 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 //TODO (later) obtain signature map key
-//TODO Do we want each marker to have a bubble? I'd say no (JS)
 
 /*
 * This class requires the Google Play Services apk, and provides access to Google Maps v2.
@@ -55,7 +53,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 public class Report extends SherlockFragmentActivity {
 	
-	private static final int LEGAL = 1, MAPTYPE = 2, CAMERA = 3, NO_GPS = 4; // Used for calling dialogs. arbitrary numbers
+	private static final int LEGAL = 1, CAMERA = 3, NO_GPS = 4; // Used for calling dialogs. arbitrary numbers
 	private static final int CAMERA_REQUEST = 1337;
 	private boolean gpsEnabled = false;
 	private boolean playAPKEnabled = false;
@@ -143,7 +141,6 @@ public class Report extends SherlockFragmentActivity {
 			if (playAPKEnabled) {
 				setUpMapIfNeeded();
 				wheresWaldo();
-				setDragListener();
 			}
 		}
 	}
@@ -156,21 +153,6 @@ public class Report extends SherlockFragmentActivity {
 			return false;
 		} else
 			return true;
-	}
-	
-	// When the user drags the marker around the page, the textviews will change in real time--cool!
-	protected void setDragListener() {
-		mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
-			@Override
-			public void onMarkerDrag(Marker marker) {
-				LatLng draggedLatLng = marker.getPosition();
-				double lat = draggedLatLng.latitude;
-				double lng = draggedLatLng.longitude;
-				setEditTexts(lat, lng);
-			}
-			@Override public void onMarkerDragEnd(Marker marker) {}
-			@Override public void onMarkerDragStart(Marker marker) {}
-		});
 	}
 	
 	@Override
@@ -189,9 +171,6 @@ public class Report extends SherlockFragmentActivity {
             startActivity(mainIntent);
             finish();
             return true;
-		case R.id.menu_maptype:
-			showDialog(MAPTYPE);
-			return true;
         case R.id.menu_submit:
         	return true;
         case R.id.menu_legal:
@@ -220,6 +199,11 @@ public class Report extends SherlockFragmentActivity {
 		}
 	}
 	
+	public void onEdit(View view) {
+		Intent editIntent = new Intent(this, Report_Mapview.class);
+		startActivity(editIntent);
+	}
+	
 	private void setUpMapIfNeeded() {
 		if (mMap == null) {
 			mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapview_checkin)).getMap();
@@ -232,7 +216,8 @@ public class Report extends SherlockFragmentActivity {
         updateMyLocation();
         mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
         mUiSettings = mMap.getUiSettings();
-        mUiSettings.setMyLocationButtonEnabled(true); // Currently overlapped by zoom buttons
+        mUiSettings.setMyLocationButtonEnabled(false);
+        mUiSettings.setAllGesturesEnabled(false);
     }
 	
 	private void updateMyLocation() {
@@ -279,8 +264,6 @@ public class Report extends SherlockFragmentActivity {
 		// Creating a marker
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(latLng);
-        markerOptions.draggable(true);
-        markerOptions.title("3/18/13 - nth entry");
 
         // Placing a marker on the touched position
         mMap.addMarker(markerOptions);
@@ -331,17 +314,6 @@ public class Report extends SherlockFragmentActivity {
 				.setMessage(GooglePlayServicesUtil.getOpenSourceSoftwareLicenseInfo(getApplicationContext()))
 				.setPositiveButton("Got it", null)
 				.setNegativeButton("Cancel", null)
-				.create();
-			case MAPTYPE:
-				return new AlertDialog.Builder(this)
-				.setItems(R.array.maptype_array, new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int item) {
-						if (item == 0)
-							mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-						else if (item == 1)
-							mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
-					}
-				})
 				.create();
 			case CAMERA:
 				return new AlertDialog.Builder(this)

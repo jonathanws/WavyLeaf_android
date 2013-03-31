@@ -9,9 +9,7 @@ import android.widget.Button;
 
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
-
-// TODO: Apparently the code for up navigation doesn't work on jelly bean devices
+//import com.actionbarsherlock.view.MenuItem;
 
 public class Main extends SherlockActivity implements OnClickListener {
 	
@@ -22,7 +20,6 @@ public class Main extends SherlockActivity implements OnClickListener {
 		super.onCreate(bundle);
 		
 		setContentView(R.layout.layout_main);
-		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		initLayout();
 	}
 	
@@ -44,18 +41,12 @@ public class Main extends SherlockActivity implements OnClickListener {
 		return true;
 	}
 	
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-			case android.R.id.home:
-				Intent mainIntent = new Intent(this, Main.class);
-	            mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-	            startActivity(mainIntent);
-	            finish();
-				return true;
-			}
-		return super.onOptionsItemSelected(item);
-	}
+//	@Override
+//	public boolean onOptionsItemSelected(MenuItem item) {
+//		switch (item.getItemId()) {
+//		}
+//		return super.onOptionsItemSelected(item);
+//	}
 	
 	@Override
 	public void onClick(View view) {

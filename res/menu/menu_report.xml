@@ -12,12 +12,5 @@
         android:orderInCategory="100"
         android:showAsAction="always|withText"
         android:title="Submit" />
-    
-    <item
-        android:id="@+id/menu_maptype"
-        android:icon="@drawable/ic_map"
-        android:orderInCategory="200"
-        android:showAsAction="ifRoom"
-        android:title="Map type" />
 
 </menu>

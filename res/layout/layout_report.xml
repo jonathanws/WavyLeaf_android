@@ -277,10 +277,11 @@
 	                
                 	<Button
                 	    android:layout_width="32dp"
-                	    android:layout_height="32dp"
+                	    android:layout_height="wrap_content"
                 	    android:layout_gravity="center_vertical"
                 	    android:layout_marginRight="8dp"
-                	    android:background="@drawable/ic_edit" />
+                	    android:background="@drawable/edit_drawable"
+                	    android:onClick="onEdit" />
                 
                 </LinearLayout>
                 
@@ -293,7 +294,7 @@
             </LinearLayout>
 
             <View
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="3dp"
                 android:layout_marginBottom="16dp"
                 android:background="@drawable/drop_shadow" />

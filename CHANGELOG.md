@@ -1,6 +1,15 @@
 Change Log
 ===============================================================================
 
+Version 1.0.4 *(3-31-2013)*
+----------------------------
+* Added Report_Mapview.java
+* Added layout_report_mapview.xml
+* Added menu_report_mapview.xml
+* Added drawable for edit button, plus state 9patch buttons
+* Removed ability to edit map from Report.java
+* Removed up button from Main.java
+
 Version 1.0.3 *(3-30-2013)*
 ----------------------------
 * Deleted Edit Record, intents, and buttons from Main
@@ -28,11 +37,9 @@ Version 1.0.2 *(3-26-2013)*
 Version 1.0.1 *(3-20-2013)*
 ----------------------------
 * updated readme
-
 * deleted jar from /libs
 * deleted style from res/values-v11
 * deleted style from res/values-v14
-
 * added folder /res/drawable
 * added folder /res/menu
 * added folder /assets/fonts
