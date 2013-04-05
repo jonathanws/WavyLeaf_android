@@ -14,12 +14,12 @@
         android:text="@string/layout_main_new" />
 
     <Button
-        android:id="@+id/button_session"
+        android:id="@+id/button_trip"
         style="@style/DashboardButton"
         android:background="@drawable/abs__list_selector_holo_light"
         android:drawableLeft="@drawable/ic_main_start_light"
         android:drawablePadding="8dp"
         android:gravity="left|center_vertical"
-        android:text="@string/layout_main_startsession" />
+        android:text="@string/layout_main_trip" />
 
 </com.towson.wavyleaf.DashboardLayout>

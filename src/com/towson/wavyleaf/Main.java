@@ -16,7 +16,7 @@ import com.actionbarsherlock.view.MenuItem;
 public class Main extends SherlockActivity implements OnClickListener {
 	
 	private static final int HELP = 0;
-	protected Button bu_new, bu_session;
+	protected Button bu_new, bu_trip;
 	
 	@Override
 	public void onCreate(Bundle bundle) {
@@ -28,8 +28,9 @@ public class Main extends SherlockActivity implements OnClickListener {
 	
 	protected void initLayout() {
 		bu_new = (Button) findViewById(R.id.button_new);
-		bu_session = (Button) findViewById(R.id.button_session);
+		bu_trip = (Button) findViewById(R.id.button_trip);
 		bu_new.setOnClickListener(this);
+		bu_trip.setOnClickListener(this);
 	}
 	
 	@Override
@@ -55,15 +56,11 @@ public class Main extends SherlockActivity implements OnClickListener {
 	public void onClick(View view) {
 		if (view == this.bu_new) {
 			Intent newReportIntent = new Intent(this, Report.class);
-			this.startActivity(newReportIntent);
-			
-		} //else if (view == this.bu_upload) {
-//			Intent uploadIntent = new Intent(this, Upload.class);
-//			this.startActivity(uploadIntent);
-//		} else if (view == this.bu_session) {
-//			Intent sessionIntent = new Intent(this, Session.class);
-//			this.startActivity(sessionIntent);
-//		}
+			this.startActivity(newReportIntent);	
+		} else if (view == this.bu_trip) {
+			Intent sessionIntent = new Intent(this, Trip.class);
+			this.startActivity(sessionIntent);
+		}
 	}
 	
 	@Override
