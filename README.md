@@ -9,7 +9,7 @@ Developed By
 ============
 
 * Jon Smoley - jsmole1@students.towson.edu
-* Mohsin M.
+* Mohsin M. - mmajid1@students.towson.edu
 * Eric F.
 
 Setup
