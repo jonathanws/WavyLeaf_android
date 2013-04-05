@@ -1,5 +1,7 @@
 package com.towson.wavyleaf;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -13,7 +15,8 @@ import com.actionbarsherlock.view.MenuItem;
 
 public class Main extends SherlockActivity implements OnClickListener {
 	
-	Button bu_new, bu_session;
+	private static final int HELP = 0;
+	protected Button bu_new, bu_session;
 	
 	@Override
 	public void onCreate(Bundle bundle) {
@@ -40,6 +43,10 @@ public class Main extends SherlockActivity implements OnClickListener {
 		switch (item.getItemId()) {
 			case R.id.menu_settings:
 				Toast.makeText(this, "settings", Toast.LENGTH_SHORT).show();
+				return true;
+			case R.id.menu_help:
+				showDialog(HELP);
+				return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -57,6 +64,20 @@ public class Main extends SherlockActivity implements OnClickListener {
 //			Intent sessionIntent = new Intent(this, Session.class);
 //			this.startActivity(sessionIntent);
 //		}
+	}
+	
+	@Override
+	protected Dialog onCreateDialog(int id) {
+		switch(id) {
+			case HELP:
+				return new AlertDialog.Builder(this)
+				.setTitle("HALP")
+				.setMessage("I'm here to help!")
+				.setPositiveButton("Phew!", null)
+				.setNegativeButton("cancel", null)
+				.create();
+		}
+		return super.onCreateDialog(id);
 	}
 
 }
