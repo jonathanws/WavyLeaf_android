@@ -2,18 +2,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item
-        android:id="@+id/menu_maptype"
-        android:icon="@drawable/ic_map"
-        android:orderInCategory="200"
-        android:showAsAction="ifRoom"
-        android:title="Map type" />
+        android:id="@+id/menu_done"
+        android:showAsAction="always"
+        android:title="Done" />
     
     <item
-        android:id="@+id/menu_done"
-        android:orderInCategory="100"
-        android:showAsAction="withText"
-        android:title="Done" />"
-    
+        android:id="@+id/menu_maptype"
+        android:icon="@drawable/ic_map"
+        android:showAsAction="ifRoom"
+        android:title="Map type" />
+        
     <item
         android:id="@+id/menu_legal"
         android:showAsAction="never"

@@ -114,146 +114,154 @@ public class Report_Mapview extends SherlockFragmentActivity {
 	}
 	
 	// When the user drags the marker around the page, the textviews will change in real time--cool!
-		protected void setDragListener() {
-			mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
-				@Override
-				public void onMarkerDrag(Marker marker) {
-					LatLng draggedLatLng = marker.getPosition();
-					double lat = draggedLatLng.latitude;
-					double lng = draggedLatLng.longitude;
-					setEditTexts(lat, lng);
-				}
-				@Override public void onMarkerDragEnd(Marker marker) {}
-				@Override public void onMarkerDragStart(Marker marker) {}
-			});
-		}
-		
-		private void setUpMapIfNeeded() {
-			if (mMap == null) {
-				mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapview_fullscreen)).getMap();
-				if (mMap != null)
-					setUpMap(); // Weird method chaining, but this is what google example code does
+	protected void setDragListener() {
+		mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
+			@Override
+			public void onMarkerDrag(Marker marker) {
+				LatLng draggedLatLng = marker.getPosition();
+				double lat = draggedLatLng.latitude;
+				double lng = draggedLatLng.longitude;
+				setEditTexts(lat, lng);
 			}
+			@Override public void onMarkerDragEnd(Marker marker) {}
+			@Override public void onMarkerDragStart(Marker marker) {}
+		});
+	}
+	
+	private void setUpMapIfNeeded() {
+		if (mMap == null) {
+			mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapview_fullscreen)).getMap();
+		if (mMap != null)
+			setUpMap(); // Weird method chaining, but this is what google example code does
 		}
+	}
+	
+	private void setUpMap() {
+		updateMyLocation();
+		mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+		mUiSettings = mMap.getUiSettings();
+		mUiSettings.setMyLocationButtonEnabled(false);
+		mUiSettings.setCompassEnabled(false);
+	}
+	
+	private void updateMyLocation() {
+		mMap.setMyLocationEnabled(true);
+	}
+	
+	private void updateUILocation(Location location) {
+		goToCurrentPosition(location);
+		setEditTexts(location.getLatitude(), location.getLongitude());
+		if (!mapHasMarker)
+			setCurrentPositionMarker(location);
+	}
+	
+	// Method won't be called unless Play APK in installed
+	public void wheresWaldo() {
+		Location gpsLocation = null;
+		gpsLocation = requestUpdatesFromProvider();
 		
-		private void setUpMap() {
-	        updateMyLocation();
-	        mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-	        mUiSettings = mMap.getUiSettings();
-	        mUiSettings.setMyLocationButtonEnabled(false);
-	    }
-		
-		private void updateMyLocation() {
-			mMap.setMyLocationEnabled(true);
+		if (gpsLocation != null)
+			updateUILocation(gpsLocation);
+	}
+	
+	private Location requestUpdatesFromProvider() {
+		Location location = null;
+		if (mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+			location = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 		}
+		return location;
+	}
+	
+	private void setEditTexts(double latitude, double longitude) {
+		tvlat.setText("Latitude:\t\t\t\t" + latitude);
+		tvlong.setText("Longitude:\t\t" + longitude);
+	}
+	
+	public void setCurrentPositionMarker(Location location) {
+		// Create new LatLng object
+		LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
 		
-		private void updateUILocation(Location location) {
-			goToCurrentPosition(location);
-			setEditTexts(location.getLatitude(), location.getLongitude());
-			if (!mapHasMarker)
-				setCurrentPositionMarker(location);
+		// Creating a marker
+		MarkerOptions markerOptions = new MarkerOptions();
+		markerOptions.position(latLng);
+		markerOptions.draggable(true);
+		markerOptions.title("3/18/13 - nth entry");
+		
+		// Placing a marker on the touched position
+		mMap.addMarker(markerOptions);
+		mapHasMarker = true;
+	}
+	
+	public void goToCurrentPosition(Location location) {
+		if (!checkReady()) {
+			return;
 		}
-		
-		// Method won't be called unless Play APK in installed
-		public void wheresWaldo() {
-			Location gpsLocation = null;
-			gpsLocation = requestUpdatesFromProvider();
-			
-			if (gpsLocation != null)
-				updateUILocation(gpsLocation);
+		// Taken from google sample code
+		userCurrentPosition =
+				new CameraPosition.Builder()
+						.target(new LatLng(location.getLatitude(), location.getLongitude()))
+						.zoom(18f) //arbitrary
+						.bearing(0)
+						.tilt(35) //arbitrary
+						.build();
+		changeCamera(CameraUpdateFactory.newCameraPosition(userCurrentPosition));
+	}
+	
+	// Part of the sample code
+	private boolean checkReady() {
+		if (mMap == null) {
+			Toast.makeText(this, "Map not loaded yet", Toast.LENGTH_SHORT).show();
+			return false;
 		}
-		
-		private Location requestUpdatesFromProvider() {
-			Location location = null;
-			if (mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-	            location = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-	        }
-			return location;
-		}
-		
-		private void setEditTexts(double latitude, double longitude) {
-			tvlat.setText("Latitude:\t\t\t\t" + latitude);
-			tvlong.setText("Longitude:\t\t" + longitude);
-		}
-		
-		public void setCurrentPositionMarker(Location location) {
-			// Create new LatLng object
-	        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-			
-			// Creating a marker
-	        MarkerOptions markerOptions = new MarkerOptions();
-	        markerOptions.position(latLng);
-	        markerOptions.draggable(true);
-	        markerOptions.title("3/18/13 - nth entry");
-
-	        // Placing a marker on the touched position
-	        mMap.addMarker(markerOptions);
-	        mapHasMarker = true;
-		}
-		
-		public void goToCurrentPosition(Location location) {
-//			if (!checkReady()) {
-//				return;
-//			}
-			
-			// Taken from google sample code
-			userCurrentPosition =
-		            new CameraPosition.Builder()
-							.target(new LatLng(location.getLatitude(), location.getLongitude()))
-		                    .zoom(18f) //arbitrary
-		                    .bearing(0)
-		                    .tilt(35) //arbitrary
-		                    .build();
-			
-			changeCamera(CameraUpdateFactory.newCameraPosition(userCurrentPosition));
-		}
-		
-		private void changeCamera(CameraUpdate update) {
-			changeCamera(update, null);
-		}
-		
-		private void changeCamera(CameraUpdate update, CancelableCallback callback) {
-			mMap.animateCamera(update, callback);
-//			mMap.moveCamera(update); //for the less fun people
-	    }
-		
-		@Override
-		protected Dialog onCreateDialog(int id) {
-			switch(id) {
-				case LEGAL:
-					return new AlertDialog.Builder(this)
-					.setTitle("Legal Notice")
-					.setMessage(GooglePlayServicesUtil.getOpenSourceSoftwareLicenseInfo(getApplicationContext()))
-					.setPositiveButton("Got it", null)
-					.setNegativeButton("Cancel", null)
-					.create();
-				case MAPTYPE:
-					return new AlertDialog.Builder(this)
-					.setItems(R.array.maptype_array, new DialogInterface.OnClickListener() {
-						// Changing view seems to change zoom as well.  We'll account for that
-						public void onClick(DialogInterface dialog, int item) {
-							if (item == 0)
-								mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-							else if (item == 1)
-								mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
-						}
-					})
-					.create();
-				case NO_GPS:
-					return new AlertDialog.Builder(this)
-					.setTitle("GPS is diabled")
-					.setMessage("Show location settings?")
-					.setCancelable(false)
-					.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-						}
-					})
-					.create();
+		return true;
+	}
+	
+	private void changeCamera(CameraUpdate update) {
+		changeCamera(update, null);
+	}
+	
+	private void changeCamera(CameraUpdate update, CancelableCallback callback) {
+		mMap.animateCamera(update, callback);
+//		mMap.moveCamera(update); //for the less fun people
+	}
+	
+	@Override
+	protected Dialog onCreateDialog(int id) {
+		switch(id) {
+			case LEGAL:
+				return new AlertDialog.Builder(this)
+				.setTitle("Legal Notice")
+				.setMessage(GooglePlayServicesUtil.getOpenSourceSoftwareLicenseInfo(getApplicationContext()))
+				.setPositiveButton("Got it", null)
+				.setNegativeButton("Cancel", null)
+				.create();
+			case MAPTYPE:
+				return new AlertDialog.Builder(this)
+				.setItems(R.array.maptype_array, new DialogInterface.OnClickListener() {
+					// Changing view seems to change zoom as well.  We'll account for that
+					public void onClick(DialogInterface dialog, int item) {
+						if (item == 0)
+							mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+						else if (item == 1)
+							mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+					}
+				})
+				.create();
+			case NO_GPS:
+				return new AlertDialog.Builder(this)
+				.setTitle("GPS is diabled")
+				.setMessage("Show location settings?")
+				.setCancelable(false)
+				.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+					}
+				})
+				.create();
 			}
-			return super.onCreateDialog(id);
-			//http://stackoverflow.com/questions/3326366/what-context-should-i-use-alertdialog-builder-in
-		}
+		return super.onCreateDialog(id);
+		//http://stackoverflow.com/questions/3326366/what-context-should-i-use-alertdialog-builder-in
+	}
 
 }

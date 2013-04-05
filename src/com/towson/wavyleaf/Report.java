@@ -1,5 +1,8 @@
 package com.towson.wavyleaf;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -172,6 +175,7 @@ public class Report extends SherlockFragmentActivity {
             finish();
             return true;
         case R.id.menu_submit:
+        	peekAtJson(createJSONObject());
         	return true;
         case R.id.menu_legal:
         	showDialog(LEGAL);
@@ -233,10 +237,10 @@ public class Report extends SherlockFragmentActivity {
 	
 	// Method won't be called unless Play APK in installed
 	public void wheresWaldo() {
-		Location gpsLocation = null;
-		gpsLocation = requestUpdatesFromProvider();
-		
-		if (gpsLocation != null)
+		Location gpsLocation = requestUpdatesFromProvider();
+		if (gpsLocation == null)
+			Toast.makeText(getApplicationContext(), "No GPS signal", Toast.LENGTH_SHORT).show();
+		else if (gpsLocation != null)
 			updateUILocation(gpsLocation);
 	}
 	
@@ -253,7 +257,7 @@ public class Report extends SherlockFragmentActivity {
 	}
 	
 	private void setEditTexts(double latitude, double longitude) {
-		tvlat.setText("Latitude:\t\t" + latitude);
+		tvlat.setText("Latitude:\t\t\t" + latitude);
 		tvlong.setText("Longitude:\t\t" + longitude);
 	}
 	
@@ -271,9 +275,9 @@ public class Report extends SherlockFragmentActivity {
 	}
 	
 	public void goToCurrentPosition(Location location) {
-//		if (!checkReady()) {
-//			return;
-//		}
+		if (!checkReady()) {
+			return;
+		}
 		
 		// Taken from google sample code
 		userCurrentPosition =
@@ -351,5 +355,41 @@ public class Report extends SherlockFragmentActivity {
             ib.setImageBitmap(photo);
         }  
     }
+	
+	private JSONObject createJSONObject() {
+		
+		// Sample json object will look like:
+//		{
+//		  "user": 
+//		  {
+//		    "name":"slender",
+//		    "username":"trogdor",
+//		    "age":"100" 
+//		  }
+//		}
+		JSONObject parent = new JSONObject();
+		JSONObject report = new JSONObject();
+		try {
+			report.put("name", "slender");
+			report.put("username", "trogdor");
+			report.put("age", "100");
+			parent.put("user", report);
+			Toast.makeText(getApplicationContext(), "Success!", Toast.LENGTH_SHORT).show();
+		} catch (JSONException e) {
+			Toast.makeText(getApplicationContext(), "Data not saved, try again", Toast.LENGTH_SHORT).show();
+		}
+		return parent;
+	}
+	
+	// Used for testing
+	private void peekAtJson(JSONObject json) {
+		try {
+			JSONObject itemObject = json.getJSONObject("user");
+			String lol = itemObject.getString("name");
+			Toast.makeText(getApplicationContext(), lol + " ", Toast.LENGTH_SHORT).show();
+		} catch (JSONException e) {
+			Toast.makeText(getApplicationContext(), "nope", Toast.LENGTH_SHORT).show();
+		}
+	}
 
 }

@@ -10,7 +10,7 @@
         android:id="@+id/menu_submit"
         android:icon="@drawable/ic_submit"
         android:orderInCategory="100"
-        android:showAsAction="always|withText"
+        android:showAsAction="always"
         android:title="Submit" />
 
 </menu>

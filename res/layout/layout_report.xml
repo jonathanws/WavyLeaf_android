@@ -1,41 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:layout_height="match_parent" >
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" >
+        android:layout_height="wrap_content"
+        android:background="#E5E5E5"
+        android:orientation="vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="16dp" >
 
-        <!-- #E8E3DC -->
+<!-- ================================================== Picture/notes ================================================== -->
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#E5E5E5"
-            android:orientation="vertical"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:paddingTop="16dp" >
+            android:background="#F2F2F2"
+            android:orientation="vertical" >
 
-<!-- ================================================== Picture/notes ================================================== -->
+            <TextView
+                android:id="@+id/tv_picturenotes"
+                android:layout_width="match_parent"
+                android:layout_height="24dp"
+                android:background="#FFFFFF"
+                android:gravity="center_vertical"
+                android:paddingLeft="8dp"
+                android:text="@string/layout_report_picturenotes" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#F2F2F2"
-                android:orientation="vertical" >
+                android:orientation="horizontal"
+                android:padding="4dp" >
 
-                <TextView
-                    android:id="@+id/tv_picturenotes"
-                    android:layout_width="match_parent"
-                    android:layout_height="24dp"
-                    android:background="#FFFFFF"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="8dp"
-                    android:text="PICTURE/NOTES" />
+                <ImageButton
+                    android:id="@+id/report_imagebutton"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_marginRight="4dp"
+                    android:contentDescription="@string/layout_report_camera"
+                    android:src="@drawable/camera" />
+
+                <EditText
+                    android:id="@+id/notes"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:inputType="textMultiLine"
+                    android:maxHeight="120dp" />
+                
+            </LinearLayout>
+            
+        </LinearLayout>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="3dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/drop_shadow" />
+
+<!-- ================================================== Percentage Seen ================================================== -->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#F2F2F2"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/tv_percentageseen"
+                android:layout_width="match_parent"
+                android:layout_height="24dp"
+                android:background="#FFFFFF"
+                android:gravity="center_vertical"
+                android:paddingLeft="8dp"
+                android:text="@string/layout_report_percentage" />
+
+            <RadioGroup
+                android:id="@+id/toggleGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -43,266 +90,208 @@
                     android:orientation="horizontal"
                     android:padding="4dp" >
 
-                    <ImageButton
-                        android:id="@+id/report_imagebutton"
-                        android:layout_width="120dp"
-                        android:layout_height="120dp"
-                        android:layout_marginRight="4dp"
-                        android:src="@drawable/camera"
-                        android:contentDescription="Choose a picture" />
-
-                    <EditText
-                        android:id="@+id/notes"
+                    <ToggleButton
+                        android:id="@+id/bu_1"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="48dp"
                         android:layout_weight="1"
-                        android:ems="10"
-                        android:inputType="textMultiLine"
-                        android:maxHeight="120dp" />
+                        android:onClick="onToggle"
+                        android:textOff="0%"
+                        android:textOn="0%"
+                        android:textSize="20sp" />
+
+                    <ToggleButton
+                        android:id="@+id/bu_2"
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:layout_weight="1"
+                        android:onClick="onToggle"
+                        android:textOff="1-10%"
+                        android:textOn="1-10%"
+                        android:textSize="20sp" />
+
+                    <ToggleButton
+                        android:id="@+id/bu_3"
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:layout_weight="1"
+                        android:onClick="onToggle"
+                        android:textOff="10-25%"
+                        android:textOn="10-25%"
+                        android:textSize="20sp" />
                     
                 </LinearLayout>
-                
-            </LinearLayout>
-
-            <View
-                android:layout_width="fill_parent"
-                android:layout_height="3dp"
-                android:layout_marginBottom="16dp"
-                android:background="@drawable/drop_shadow" />
-            
-<!--================================================== Percentage Seen ==================================================-->
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#F2F2F2"
-                android:orientation="vertical" >
-
-                <TextView
-                    android:id="@+id/tv_percentageseen"
-                    android:layout_width="match_parent"
-                    android:layout_height="24dp"
-                    android:background="#FFFFFF"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="8dp"
-                    android:text="PERCENTAGE SEEN" />
-
-                <RadioGroup
-                    android:id="@+id/toggleGroup"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" >
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:padding="4dp" >
-
-                        <ToggleButton
-                            android:id="@+id/bu_1"
-                            android:layout_width="0dp"
-                            android:layout_height="48dp"
-                            android:layout_weight="1"
-                            android:onClick="onToggle"
-                            android:textOff="0%"
-                            android:textOn="0%"
-                            android:textSize="20sp" />
-
-                        <ToggleButton
-                            android:id="@+id/bu_2"
-                            android:layout_width="0dp"
-                            android:layout_height="48dp"
-                            android:layout_weight="1"
-                            android:onClick="onToggle"
-                            android:textOff="1-10%"
-                            android:textOn="1-10%"
-                            android:textSize="20sp" />
-
-                        <ToggleButton
-                            android:id="@+id/bu_3"
-                            android:layout_width="0dp"
-                            android:layout_height="48dp"
-                            android:layout_weight="1"
-                            android:onClick="onToggle"
-                            android:textOff="10-25%"
-                            android:textOn="10-25%"
-                            android:textSize="20sp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:padding="4dp" >
-
-                        <ToggleButton
-                            android:id="@+id/bu_4"
-                            android:layout_width="0dp"
-                            android:layout_height="48dp"
-                            android:layout_weight="1"
-                            android:onClick="onToggle"
-                            android:textOff="25-50%"
-                            android:textOn="25-50%"
-                            android:textSize="20sp" />
-
-                        <ToggleButton
-                            android:id="@+id/bu_5"
-                            android:layout_width="0dp"
-                            android:layout_height="48dp"
-                            android:layout_weight="1"
-                            android:onClick="onToggle"
-                            android:textOff="50-75%"
-                            android:textOn="50-75%"
-                            android:textSize="20sp" />
-
-                        <ToggleButton
-                            android:id="@+id/bu_6"
-                            android:layout_width="0dp"
-                            android:layout_height="48dp"
-                            android:layout_weight="1"
-                            android:onClick="onToggle"
-                            android:textOff="75-100%"
-                            android:textOn="75-100%"
-                            android:textSize="20sp" />
-                        
-                    </LinearLayout>
-                    
-                </RadioGroup>
-                
-            </LinearLayout>
-
-            <View
-                android:layout_width="fill_parent"
-                android:layout_height="3dp"
-                android:layout_marginBottom="16dp"
-                android:background="@drawable/drop_shadow" />
-            
-<!--================================================== Area Infested ==================================================-->
-            
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#F2F2F2"
-                android:orientation="vertical" >
-
-                <TextView
-                    android:id="@+id/tv_areainfested"
-                    android:layout_width="match_parent"
-                    android:layout_height="24dp"
-                    android:background="#FFFFFF"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="8dp"
-                    android:text="AREA INFESTED" />
-                
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:paddingLeft="4dp"
-                    android:paddingRight="4dp" >
-                    
-                    <EditText
-                        android:id="@+id/et_areainfested"
-                        android:layout_width="96dp"
-                        android:layout_height="48dp"
-                        android:inputType="number" />
-                    
-                    <Spinner 
-                        android:id="@+id/sp_areainfested"
-                        android:layout_alignParentRight="true"
-                        android:layout_width="wrap_content"
-                        android:layout_height="48dp" />
-                    	
-                </RelativeLayout>
-                
-            </LinearLayout>
-
-            <View
-                android:layout_width="fill_parent"
-                android:layout_height="3dp"
-                android:layout_marginBottom="16dp"
-                android:background="@drawable/drop_shadow" />
-            
-<!--================================================== Coordinates ==================================================-->
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#F2F2F2"
-                android:orientation="vertical" >
-
-                <TextView
-                    android:id="@+id/tv_coordinates"
-                    android:layout_width="match_parent"
-                    android:layout_height="24dp"
-                    android:background="#FFFFFF"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="8dp"
-                    android:text="COORDINATES" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:paddingLeft="4dp" >
-                
-                	<LinearLayout
-	                    android:layout_width="0dp"
-                    	android:layout_height="wrap_content"
-	                    android:layout_weight="1"
-	                    android:orientation="vertical" >
-                
-                		<TextView
-		                    android:id="@+id/tv_latitude"
-                    		android:layout_width="match_parent"
-                    		android:layout_height="wrap_content"
-                    		android:paddingBottom="12dp"
-                    		android:paddingLeft="8dp"
-                    		android:paddingTop="12dp"
-                    		android:text="Latitude"
-                    		android:textSize="14sp"
-                    		android:textColor="@android:color/black" />
-                
-                		<TextView
-		                    android:id="@+id/tv_longitude"
-                    		android:layout_width="match_parent"
-                    		android:layout_height="wrap_content"
-                    		android:paddingBottom="12dp"
-                    		android:paddingLeft="8dp"
-                    		android:paddingTop="12dp"
-                    		android:text="Longitude"
-                    		android:textSize="14sp"
-                    		android:textColor="@android:color/black" />
-                	
-	                </LinearLayout>
-	                
-                	<Button
-                	    android:layout_width="32dp"
-                	    android:layout_height="wrap_content"
-                	    android:layout_gravity="center_vertical"
-                	    android:layout_marginRight="8dp"
-                	    android:background="@drawable/edit_drawable"
-                	    android:onClick="onEdit" />
-                
+                    android:padding="4dp" >
+
+                    <ToggleButton
+                        android:id="@+id/bu_4"
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:layout_weight="1"
+                        android:onClick="onToggle"
+                        android:textOff="25-50%"
+                        android:textOn="25-50%"
+                        android:textSize="20sp" />
+
+                    <ToggleButton
+                        android:id="@+id/bu_5"
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:layout_weight="1"
+                        android:onClick="onToggle"
+                        android:textOff="50-75%"
+                        android:textOn="50-75%"
+                        android:textSize="20sp" />
+
+                    <ToggleButton
+                        android:id="@+id/bu_6"
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:layout_weight="1"
+                        android:onClick="onToggle"
+                        android:textOff="75-100%"
+                        android:textOn="75-100%"
+                        android:textSize="20sp" />
+                    
                 </LinearLayout>
                 
-                <fragment
-                    android:id="@+id/mapview_checkin"
-                    android:name="com.google.android.gms.maps.SupportMapFragment"
-                    android:layout_width="match_parent"
-                    android:layout_height="144dp" />
+            </RadioGroup>
+            
+        </LinearLayout>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="3dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/drop_shadow" />
+
+<!-- ================================================== Area Infested ================================================== -->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#F2F2F2"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/tv_areainfested"
+                android:layout_width="match_parent"
+                android:layout_height="24dp"
+                android:background="#FFFFFF"
+                android:gravity="center_vertical"
+                android:paddingLeft="8dp"
+                android:text="@string/layout_report_area" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp" >
+
+                <EditText
+                    android:id="@+id/et_areainfested"
+                    android:layout_width="96dp"
+                    android:layout_height="48dp"
+                    android:inputType="number" />
+
+                <Spinner
+                    android:id="@+id/sp_areainfested"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:layout_alignParentRight="true" />
+                
+            </RelativeLayout>
+            
+        </LinearLayout>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="3dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/drop_shadow" />
+
+<!-- ================================================== Coordinates ================================================== -->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#F2F2F2"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/tv_coordinates"
+                android:layout_width="match_parent"
+                android:layout_height="24dp"
+                android:background="#FFFFFF"
+                android:gravity="center_vertical"
+                android:paddingLeft="8dp"
+                android:text="@string/layout_report_coordinates" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingLeft="4dp" >
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        android:id="@+id/tv_latitude"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="6dp"
+                        android:paddingLeft="8dp"
+                        android:paddingTop="12dp"
+                        android:text="@string/latitude"
+                        android:textColor="@android:color/black"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/tv_longitude"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="12dp"
+                        android:paddingLeft="8dp"
+                        android:paddingTop="6dp"
+                        android:text="@string/longitude"
+                        android:textColor="@android:color/black"
+                        android:textSize="14sp" />
+                    
+                </LinearLayout>
+
+                <Button
+                    android:layout_width="32dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="8dp"
+                    android:background="@drawable/edit_drawable"
+                    android:onClick="onEdit" />
                 
             </LinearLayout>
 
-            <View
+            <fragment
+                android:id="@+id/mapview_checkin"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
                 android:layout_width="match_parent"
-                android:layout_height="3dp"
-                android:layout_marginBottom="16dp"
-                android:background="@drawable/drop_shadow" />
+                android:layout_height="144dp" />
             
         </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/drop_shadow" />
         
-    </ScrollView>
+    </LinearLayout>
 
-    
-
-</LinearLayout>
+</ScrollView>

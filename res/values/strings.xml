@@ -18,5 +18,17 @@
         <item>Square Acres</item>
         <item>Square Feet</item>
     </string-array>
+    
+    <string name="layout_main_new">New Record</string>
+    <string name="layout_main_startsession">Start Session</string>
+    <string name="layout_main_upload">Upload Records</string>
+    
+    <string name="layout_report_picturenotes">PICTURE/NOTES</string>
+    <string name="layout_report_percentage">PERCENTAGE</string>
+    <string name="layout_report_area">AREA INFESTED</string>
+    <string name="layout_report_coordinates">COORDINATES</string>
+    <string name="layout_report_camera">Choose a picture</string>
+    <string name="latitude">Latitude</string>
+    <string name="longitude">Longitude</string>
 
 </resources>

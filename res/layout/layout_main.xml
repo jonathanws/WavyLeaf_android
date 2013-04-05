@@ -2,30 +2,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_weight="1"
-    android:background="#eeeeee" >
+    android:background="#dddddd" >
 
     <Button
         android:id="@+id/button_new"
         style="@style/DashboardButton"
         android:background="@drawable/abs__list_selector_holo_light"
-        android:drawableTop="@drawable/temp_144x96"
-        android:text="New\nRecord"
-        android:textColor="#db4437" />
+        android:drawableLeft="@drawable/ic_main_new_light"
+        android:drawablePadding="8dp"
+        android:gravity="left|center_vertical"
+        android:text="@string/layout_main_new" />
 
     <Button
         android:id="@+id/button_session"
         style="@style/DashboardButton"
         android:background="@drawable/abs__list_selector_holo_light"
-        android:drawableTop="@drawable/temp_144x96"
-        android:text="Start\nSession"
-        android:textColor="#7f00ff" />
+        android:drawableLeft="@drawable/ic_main_start_light"
+        android:drawablePadding="8dp"
+        android:gravity="left|center_vertical"
+        android:text="@string/layout_main_startsession" />
 
-    <Button
-        android:id="@+id/button_upload"
-        style="@style/DashboardButton"
-        android:background="@drawable/abs__list_selector_holo_light"
-        android:drawableTop="@drawable/temp_144x96"
-        android:text="Upload\nRecords"
-        android:textColor="#0000ff" />
-    
 </com.towson.wavyleaf.DashboardLayout>
