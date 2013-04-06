@@ -1,23 +1,6 @@
 <resources>
 
-    <!--
-        Base application theme, dependent on API level. This theme is replaced
-        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
-    -->
-    <style name="AppBaseTheme" parent="android:Theme.Light">
-        <!--
-            Theme customizations available in newer API levels can go in
-            res/values-vXX/styles.xml, while customizations related to
-            backward-compatibility can go here.
-        -->
-    </style>
-
-    <!-- Application theme. -->
-    <style name="AppTheme" parent="AppBaseTheme">
-        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
-    </style>
-    
-    <style name="DashboardButton" >
+    <style name="DashboardButton">
         <item name="android:layout_gravity">center_vertical</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -26,6 +9,88 @@
         <item name="android:drawablePadding">2dp</item>
         <item name="android:textSize">20sp</item>
         <item name="android:background">@null</item>
+    </style>
+
+    <!-- Custom view styles -->
+
+    <style name="EditTextgreeeeeen" parent="android:Widget.EditText">
+        <item name="android:background">@drawable/edit_text_holo_light</item>
+        <item name="android:textColor">#000000</item>
+    </style>
+
+    <style name="Buttongreeeeeen" parent="android:Widget.Button">
+        <item name="android:background">@drawable/btn_default_holo_light</item>
+        <item name="android:minHeight">48dip</item>
+        <item name="android:minWidth">64dip</item>
+        <item name="android:textColor">#000000</item>
+    </style>
+
+    <style name="ImageButtongreeeeeen" parent="android:Widget.ImageButton">
+        <item name="android:background">@drawable/btn_default_holo_light</item>
+    </style>
+
+    <style name="Spinnergreeeeeen" parent="android:Widget.Spinner">
+        <item name="android:background">@drawable/spinner_background_holo_light</item>
+        <item name="android:dropDownSelector">@drawable/list_selector_holo_light</item>
+    </style>
+
+    <style name="Spinnergreeeeeen.DropDown">
+        <item name="android:spinnerMode">dropdown</item>
+    </style>
+
+    <style name="Togglegreeeeeen" parent="android:Widget.Button.Toggle">
+        <item name="android:background">@drawable/btn_toggle_holo_light</item>
+        <item name="android:minHeight">48dip</item>
+    </style>
+    
+    
+    
+    
+    
+    
+    
+    <style name="ActionBar.Solid.Greentheme" parent="@style/Widget.Sherlock.Light.ActionBar.Solid.Inverse">
+        <item name="background">@drawable/ab_solid_greentheme</item>
+        <item name="backgroundStacked">@drawable/ab_stacked_solid_greentheme</item>
+        <item name="backgroundSplit">@drawable/ab_bottom_solid_greentheme</item>
+        <item name="progressBarStyle">@style/ProgressBar.Greentheme</item>
+    </style>
+
+    <style name="ActionBar.Transparent.Greentheme" parent="@style/Widget.Sherlock.ActionBar">
+        <item name="background">@drawable/ab_transparent_greentheme</item>
+        <item name="progressBarStyle">@style/ProgressBar.Greentheme</item>
+    </style>
+	
+    <style name="PopupMenu.Greentheme" parent="@style/Widget.Sherlock.ListPopupWindow">	
+        <item name="android:popupBackground">@drawable/menu_dropdown_panel_greentheme</item>	
+    </style>
+	
+    <style name="DropDownListView.Greentheme" parent="@style/Widget.Sherlock.ListView.DropDown">
+        <item name="android:listSelector">@drawable/selectable_background_greentheme</item>
+    </style>
+
+    <style name="ActionBarTabStyle.Greentheme" parent="@style/Widget.Sherlock.ActionBar.TabView">
+        <item name="android:background">@drawable/tab_indicator_ab_greentheme</item>
+    </style>
+	
+    <style name="DropDownNav.Greentheme" parent="@style/Widget.Sherlock.Spinner.DropDown.ActionBar">
+        <item name="android:background">@drawable/spinner_background_ab_greentheme</item>
+        <item name="android:popupBackground">@drawable/menu_dropdown_panel_greentheme</item>
+        <item name="android:dropDownSelector">@drawable/selectable_background_greentheme</item>
+    </style>
+    
+    <style name="ProgressBar.Greentheme" parent="@style/Widget.Sherlock.ProgressBar.Horizontal">
+        <item name="android:progressDrawable">@drawable/progress_horizontal_greentheme</item>
+    </style>
+    
+    <style name="ActionButton.CloseMode.Greentheme" parent="@style/Widget.Sherlock.ActionButton.CloseMode">
+        <item name="android:background">@drawable/btn_cab_done_greentheme</item>
+    </style>
+    
+    <!-- this style is only referenced in a Light.DarkActionBar based theme -->
+    <style name="Theme.Greentheme.Widget" parent="@style/Theme.Sherlock">
+        <item name="popupMenuStyle">@style/PopupMenu.Greentheme</item>
+        <item name="dropDownListViewStyle">@style/DropDownListView.Greentheme</item>
     </style>
 
 </resources>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <string-array name="camera_array">
+        <item>Take Picture</item>
+        <item>Choose From Gallery</item>
+    </string-array>
+    
+    <string-array name="maptype_array">
+        <item>Satellite</item>
+        <item>Terrain</item>
+    </string-array>
+    
+    <string-array name="areainfested_array">
+        <item>Square Miles</item>
+        <item>Square Acres</item>
+        <item>Square Feet</item>
+    </string-array>
+    
+    <string-array name="tripinterval_array">
+        <item>5 Minutes</item>
+        <item>10 Minutes</item>
+        <item>15 Minutes</item>
+        <item>20 Minutes</item>
+        <item>30 Minutes</item>
+    </string-array>
+    
+</resources>

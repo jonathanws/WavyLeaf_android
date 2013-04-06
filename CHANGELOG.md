@@ -2,9 +2,14 @@ Change Log
 ===============================================================================
 
 
+Version 1.0.7 *(4-6-2013)*
+----------------------------
+* Added green theming and styles
+* Added estimated 1,000,000 drawables for green themes
+
 Version 1.0.6 *(4-5-2013)*
 ----------------------------
-Added help option to main screen
+* Added help option to main screen
 
 Version 1.0.5 *(4-5-2103)*
 ----------------------------

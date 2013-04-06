@@ -33,8 +33,8 @@
                 android:layout_weight="1"
                 android:gravity="right|bottom"
                 android:text="5:00 Minutes"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#CC0000" />
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="#669900" />
             
         </LinearLayout>
         
@@ -58,18 +58,18 @@
                 android:layout_weight="1"
                 android:gravity="right|bottom"
                 android:text="42"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#CC0000" />
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="#669900" />
             
         </LinearLayout>
 
         <View
             android:layout_width="fill_parent"
             android:layout_height="1dp"
-            android:background="@android:color/darker_gray"
-            android:layout_marginBottom="16dp" />
+            android:background="#669900"
+            android:layout_marginBottom="8dp" />
         
-        <!-- ================================================== Picture/notes ================================================== -->
+<!-- ================================================== Picture/notes ================================================== -->
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -155,7 +155,7 @@
                         android:onClick="onToggle"
                         android:textOff="0%"
                         android:textOn="0%"
-                        android:textSize="20sp" />
+                        android:textSize="18sp" />
 
                     <ToggleButton
                         android:id="@+id/bu_2"
@@ -165,7 +165,7 @@
                         android:onClick="onToggle"
                         android:textOff="1-10%"
                         android:textOn="1-10%"
-                        android:textSize="20sp" />
+                        android:textSize="18sp" />
 
                     <ToggleButton
                         android:id="@+id/bu_3"
@@ -175,7 +175,7 @@
                         android:onClick="onToggle"
                         android:textOff="10-25%"
                         android:textOn="10-25%"
-                        android:textSize="20sp" />
+                        android:textSize="18sp" />
                     
                 </LinearLayout>
 
@@ -193,7 +193,7 @@
                         android:onClick="onToggle"
                         android:textOff="25-50%"
                         android:textOn="25-50%"
-                        android:textSize="20sp" />
+                        android:textSize="18sp" />
 
                     <ToggleButton
                         android:id="@+id/bu_5"
@@ -203,7 +203,7 @@
                         android:onClick="onToggle"
                         android:textOff="50-75%"
                         android:textOn="50-75%"
-                        android:textSize="20sp" />
+                        android:textSize="18sp" />
 
                     <ToggleButton
                         android:id="@+id/bu_6"
@@ -213,7 +213,7 @@
                         android:onClick="onToggle"
                         android:textOff="75-100%"
                         android:textOn="75-100%"
-                        android:textSize="20sp" />
+                        android:textSize="18sp" />
                     
                 </LinearLayout>
                 
@@ -337,14 +337,16 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Done Trip" />
+                android:text="Done Trip"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
             
             <Button
                 android:id="@+id/donePoint"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Done Point" />
+                android:text="Done Point"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
             
         </LinearLayout>
         

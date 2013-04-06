@@ -3,6 +3,7 @@ package com.towson.wavyleaf;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -27,8 +28,14 @@ public class Main extends SherlockActivity implements OnClickListener {
 	}
 	
 	protected void initLayout() {
+		Typeface tf_light = Typeface.createFromAsset(getAssets(), "fonts/roboto_light.ttf");
+		
 		bu_new = (Button) findViewById(R.id.button_new);
 		bu_trip = (Button) findViewById(R.id.button_trip);
+		
+		bu_new.setTypeface(tf_light);
+		bu_trip.setTypeface(tf_light);
+		
 		bu_new.setOnClickListener(this);
 		bu_trip.setOnClickListener(this);
 	}

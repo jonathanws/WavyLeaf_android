@@ -61,7 +61,8 @@
         <activity
             android:name="com.towson.wavyleaf.Trip"
             android:label="Trip"
-            android:theme="@style/Theme.Sherlock.Light.DarkActionBar"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.greeeeeen"
             android:windowSoftInputMode="stateHidden" />
         
     </application>
