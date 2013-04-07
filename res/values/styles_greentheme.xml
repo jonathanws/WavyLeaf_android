@@ -30,7 +30,6 @@
         <item name="android:editTextStyle">@style/EditTextgreeeeeen</item>
         <item name="android:buttonStyle">@style/Buttongreeeeeen</item>
         <item name="android:imageButtonStyle">@style/ImageButtongreeeeeen</item>
-        <item name="android:spinnerStyle">@style/Spinnergreeeeeen</item>
         <item name="android:dropDownSpinnerStyle">@style/Spinnergreeeeeen.DropDown</item>
         <item name="android:buttonStyleToggle">@style/Togglegreeeeeen</item>
         

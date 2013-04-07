@@ -50,7 +50,7 @@
             android:name="com.towson.wavyleaf.Report"
             android:label="New Record"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.Sherlock.Light.DarkActionBar"
+            android:theme="@style/Theme.greeeeeen"
             android:windowSoftInputMode="stateHidden" />
         
         <activity

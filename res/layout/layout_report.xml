@@ -28,6 +28,11 @@
                 android:gravity="center_vertical"
                 android:paddingLeft="8dp"
                 android:text="@string/layout_report_picturenotes" />
+            
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:background="#669900" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -78,6 +83,11 @@
                 android:gravity="center_vertical"
                 android:paddingLeft="8dp"
                 android:text="@string/layout_report_percentage" />
+            
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:background="#669900" />
 
             <RadioGroup
                 android:id="@+id/toggleGroup"
@@ -186,6 +196,11 @@
                 android:gravity="center_vertical"
                 android:paddingLeft="8dp"
                 android:text="@string/layout_report_area" />
+            
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:background="#669900" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -231,6 +246,11 @@
                 android:gravity="center_vertical"
                 android:paddingLeft="8dp"
                 android:text="@string/layout_report_coordinates" />
+            
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:background="#669900" />
 
             <LinearLayout
                 android:layout_width="match_parent"
