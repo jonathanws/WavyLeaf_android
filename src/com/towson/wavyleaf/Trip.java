@@ -27,7 +27,7 @@ public class Trip extends SherlockActivity {
 	
 	private static final int ONSTART = 6;
 	protected TextView tripInterval, tripSelection, tally, tallyNumber, tvlat, tvlong, tvpicnotes, tvper, tvcoor, tvarea, notes;
-	protected Button doneTrip, donePoint, b1, b2, b3, b4, b5, b6;
+	protected Button doneTrip, save, b1, b2, b3, b4, b5, b6;
 	protected RadioGroup rg;
 	protected Spinner sp;
 	protected ImageButton ib;
@@ -59,8 +59,8 @@ public class Trip extends SherlockActivity {
 		
 		notes = (EditText) findViewById(R.id.notes);
 		
-		doneTrip = (Button) findViewById(R.id.doneTrip);
-		donePoint = (Button) findViewById(R.id.donePoint);
+//		doneTrip = (Button) findViewById(R.id.finishTrip);
+		save = (Button) findViewById(R.id.save);
 
 		b1 = (ToggleButton) findViewById(R.id.bu_1);
 		b2 = (ToggleButton) findViewById(R.id.bu_2);
@@ -84,8 +84,8 @@ public class Trip extends SherlockActivity {
 		tripSelection.setTypeface(tf_light);
 		tally.setTypeface(tf_light);
 		tallyNumber.setTypeface(tf_light);
-		doneTrip.setTypeface(tf_light);
-		donePoint.setTypeface(tf_light);
+//		doneTrip.setTypeface(tf_light);
+		save.setTypeface(tf_light);
 		tvlat.setTypeface(tf_light);
 		tvlong.setTypeface(tf_light);
 		tvcoor.setTypeface(tf_bold);

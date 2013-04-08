@@ -334,10 +334,10 @@ public class Report extends SherlockFragmentActivity {
 				.create();
 			case NO_GPS:
 				return new AlertDialog.Builder(this)
-				.setTitle("GPS is diabled")
-				.setMessage("Show location settings?")
+				.setTitle(getResources().getString(R.string.gps_is_disabled))
+				.setMessage(getResources().getString(R.string.show_location_settings))
 				.setCancelable(false)
-				.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+				.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));

@@ -14,5 +14,11 @@
     <string name="layout_report_camera">Choose a picture</string>
     <string name="latitude">Latitude</string>
     <string name="longitude">Longitude</string>
+    
+    <string name="layout_trip_save">Save</string>
+    <string name="finish_trip">Finish Trip</string>
+    
+    <string name="gps_is_disabled">GPS is disabled</string>
+    <string name="show_location_settings">Show Location Settings</string>
 
 </resources>

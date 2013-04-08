@@ -1,27 +1,95 @@
-<com.towson.wavyleaf.DashboardLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_weight="1"
-    android:background="#dddddd" >
+    android:background="#dddddd"
+    android:paddingBottom="8dp"
+    android:orientation="vertical" >
 
-    <Button
-        android:id="@+id/button_new"
-        style="@style/DashboardButton"
-        android:background="@drawable/abs__list_selector_holo_light"
-        android:drawableLeft="@drawable/ic_main_new_light"
-        android:drawablePadding="16dp"
-        android:gravity="left|center_vertical"
-        android:text="@string/layout_main_new"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+    <com.towson.wavyleaf.DashboardLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" >
 
-    <Button
-        android:id="@+id/button_trip"
-        style="@style/DashboardButton"
-        android:background="@drawable/abs__list_selector_holo_light"
-        android:drawableLeft="@drawable/ic_main_start_light"
-        android:drawablePadding="16dp"
-        android:gravity="left|center_vertical"
-        android:text="@string/layout_main_trip"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        <Button
+            android:id="@+id/button_new"
+            style="@style/DashboardButton"
+            android:background="@drawable/abs__list_selector_holo_light"
+            android:drawableLeft="@drawable/ic_main_new_light"
+            android:drawablePadding="16dp"
+            android:gravity="left|center_vertical"
+            android:text="@string/layout_main_new"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
 
-</com.towson.wavyleaf.DashboardLayout>
+        <Button
+            android:id="@+id/button_trip"
+            style="@style/DashboardButton"
+            android:background="@drawable/abs__list_selector_holo_light"
+            android:drawableLeft="@drawable/ic_main_start_light"
+            android:drawablePadding="16dp"
+            android:gravity="left|center_vertical"
+            android:text="@string/layout_main_trip"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+    </com.towson.wavyleaf.DashboardLayout>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:background="#669900" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp" >
+
+        <TextView
+            android:id="@+id/tv_tripinterval"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="left|bottom"
+            android:text="Trip Interval"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <TextView
+            android:id="@+id/tv_tripselection"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="right|bottom"
+            android:text="5:00 Minutes"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="#669900" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp" >
+
+        <TextView
+            android:id="@+id/tv_triptally"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="left|bottom"
+            android:text="# Recorded"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <TextView
+            android:id="@+id/tv_triptallynumber"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="right|bottom"
+            android:text="42"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="#669900" />
+    </LinearLayout>
+
+</LinearLayout>

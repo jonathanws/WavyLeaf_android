@@ -2,6 +2,11 @@ Change Log
 ===============================================================================
 
 
+Version 1.0.8 *(4-7-2013)*
+----------------------------
+* Fixed changes suggested by *advisees*
+* Changed Main layout/Trip layout to both have current tally of points recorded
+
 Version 1.0.7 *(4-6-2013)*
 ----------------------------
 * Added green theming and styles

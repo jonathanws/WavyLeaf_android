@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockActivity;
@@ -18,6 +19,7 @@ public class Main extends SherlockActivity implements OnClickListener {
 	
 	private static final int HELP = 0;
 	protected Button bu_new, bu_trip;
+	protected TextView tripInterval, tripSelection, tally, tallyNumber;
 	
 	@Override
 	public void onCreate(Bundle bundle) {
@@ -32,9 +34,17 @@ public class Main extends SherlockActivity implements OnClickListener {
 		
 		bu_new = (Button) findViewById(R.id.button_new);
 		bu_trip = (Button) findViewById(R.id.button_trip);
+		tripInterval = (TextView) findViewById(R.id.tv_tripinterval);
+		tripSelection = (TextView) findViewById(R.id.tv_tripselection);
+		tally = (TextView) findViewById(R.id.tv_triptally);
+		tallyNumber = (TextView) findViewById(R.id.tv_triptallynumber);
 		
 		bu_new.setTypeface(tf_light);
 		bu_trip.setTypeface(tf_light);
+		tripInterval.setTypeface(tf_light);
+		tripSelection.setTypeface(tf_light);
+		tally.setTypeface(tf_light);
+		tallyNumber.setTypeface(tf_light);
 		
 		bu_new.setOnClickListener(this);
 		bu_trip.setOnClickListener(this);
