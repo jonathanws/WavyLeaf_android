@@ -4,8 +4,10 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -46,6 +48,7 @@ public class Trip extends SherlockActivity {
 		Typeface tf_light = Typeface.createFromAsset(getAssets(), "fonts/roboto_light.ttf");
 		Typeface tf_bold = Typeface.createFromAsset(getAssets(), "fonts/roboto_bold.ttf");
 		
+		//TODO read tripSelection every onCreate from SharedPreferences
 		tripInterval = (TextView) findViewById(R.id.tv_tripinterval);
 		tripSelection = (TextView) findViewById(R.id.tv_tripselection);
 		tally = (TextView) findViewById(R.id.tv_triptally);
@@ -98,6 +101,9 @@ public class Trip extends SherlockActivity {
 		b4.setTypeface(tf_light);
 		b5.setTypeface(tf_light);
 		b6.setTypeface(tf_light);
+		
+		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+		tripInterval.setText(sp.getString("TRIP_INTERVAL", "(Not Set)"));	
 	}
 	
 	@Override
