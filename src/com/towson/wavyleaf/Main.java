@@ -1,13 +1,18 @@
 package com.towson.wavyleaf;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -21,11 +26,15 @@ import com.actionbarsherlock.view.MenuItem;
 
 public class Main extends SherlockActivity implements OnClickListener {
 	
+	private static final int ONSTART = 6;
 	private static final int HELP = 0;
 	private static final String TRIP_ENABLED_KEY = "trip_enabled";
 	public boolean tripEnabled = false;
 	protected Button bu_new, bu_trip;
 	protected TextView tripInterval, tripSelection, tally, tallyNumber;
+	private AlarmManager intervalAlarm;
+	private Intent alarmIntent;
+	private PendingIntent pendingAlarm;
 	
 	@Override
 	public void onCreate(Bundle bundle) {
@@ -39,8 +48,19 @@ public class Main extends SherlockActivity implements OnClickListener {
         
         if (tripEnabled) {
         	setButtonDrawable(R.drawable.ic_main_end);
-        } else if (!tripEnabled)
+        	//setup alarm for trips
+        	intervalAlarm = (AlarmManager)getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+			alarmIntent = new Intent(getApplicationContext(), Trip.class);
+			pendingAlarm = PendingIntent.getBroadcast(getApplicationContext(), 117, alarmIntent, 0);
+			
+        } 
+        else if (!tripEnabled) {
         	setButtonDrawable(R.drawable.ic_main_start_light);
+        	if(intervalAlarm != null)
+        	{
+        		intervalAlarm.cancel(pendingAlarm);
+        	}
+        }
         
         Toast.makeText(getApplicationContext(), tripEnabled + "", Toast.LENGTH_SHORT).show();
 	}
@@ -97,6 +117,10 @@ public class Main extends SherlockActivity implements OnClickListener {
 			ed.putBoolean(TRIP_ENABLED_KEY, tripEnabled);
 			ed.commit();
 			Toast.makeText(getApplicationContext(), tripEnabled + "", Toast.LENGTH_SHORT).show();
+			if(tripEnabled)
+			{
+				showDialog(ONSTART);
+			}
 //			Intent sessionIntent = new Intent(this, Trip.class);
 //			this.startActivity(sessionIntent);
 		}
@@ -111,6 +135,45 @@ public class Main extends SherlockActivity implements OnClickListener {
 				.setMessage("I'm here to help!")
 				.setPositiveButton("Phew!", null)
 				.setNegativeButton("cancel", null)
+				.create();
+			case ONSTART:
+				return new AlertDialog.Builder(this)
+				.setTitle("Choose Interval")
+				.setItems(R.array.tripinterval_array, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+						Editor ed = sp.edit();						
+						
+						if (which == 0) {
+							intervalAlarm.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), 300000, pendingAlarm);
+							ed.putInt("TRIP_INTERVAL", 300000);
+							Toast.makeText(getApplicationContext(), "Five Minutes", Toast.LENGTH_SHORT).show();
+						}
+						else if(which == 1) {
+							intervalAlarm.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), 600000, pendingAlarm);
+							ed.putInt("TRIP_INTERVAL", 600000);
+							Toast.makeText(getApplicationContext(), "Ten Minutes", Toast.LENGTH_SHORT).show();
+						}
+						else if(which == 2) {
+							intervalAlarm.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), 900000, pendingAlarm);
+							ed.putInt("TRIP_INTERVAL", 900000);
+							Toast.makeText(getApplicationContext(), "Fifteen Minutes", Toast.LENGTH_SHORT).show();
+						}
+						else if(which == 3) {
+							intervalAlarm.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), 1200000, pendingAlarm);
+							ed.putInt("TRIP_INTERVAL", 1200000);
+							Toast.makeText(getApplicationContext(), "Twenty Minutes", Toast.LENGTH_SHORT).show();
+						}
+						else if(which == 4) {
+							intervalAlarm.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), 1800000, pendingAlarm);
+							ed.putInt("TRIP_INTERVAL", 1800000);
+							Toast.makeText(getApplicationContext(), "Thirty Minutes", Toast.LENGTH_SHORT).show();
+						}
+						
+						ed.commit();
+					}
+				})
 				.create();
 		}
 		return super.onCreateDialog(id);

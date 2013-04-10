@@ -64,6 +64,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.greeeeeen"
             android:windowSoftInputMode="stateHidden" />
+        <receiver android:name="TripIntervalAlert"></receiver>
         
     </application>
 

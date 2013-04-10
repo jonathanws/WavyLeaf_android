@@ -25,7 +25,7 @@ import com.actionbarsherlock.view.MenuItem;
 
 public class Trip extends SherlockActivity {
 	
-	private static final int ONSTART = 6;
+	//private static final int ONSTART = 6;
 	protected TextView tripInterval, tripSelection, tally, tallyNumber, tvlat, tvlong, tvpicnotes, tvper, tvcoor, tvarea, notes;
 	protected Button doneTrip, save, b1, b2, b3, b4, b5, b6;
 	protected RadioGroup rg;
@@ -37,7 +37,7 @@ public class Trip extends SherlockActivity {
 		super.onCreate(bundle);
 		setContentView(R.layout.layout_trip);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		showDialog(ONSTART);
+		//showDialog(ONSTART);
 		init();
 	}
 	
@@ -59,7 +59,7 @@ public class Trip extends SherlockActivity {
 		
 		notes = (EditText) findViewById(R.id.notes);
 		
-//		doneTrip = (Button) findViewById(R.id.finishTrip);
+//		doneTrip = (Button) findViewById(R.id.finishTrip);	//img should say Save & Done Trip
 		save = (Button) findViewById(R.id.save);
 
 		b1 = (ToggleButton) findViewById(R.id.bu_1);
@@ -139,22 +139,22 @@ public class Trip extends SherlockActivity {
 			}
 		}
 	
-	@Override
-	protected Dialog onCreateDialog(int id) {
-		switch(id) {
-			case ONSTART:
-				return new AlertDialog.Builder(this)
-				.setTitle("Choose Interval")
-				.setItems(R.array.tripinterval_array, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						if (which == 0)
-							Toast.makeText(getApplicationContext(), "Five Minutes", Toast.LENGTH_SHORT).show();
-					}
-				})
-				.create();
-		}
-		return super.onCreateDialog(id);
-	}
+//	@Override
+//	protected Dialog onCreateDialog(int id) {
+//		switch(id) {
+//			case ONSTART:
+//				return new AlertDialog.Builder(this)
+//				.setTitle("Choose Interval")
+//				.setItems(R.array.tripinterval_array, new DialogInterface.OnClickListener() {
+//					@Override
+//					public void onClick(DialogInterface dialog, int which) {
+//						if (which == 0)
+//							Toast.makeText(getApplicationContext(), "Five Minutes", Toast.LENGTH_SHORT).show();
+//					}
+//				})
+//				.create();
+//		}
+//		return super.onCreateDialog(id);
+//	}
 
 }

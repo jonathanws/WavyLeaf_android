@@ -10,7 +10,9 @@ import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,6 +41,7 @@ public class Report_Mapview extends SherlockFragmentActivity {
 	protected GoogleMap mMap;
 	protected CameraPosition userCurrentPosition;
 	protected LocationManager mLocationManager;
+	protected Button bu_resetCoord;
 	
 	@Override
 	protected void onCreate(Bundle bundle) {
@@ -60,6 +63,9 @@ public class Report_Mapview extends SherlockFragmentActivity {
 		//set all the beautiful typefaces
 		tvlat.setTypeface(tf_light);
 		tvlong.setTypeface(tf_light);
+		
+		//setup reset coordinates button
+		bu_resetCoord = (Button) findViewById(R.id.btnResetCoord);
 	}
 	
 	@Override
@@ -239,10 +245,17 @@ public class Report_Mapview extends SherlockFragmentActivity {
 				.setItems(R.array.maptype_array, new DialogInterface.OnClickListener() {
 					// Changing view seems to change zoom as well.  We'll account for that
 					public void onClick(DialogInterface dialog, int item) {
-						if (item == 0)
+						float zoomLevel;	//collect zoom level info, then switch map types then reset zoom essentially
+						if (item == 0) {
+							zoomLevel = mMap.getCameraPosition().zoom;
 							mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-						else if (item == 1)
+							changeCamera(CameraUpdateFactory.zoomTo(zoomLevel));
+						}
+						else if (item == 1) {
+							zoomLevel = mMap.getCameraPosition().zoom;
 							mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+							changeCamera(CameraUpdateFactory.zoomTo(zoomLevel));
+						}
 					}
 				})
 				.create();
@@ -261,6 +274,12 @@ public class Report_Mapview extends SherlockFragmentActivity {
 			}
 		return super.onCreateDialog(id);
 		//http://stackoverflow.com/questions/3326366/what-context-should-i-use-alertdialog-builder-in
+	}
+	
+	public void onClick(View view) {
+		if (view == this.bu_resetCoord) {
+			wheresWaldo();
+		}
 	}
 
 }
