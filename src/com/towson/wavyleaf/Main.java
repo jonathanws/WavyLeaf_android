@@ -3,8 +3,12 @@ package com.towson.wavyleaf;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -18,6 +22,8 @@ import com.actionbarsherlock.view.MenuItem;
 public class Main extends SherlockActivity implements OnClickListener {
 	
 	private static final int HELP = 0;
+	private static final String TRIP_ENABLED_KEY = "trip_enabled";
+	public boolean tripEnabled = false;
 	protected Button bu_new, bu_trip;
 	protected TextView tripInterval, tripSelection, tally, tallyNumber;
 	
@@ -27,6 +33,16 @@ public class Main extends SherlockActivity implements OnClickListener {
 		
 		setContentView(R.layout.layout_main);
 		initLayout();
+		
+		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        tripEnabled = sp.getBoolean(TRIP_ENABLED_KEY, false);
+        
+        if (tripEnabled) {
+        	setButtonDrawable(R.drawable.ic_main_end);
+        } else if (!tripEnabled)
+        	setButtonDrawable(R.drawable.ic_main_start_light);
+        
+        Toast.makeText(getApplicationContext(), tripEnabled + "", Toast.LENGTH_SHORT).show();
 	}
 	
 	protected void initLayout() {
@@ -75,8 +91,14 @@ public class Main extends SherlockActivity implements OnClickListener {
 			Intent newReportIntent = new Intent(this, Report.class);
 			this.startActivity(newReportIntent);	
 		} else if (view == this.bu_trip) {
-			Intent sessionIntent = new Intent(this, Trip.class);
-			this.startActivity(sessionIntent);
+			tripEnabled = !tripEnabled;
+			SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+			Editor ed = sp.edit();
+			ed.putBoolean(TRIP_ENABLED_KEY, tripEnabled);
+			ed.commit();
+			Toast.makeText(getApplicationContext(), tripEnabled + "", Toast.LENGTH_SHORT).show();
+//			Intent sessionIntent = new Intent(this, Trip.class);
+//			this.startActivity(sessionIntent);
 		}
 	}
 	
@@ -92,6 +114,11 @@ public class Main extends SherlockActivity implements OnClickListener {
 				.create();
 		}
 		return super.onCreateDialog(id);
+	}
+	
+	protected void setButtonDrawable(int button) {
+		Drawable img = getBaseContext().getResources().getDrawable(button);
+		bu_trip.setCompoundDrawablesWithIntrinsicBounds(img, null, null, null);
 	}
 
 }

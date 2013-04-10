@@ -2,6 +2,10 @@ Change Log
 ===============================================================================
 
 
+Version 1.0.9 *(4-7-2013)*
+----------------------------
+Fixed main's Trip button. Still needs listener to change on user click
+
 Version 1.0.8 *(4-7-2013)*
 ----------------------------
 * Fixed changes suggested by *advisees*

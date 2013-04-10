@@ -344,7 +344,7 @@
                 android:layout_height="match_parent"
                 android:background="@drawable/button_darkgreen"
                 android:text="@string/layout_trip_save"
-                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="#ffffff" />
         </LinearLayout>
     </LinearLayout>
