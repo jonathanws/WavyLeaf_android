@@ -1,6 +1,13 @@
 Change Log
 ===============================================================================
 
+
+Version 1.1.0 *(4-10-2013)*
+----------------------------
+* Added header previews to New Report and Trip
+* Added temporary intent to Trip in Main's overflow menu; to be deleted soon.
+* Changed minsdkversion
+
 Version 1.0.10 *(4-10-2013)*
 ----------------------------
 * First commit: implemented skeleton AlarmManager, added reset btn and keep-zoom to Edit Map

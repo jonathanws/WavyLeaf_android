@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="pressed_greentheme">#CC99CC00</color>
+    <color name="holo_darkgreen">#669900</color>
+    <color name="holo_lightgreen">#99CC00</color>
 </resources>

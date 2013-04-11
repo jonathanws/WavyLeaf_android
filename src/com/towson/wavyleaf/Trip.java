@@ -8,8 +8,12 @@ import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,6 +24,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+import android.widget.AdapterView.OnItemSelectedListener;
 
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
@@ -27,8 +32,10 @@ import com.actionbarsherlock.view.MenuItem;
 
 public class Trip extends SherlockActivity {
 	
-	//private static final int ONSTART = 6;
-	protected TextView tripInterval, tripSelection, tally, tallyNumber, tvlat, tvlong, tvpicnotes, tvper, tvcoor, tvarea, notes;
+	private static final int CAMERA = 3;
+	protected TextView tripInterval, tripSelection, tally, tallyNumber, tvlat, tvlong, tvpicnotes, 
+		tvper, tvper_summary, tvcoor, tvarea, tvarea_summary;
+	protected EditText notes, etarea;
 	protected Button doneTrip, save, b1, b2, b3, b4, b5, b6;
 	protected RadioGroup rg;
 	protected Spinner sp;
@@ -53,30 +60,56 @@ public class Trip extends SherlockActivity {
 		tripSelection = (TextView) findViewById(R.id.tv_tripselection);
 		tally = (TextView) findViewById(R.id.tv_triptally);
 		tallyNumber = (TextView) findViewById(R.id.tv_triptallynumber);
+		
 		tvlat = (TextView) findViewById(R.id.tv_latitude);
 		tvlong = (TextView) findViewById(R.id.tv_longitude);
 		tvpicnotes = (TextView) findViewById(R.id.tv_picturenotes);
 		tvper = (TextView) findViewById(R.id.tv_percentageseen);
+		tvper_summary = (TextView) findViewById(R.id.tv_percentageseen_summary);
 		tvcoor = (TextView) findViewById(R.id.tv_coordinates);
 		tvarea = (TextView) findViewById(R.id.tv_areainfested);
-		
+		tvarea_summary = (TextView) findViewById(R.id.tv_areainfested_summary);
 		notes = (EditText) findViewById(R.id.notes);
-		
-//		doneTrip = (Button) findViewById(R.id.finishTrip);	//img should say Save & Done Trip
-		save = (Button) findViewById(R.id.save);
-
+		etarea = (EditText) findViewById(R.id.et_areainfested);
 		b1 = (ToggleButton) findViewById(R.id.bu_1);
 		b2 = (ToggleButton) findViewById(R.id.bu_2);
 		b3 = (ToggleButton) findViewById(R.id.bu_3);
 		b4 = (ToggleButton) findViewById(R.id.bu_4);
 		b5 = (ToggleButton) findViewById(R.id.bu_5);
 		b6 = (ToggleButton) findViewById(R.id.bu_6);
-		
 		rg = (RadioGroup) findViewById(R.id.toggleGroup);
-		
 		sp = (Spinner) findViewById(R.id.sp_areainfested);
-		
 		ib = (ImageButton) findViewById(R.id.report_imagebutton);
+		save = (Button) findViewById(R.id.save);
+		
+		// Listener for camera button
+		ib.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				showDialog(CAMERA);
+			}
+		});
+		
+		// Listener for EditText in Area Infested
+		etarea.addTextChangedListener(new TextWatcher() {
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				if (etarea.getText().length() == 0)
+					tvarea_summary.setText("");
+				else
+					tvarea_summary.setText(etarea.getText() + " " + sp.getSelectedItem().toString());
+				}
+			public void afterTextChanged(Editable s) {}
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+		});
+		
+		// Listener for Spinner in Area Infested
+		sp.setOnItemSelectedListener(new OnItemSelectedListener() {
+			@Override public void onNothingSelected(AdapterView<?> arg0) {}
+			@Override
+			public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+				if (etarea.getText().length() != 0)
+					tvarea_summary.setText(etarea.getText() + " " + sp.getSelectedItem());
+			}
+		});
 		
 		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.areainfested_array, android.R.layout.simple_spinner_item);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -87,13 +120,14 @@ public class Trip extends SherlockActivity {
 		tripSelection.setTypeface(tf_light);
 		tally.setTypeface(tf_light);
 		tallyNumber.setTypeface(tf_light);
-//		doneTrip.setTypeface(tf_light);
 		save.setTypeface(tf_light);
 		tvlat.setTypeface(tf_light);
 		tvlong.setTypeface(tf_light);
 		tvcoor.setTypeface(tf_bold);
 		tvarea.setTypeface(tf_bold);
+		tvarea_summary.setTypeface(tf_bold);
 		tvper.setTypeface(tf_bold);
+		tvper_summary.setTypeface(tf_bold);
 		tvpicnotes.setTypeface(tf_bold);
 		b1.setTypeface(tf_light);
 		b2.setTypeface(tf_light);
@@ -143,24 +177,34 @@ public class Trip extends SherlockActivity {
 					}
 				}
 			}
+		
+		// Determine text to set to textview
+		switch (view.getId()) {
+			case R.id.bu_1:
+				tvper_summary.setText("0%");
+				break;
+			case R.id.bu_2:
+				tvper_summary.setText("1-10%");
+				break;
+			case R.id.bu_3:
+				tvper_summary.setText("10-25%");
+				break;
+			case R.id.bu_4:
+				tvper_summary.setText("25-50%");
+				break;
+			case R.id.bu_5:
+				tvper_summary.setText("50-75%");
+				break;
+			case R.id.bu_6:
+				tvper_summary.setText("75-100%");
+				break;
+			default:
+				tvper_summary.setText("");
 		}
-	
-//	@Override
-//	protected Dialog onCreateDialog(int id) {
-//		switch(id) {
-//			case ONSTART:
-//				return new AlertDialog.Builder(this)
-//				.setTitle("Choose Interval")
-//				.setItems(R.array.tripinterval_array, new DialogInterface.OnClickListener() {
-//					@Override
-//					public void onClick(DialogInterface dialog, int which) {
-//						if (which == 0)
-//							Toast.makeText(getApplicationContext(), "Five Minutes", Toast.LENGTH_SHORT).show();
-//					}
-//				})
-//				.create();
-//		}
-//		return super.onCreateDialog(id);
-//	}
+	}
+		
+	public void onSaveButtonClick(View view) {
+		finish();
+	}
 
 }

@@ -13,9 +13,13 @@ import android.graphics.Typeface;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -65,8 +69,8 @@ public class Report extends SherlockFragmentActivity {
 	private UiSettings mUiSettings;
 	protected ImageButton ib;
 	protected RadioGroup rg;
-	protected TextView tvlat, tvlong, tvpicnotes, tvper, tvcoor, tvarea;
-	protected EditText notes;
+	protected TextView tvlat, tvlong, tvpicnotes, tvper, tvper_summary, tvcoor, tvarea, tvarea_summary;
+	protected EditText notes, etarea;
 	protected ToggleButton b1, b2, b3, b4, b5, b6;
 	protected LocationManager mLocationManager;
 	protected CameraPosition userCurrentPosition;
@@ -90,9 +94,12 @@ public class Report extends SherlockFragmentActivity {
 		tvlong = (TextView) findViewById(R.id.tv_longitude);
 		tvpicnotes = (TextView) findViewById(R.id.tv_picturenotes);
 		tvper = (TextView) findViewById(R.id.tv_percentageseen);
+		tvper_summary = (TextView) findViewById(R.id.tv_percentageseen_summary);
 		tvcoor = (TextView) findViewById(R.id.tv_coordinates);
 		tvarea = (TextView) findViewById(R.id.tv_areainfested);
+		tvarea_summary = (TextView) findViewById(R.id.tv_areainfested_summary);
 		notes = (EditText) findViewById(R.id.notes);
+		etarea = (EditText) findViewById(R.id.et_areainfested);
 		b1 = (ToggleButton) findViewById(R.id.bu_1);
 		b2 = (ToggleButton) findViewById(R.id.bu_2);
 		b3 = (ToggleButton) findViewById(R.id.bu_3);
@@ -104,11 +111,35 @@ public class Report extends SherlockFragmentActivity {
 		ib = (ImageButton) findViewById(R.id.report_imagebutton);
 		mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		
+		// Listener for camera button
 		ib.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 showDialog(CAMERA);
             }
         });
+		
+		// Listener for EditText in Area Infested
+		etarea.addTextChangedListener(new TextWatcher() {
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				if (etarea.getText().length() == 0)
+					tvarea_summary.setText("");
+				else
+					tvarea_summary.setText(etarea.getText() + " " + sp.getSelectedItem().toString());
+			}
+			public void afterTextChanged(Editable s) {}
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+		});
+		
+		// Listener for Spinner in Area Infested
+		sp.setOnItemSelectedListener(new OnItemSelectedListener() {
+			@Override public void onNothingSelected(AdapterView<?> arg0) {}
+			@Override
+			public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+				if (etarea.getText().length() != 0)
+					tvarea_summary.setText(etarea.getText() + " " + sp.getSelectedItem());
+			}
+			
+	    });
 		
 		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.areainfested_array, android.R.layout.simple_spinner_item);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -119,7 +150,9 @@ public class Report extends SherlockFragmentActivity {
 		tvlong.setTypeface(tf_light);
 		tvcoor.setTypeface(tf_bold);
 		tvarea.setTypeface(tf_bold);
+		tvarea_summary.setTypeface(tf_bold);
 		tvper.setTypeface(tf_bold);
+		tvper_summary.setTypeface(tf_bold);
 		tvpicnotes.setTypeface(tf_bold);
 		b1.setTypeface(tf_light);
 		b2.setTypeface(tf_light);
@@ -200,6 +233,30 @@ public class Report extends SherlockFragmentActivity {
 						tog.setChecked(false);
 				}
 			}
+		}
+		
+		// Determine text to set to textview
+		switch (view.getId()) {
+			case R.id.bu_1:
+				tvper_summary.setText("0%");
+				break;
+			case R.id.bu_2:
+				tvper_summary.setText("1-10%");
+				break;
+			case R.id.bu_3:
+				tvper_summary.setText("10-25%");
+				break;
+			case R.id.bu_4:
+				tvper_summary.setText("25-50%");
+				break;
+			case R.id.bu_5:
+				tvper_summary.setText("50-75%");
+				break;
+			case R.id.bu_6:
+				tvper_summary.setText("75-100%");
+				break;
+			default:
+				tvper_summary.setText("");
 		}
 	}
 	

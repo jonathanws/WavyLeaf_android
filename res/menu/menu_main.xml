@@ -9,5 +9,10 @@
         android:id="@+id/menu_settings"
         android:showAsAction="never"
         android:title="Settings"/>
+    
+    <item
+        android:id="@+id/deleteme"
+        android:showAsAction="never"
+        android:title="Trip activity" />
 
 </menu>

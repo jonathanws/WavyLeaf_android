@@ -101,6 +101,11 @@ public class Main extends SherlockActivity implements OnClickListener {
 			case R.id.menu_help:
 				showDialog(HELP);
 				return true;
+			// Delete this!
+			case R.id.deleteme:
+				Intent sessionIntent = new Intent(this, Trip.class);
+				this.startActivity(sessionIntent);
+				return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -110,17 +115,25 @@ public class Main extends SherlockActivity implements OnClickListener {
 		if (view == this.bu_new) {
 			Intent newReportIntent = new Intent(this, Report.class);
 			this.startActivity(newReportIntent);	
-		} else if (view == this.bu_trip) {
+			
+		} else if (view == this.bu_trip) {	        
+			// Toggle boolean
 			tripEnabled = !tripEnabled;
+			
+			// Commit change
 			SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 			Editor ed = sp.edit();
 			ed.putBoolean(TRIP_ENABLED_KEY, tripEnabled);
 			ed.commit();
 			Toast.makeText(getApplicationContext(), tripEnabled + "", Toast.LENGTH_SHORT).show();
-			if(tripEnabled)
-			{
+			
+			// Set drawable
+			if(tripEnabled) {
+				setButtonDrawable(R.drawable.ic_main_end);
 				showDialog(ONSTART);
-			}
+			} else if (!tripEnabled)
+				setButtonDrawable(R.drawable.ic_main_start_light);
+				
 //			Intent sessionIntent = new Intent(this, Trip.class);
 //			this.startActivity(sessionIntent);
 		}
