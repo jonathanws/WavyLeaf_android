@@ -22,7 +22,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="left|bottom"
-                android:text="Trip Interval"
+                android:text="@string/layout_tripinterval"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
 
             <TextView
@@ -31,7 +31,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="right|bottom"
-                android:text="5:00 Minutes"
+                android:text="@string/layout_novalue"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="#669900" />
             
@@ -47,7 +47,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="left|bottom"
-                android:text="# Recorded"
+                android:text="@string/layout_numrecorded"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
 
             <TextView
@@ -56,14 +56,14 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="right|bottom"
-                android:text="42"
+                android:text="@string/layout_novalue"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="#669900" />
             
         </LinearLayout>
 
         <View
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginBottom="8dp"
             android:background="#669900" />
@@ -86,7 +86,7 @@
                 android:text="@string/layout_report_picturenotes" />
 
             <View
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="#669900" />
 
@@ -118,7 +118,7 @@
         </LinearLayout>
 
         <View
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="3dp"
             android:layout_marginBottom="16dp"
             android:background="@drawable/drop_shadow" />
@@ -158,7 +158,7 @@
             </LinearLayout>
 
             <View
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="#669900" />
 
@@ -246,7 +246,7 @@
         </LinearLayout>
 
         <View
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="3dp"
             android:layout_marginBottom="16dp"
             android:background="@drawable/drop_shadow" />
@@ -286,7 +286,7 @@
             </LinearLayout>
 
             <View
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="#669900" />
 
@@ -300,7 +300,8 @@
                     android:id="@+id/et_areainfested"
                     android:layout_width="96dp"
                     android:layout_height="48dp"
-                    android:inputType="number" />
+                    android:inputType="number"
+                    android:maxLength="4" />
 
                 <Spinner
                     android:id="@+id/sp_areainfested"
@@ -313,7 +314,7 @@
         </LinearLayout>
 
         <View
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="3dp"
             android:layout_marginBottom="16dp"
             android:background="@drawable/drop_shadow" />
@@ -336,13 +337,13 @@
                 android:text="@string/layout_report_coordinates" />
 
             <View
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="#669900" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_weight="1"
                 android:orientation="vertical" >
 

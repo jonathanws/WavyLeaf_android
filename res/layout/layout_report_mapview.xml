@@ -31,11 +31,44 @@
         android:text="Longitude"
         android:textSize="18sp" />
 
-    <Button
-        android:id="@+id/btnResetCoord"
-        style="?android:attr/buttonStyleSmall"
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="#669900" />
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Reset Coordinates" />
+        android:layout_height="48dp"
+        android:background="#212121" >
+
+        <Button
+            android:id="@+id/btnResetCoord"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:background="@drawable/abs__list_selector_holo_light"
+            android:drawableLeft="@drawable/ic_reset"
+            android:paddingLeft="16dp"
+            android:paddingRight="8dp"
+            android:text="Reset"
+            android:textColor="#ffffff"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="4dp"
+            android:background="#669900" />
+
+        <Button
+            android:id="@+id/btnDone"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:background="@drawable/abs__list_selector_holo_light"
+            android:text="Done"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/holo_darkgreen" />
+    </LinearLayout>
 
 </LinearLayout>

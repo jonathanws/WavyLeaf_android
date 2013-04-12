@@ -246,7 +246,8 @@
                     android:id="@+id/et_areainfested"
                     android:layout_width="96dp"
                     android:layout_height="48dp"
-                    android:inputType="number" />
+                    android:inputType="number"
+                    android:maxLength="4" />
 
                 <Spinner
                     android:id="@+id/sp_areainfested"

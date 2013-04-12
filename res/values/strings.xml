@@ -7,6 +7,10 @@
     <string name="layout_main_trip">Start Trip</string>
     <string name="layout_main_upload">Upload Records</string>
     
+    <string name="layout_numrecorded"># Recorded</string>
+    <string name="layout_tripinterval">Trip Interval</string>
+    <string name="layout_novalue">- - - </string>
+    
     <string name="layout_report_picturenotes">PICTURE/NOTES</string>
     <string name="layout_report_percentage">PERCENTAGE</string>
     <string name="layout_report_area">AREA INFESTED</string>

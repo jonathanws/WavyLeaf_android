@@ -61,9 +61,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class Report extends SherlockFragmentActivity {
 	
 	private static final int LEGAL = 1, CAMERA = 3, NO_GPS = 4; // Used for calling dialogs. arbitrary numbers
-	private static final int CAMERA_REQUEST = 1337;
+	private static final int CAMERA_REQUEST = 1337, EDIT_REQUEST = 1338;
 	private boolean gpsEnabled = false;
 	private boolean playAPKEnabled = false;
+	private boolean editedCoordinatesInOtherActivitySoDontGetGPSLocation = false;
 	private boolean mapHasMarker = false; // onResume keeps adding markers to map, this should stop it
 	protected GoogleMap mMap;
 	private UiSettings mUiSettings;
@@ -75,6 +76,7 @@ public class Report extends SherlockFragmentActivity {
 	protected LocationManager mLocationManager;
 	protected CameraPosition userCurrentPosition;
 	protected Spinner sp;
+	protected Location currentEditableLocation; // Used by edit feature 
 	
 	@Override
 	protected void onCreate(Bundle bundle) {
@@ -165,18 +167,23 @@ public class Report extends SherlockFragmentActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		// Check for GPS
-		LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-		gpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-		playAPKEnabled = doesDeviceHaveGooglePlayServices();
 		
-		// If GPS is disabled
-		if (!gpsEnabled) {
-			buildAlertMessageNoGps();
-		} else if(gpsEnabled) {
-			if (playAPKEnabled) {
-				setUpMapIfNeeded();
-				wheresWaldo();
+		// User edited coordinates, so don't get them again from gps
+		if (!editedCoordinatesInOtherActivitySoDontGetGPSLocation) {
+			
+			// Check for GPS
+			LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+			gpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+			playAPKEnabled = doesDeviceHaveGooglePlayServices();
+			
+			// If GPS is disabled
+			if (!gpsEnabled) {
+				buildAlertMessageNoGps();
+			} else if(gpsEnabled) {
+				if (playAPKEnabled) {
+					setUpMapIfNeeded();
+					wheresWaldo();
+				}
 			}
 		}
 	}
@@ -262,7 +269,8 @@ public class Report extends SherlockFragmentActivity {
 	
 	public void onEdit(View view) {
 		Intent editIntent = new Intent(this, Report_Mapview.class);
-		startActivity(editIntent);
+		editIntent.putExtra("location", currentEditableLocation);
+		startActivityForResult(editIntent, EDIT_REQUEST);
 	}
 	
 	private void setUpMapIfNeeded() {
@@ -297,14 +305,19 @@ public class Report extends SherlockFragmentActivity {
 		Location gpsLocation = requestUpdatesFromProvider();
 		if (gpsLocation == null)
 			Toast.makeText(getApplicationContext(), "No GPS signal", Toast.LENGTH_SHORT).show();
-		else if (gpsLocation != null)
+		else if (gpsLocation != null) {
+			// Set global location variable so if user selects edit, it has something to pass
+			currentEditableLocation = gpsLocation;
 			updateUILocation(gpsLocation);
+		}
 	}
 	
 	private Location requestUpdatesFromProvider() {
 		Location location = null;
 		if (mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             location = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            // Also set global location variable so if user selects edit, it has something to pass
+            currentEditableLocation = location;
         }
 		return location;
 	}
@@ -407,10 +420,26 @@ public class Report extends SherlockFragmentActivity {
 	}
 	
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {  
-        if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {  
+        // User took a picture with the camera
+		if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {  
             Bitmap photo = (Bitmap) data.getExtras().get("data"); 
             ib.setImageBitmap(photo);
-        }  
+        }  else if (requestCode == EDIT_REQUEST && resultCode == RESULT_OK) {
+        	editedCoordinatesInOtherActivitySoDontGetGPSLocation = true;
+        	Location fixedLocation = data.getExtras().getParcelable("location");
+        	
+        	// Current marker is expired, remove that crap
+        	mMap.clear();
+        	mapHasMarker = !mapHasMarker;
+        	setUpMapIfNeeded();
+        	updateUILocation(fixedLocation);
+        	
+        	// Update location to be send with JSON report
+        	currentEditableLocation.setLatitude(fixedLocation.getLatitude());
+        	currentEditableLocation.setLongitude(fixedLocation.getLongitude());
+        	
+        	Toast.makeText(getApplicationContext(), "new position set", Toast.LENGTH_SHORT).show();
+        }
     }
 	
 	private JSONObject createJSONObject() {

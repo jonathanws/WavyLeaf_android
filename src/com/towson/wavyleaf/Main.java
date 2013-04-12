@@ -156,31 +156,39 @@ public class Main extends SherlockActivity implements OnClickListener {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-						Editor ed = sp.edit();						
+						Editor ed = sp.edit();
+						
+						// Nullpointerexceptions are coming from calls to setRepeating()
+						// Commented just so I could work with edittexts
 						
 						if (which == 0) {
-							intervalAlarm.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), 300000, pendingAlarm);
+//							intervalAlarm.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), 300000, pendingAlarm);
 							ed.putString("TRIP_INTERVAL", "5:00 Minutes");
+							setEditText(tripSelection, "5:00 Minutes");
 							Toast.makeText(getApplicationContext(), "Five Minutes", Toast.LENGTH_SHORT).show();
 						}
 						else if(which == 1) {
-							intervalAlarm.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), 600000, pendingAlarm);
+//							intervalAlarm.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), 600000, pendingAlarm);
 							ed.putString("TRIP_INTERVAL", "10:00 Minutes");
+							setEditText(tripSelection, "10:00 Minutes");
 							Toast.makeText(getApplicationContext(), "Ten Minutes", Toast.LENGTH_SHORT).show();
 						}
 						else if(which == 2) {
-							intervalAlarm.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), 900000, pendingAlarm);
+//							intervalAlarm.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), 900000, pendingAlarm);
 							ed.putString("TRIP_INTERVAL", "15:00 Minutes");
+							setEditText(tripSelection, "15:00 Minutes");
 							Toast.makeText(getApplicationContext(), "Fifteen Minutes", Toast.LENGTH_SHORT).show();
 						}
 						else if(which == 3) {
-							intervalAlarm.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), 1200000, pendingAlarm);
+//							intervalAlarm.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), 1200000, pendingAlarm);
 							ed.putString("TRIP_INTERVAL", "20:00 Minutes");
+							setEditText(tripSelection, "20:00 Minutes");
 							Toast.makeText(getApplicationContext(), "Twenty Minutes", Toast.LENGTH_SHORT).show();
 						}
 						else if(which == 4) {
-							intervalAlarm.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), 1800000, pendingAlarm);
+//							intervalAlarm.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), 1800000, pendingAlarm);
 							ed.putString("TRIP_INTERVAL", "30:00 Minutes");
+							setEditText(tripSelection, "30:00 Minutes");
 							Toast.makeText(getApplicationContext(), "Thirty Minutes", Toast.LENGTH_SHORT).show();
 						}
 						
@@ -195,6 +203,10 @@ public class Main extends SherlockActivity implements OnClickListener {
 	protected void setButtonDrawable(int button) {
 		Drawable img = getBaseContext().getResources().getDrawable(button);
 		bu_trip.setCompoundDrawablesWithIntrinsicBounds(img, null, null, null);
+	}
+	
+	protected void setEditText(TextView tv, String message) {
+		tv.setText(message);
 	}
 
 }

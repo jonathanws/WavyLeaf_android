@@ -53,7 +53,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="left|bottom"
-            android:text="Trip Interval"
+            android:text="@string/layout_tripinterval"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <TextView
@@ -62,7 +62,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="right|bottom"
-            android:text="5:00 Minutes"
+            android:text="@string/layout_novalue"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="#669900" />
     </LinearLayout>
@@ -79,7 +79,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="left|bottom"
-            android:text="# Recorded"
+            android:text="@string/layout_numrecorded"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <TextView
@@ -88,7 +88,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="right|bottom"
-            android:text="42"
+            android:text="@string/layout_novalue"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="#669900" />
     </LinearLayout>

@@ -2,15 +2,14 @@ package com.towson.wavyleaf;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
@@ -31,17 +30,18 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class Report_Mapview extends SherlockFragmentActivity {
+public class Report_Mapview extends SherlockFragmentActivity implements OnClickListener {
 	
-	private static final int LEGAL = 1, MAPTYPE = 2, NO_GPS = 4; // Used for calling dialogs. arbitrary numbers
-	private boolean gpsEnabled = false;
+	private static final int LEGAL = 1, MAPTYPE = 2; // Used for calling dialogs. arbitrary numbers
 	private boolean mapHasMarker = false; // onResume keeps adding markers to map, this should stop it
 	private UiSettings mUiSettings;
 	protected TextView tvlat, tvlong;
+	protected Button reset, done;
 	protected GoogleMap mMap;
+	protected Marker marker;
 	protected CameraPosition userCurrentPosition;
-	protected LocationManager mLocationManager;
-	protected Button bu_resetCoord;
+	protected Location receivedLocation, newLocation;
+	protected Intent in;
 	
 	@Override
 	protected void onCreate(Bundle bundle) {
@@ -50,39 +50,43 @@ public class Report_Mapview extends SherlockFragmentActivity {
 		getSupportActionBar().setBackgroundDrawable(new ColorDrawable(0x90000000));
 		setContentView(R.layout.layout_report_mapview);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		init();
+		
 		// Most setup methods are in onResume()
+		init();
 	}
 	
 	protected void init() {
 		Typeface tf_light = Typeface.createFromAsset(getAssets(), "fonts/roboto_light.ttf");
 		tvlat = (TextView) findViewById(R.id.tv_latitude);
 		tvlong = (TextView) findViewById(R.id.tv_longitude);
-		mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+		reset = (Button) findViewById(R.id.btnResetCoord);
+		done = (Button) findViewById(R.id.btnDone);
+		reset = (Button) findViewById(R.id.btnResetCoord);
+		done = (Button) findViewById(R.id.btnDone);
 		
 		//set all the beautiful typefaces
 		tvlat.setTypeface(tf_light);
 		tvlong.setTypeface(tf_light);
+		reset.setTypeface(tf_light);
+		done.setTypeface(tf_light);
 		
-		//setup reset coordinates button
-		bu_resetCoord = (Button) findViewById(R.id.btnResetCoord);
+		reset.setOnClickListener(this);
+		done.setOnClickListener(this);	
 	}
 	
 	@Override
 	protected void onResume() {
 		super.onResume();
-		// Check for GPS
-		LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-		gpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
 		
-		// If GPS is disabled
-		if (!gpsEnabled) {
-			buildAlertMessageNoGps();
-		} else if(gpsEnabled) {
-			setUpMapIfNeeded();
-			wheresWaldo();
-			setDragListener();
-		}
+		setUpMapIfNeeded();
+		
+		// Get location from Report.java. Default to this on button click
+		in = getIntent();
+		receivedLocation = in.getExtras().getParcelable("location");
+		if (receivedLocation != null)
+			updateUILocation(receivedLocation);
+		
+		setDragListener();
 	}
 	
 	@Override
@@ -114,10 +118,6 @@ public class Report_Mapview extends SherlockFragmentActivity {
 		return super.onOptionsItemSelected(item);
 	}
 	
-	private void buildAlertMessageNoGps() {
-		showDialog(NO_GPS);
-	}
-	
 	// When the user drags the marker around the page, the textviews will change in real time--cool!
 	protected void setDragListener() {
 		mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
@@ -136,8 +136,8 @@ public class Report_Mapview extends SherlockFragmentActivity {
 	private void setUpMapIfNeeded() {
 		if (mMap == null) {
 			mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapview_fullscreen)).getMap();
-		if (mMap != null)
-			setUpMap(); // Weird method chaining, but this is what google example code does
+			if (mMap != null)
+				setUpMap(); // Weird method chaining, but this is what google example code does
 		}
 	}
 	
@@ -154,27 +154,16 @@ public class Report_Mapview extends SherlockFragmentActivity {
 	}
 	
 	private void updateUILocation(Location location) {
+		// Move the camera to this point
 		goToCurrentPosition(location);
-		setEditTexts(location.getLatitude(), location.getLongitude());
+		
+		// Set a marker at this point
 		if (!mapHasMarker)
 			setCurrentPositionMarker(location);
-	}
-	
-	// Method won't be called unless Play APK in installed
-	public void wheresWaldo() {
-		Location gpsLocation = null;
-		gpsLocation = requestUpdatesFromProvider();
 		
-		if (gpsLocation != null)
-			updateUILocation(gpsLocation);
-	}
-	
-	private Location requestUpdatesFromProvider() {
-		Location location = null;
-		if (mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-			location = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-		}
-		return location;
+		// Set EditTexts
+		setEditTexts(location.getLatitude(), location.getLongitude());
+		
 	}
 	
 	private void setEditTexts(double latitude, double longitude) {
@@ -182,18 +171,28 @@ public class Report_Mapview extends SherlockFragmentActivity {
 		tvlong.setText("Longitude:\t\t" + longitude);
 	}
 	
-	public void setCurrentPositionMarker(Location location) {
+	private void grabNewCoordinates() {
+		receivedLocation.setLatitude(marker.getPosition().latitude);
+		receivedLocation.setLongitude(marker.getPosition().longitude);
+	}
+	
+	public void setCurrentPositionMarker(Location location) {		
 		// Create new LatLng object
 		LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
 		
-		// Creating a marker
-		MarkerOptions markerOptions = new MarkerOptions();
-		markerOptions.position(latLng);
-		markerOptions.draggable(true);
-		markerOptions.title("3/18/13 - nth entry");
+//		// Creating a marker
+//		mMap.addMarker(new MarkerOptions()
+//			.position(latLng)
+//			.draggable(true)
+//			.title("Long-Press and drag to edit"))
+//			.showInfoWindow();
 		
-		// Placing a marker on the touched position
-		mMap.addMarker(markerOptions);
+		marker = mMap.addMarker(new MarkerOptions()
+        .position(latLng)
+        .draggable(true)
+        .title("Long-Press and drag to edit"));
+		marker.showInfoWindow();
+		
 		mapHasMarker = true;
 	}
 	
@@ -259,26 +258,21 @@ public class Report_Mapview extends SherlockFragmentActivity {
 					}
 				})
 				.create();
-			case NO_GPS:
-				return new AlertDialog.Builder(this)
-				.setTitle("GPS is diabled")
-				.setMessage("Show location settings?")
-				.setCancelable(false)
-				.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-					}
-				})
-				.create();
 			}
 		return super.onCreateDialog(id);
 		//http://stackoverflow.com/questions/3326366/what-context-should-i-use-alertdialog-builder-in
 	}
 	
 	public void onClick(View view) {
-		if (view == this.bu_resetCoord) {
-			wheresWaldo();
+		if (view == this.reset) {
+			mMap.clear();
+			mapHasMarker = !mapHasMarker;
+			updateUILocation(receivedLocation);
+		} else if (view == this.done) {
+			grabNewCoordinates();
+			in.putExtra("location", receivedLocation);
+			setResult(RESULT_OK, in);
+			finish();
 		}
 	}
 

@@ -2,6 +2,12 @@ Change Log
 ===============================================================================
 
 
+Version 1.1.1 *(4-12-2013)*
+----------------------------
+* Completed editing of coordinates
+* Added reset drawable
+* List Dialog in main now sets edittexts at bottom
+
 Version 1.1.0 *(4-10-2013)*
 ----------------------------
 * Added header previews to New Report and Trip
