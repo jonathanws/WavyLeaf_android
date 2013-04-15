@@ -108,9 +108,6 @@ public class Report_Mapview extends SherlockFragmentActivity implements OnClickL
 		case R.id.menu_maptype:
 			showDialog(MAPTYPE);
 			return true;
-        case R.id.menu_done:
-        	Toast.makeText(getApplicationContext(), "finish activity", Toast.LENGTH_SHORT).show();
-        	return true;
         case R.id.menu_legal:
         	showDialog(LEGAL);
         	return true;

@@ -2,6 +2,12 @@ Change Log
 ===============================================================================
 
 
+Version 1.1.2 *(4-15-2013)*
+----------------------------
+* Removed Done option from Report_Mapview
+* Added more JSON attributes
+* Added option to select from gallery
+
 Version 1.1.1 *(4-12-2013)*
 ----------------------------
 * Completed editing of coordinates

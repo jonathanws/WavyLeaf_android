@@ -130,12 +130,13 @@ public class Main extends SherlockActivity implements OnClickListener {
 			// Set drawable
 			if(tripEnabled) {
 				setButtonDrawable(R.drawable.ic_main_end);
+				setButtonText(bu_trip, "End Trip");
 				showDialog(ONSTART);
-			} else if (!tripEnabled)
+			} else if (!tripEnabled) {
 				setButtonDrawable(R.drawable.ic_main_start_light);
-				
-//			Intent sessionIntent = new Intent(this, Trip.class);
-//			this.startActivity(sessionIntent);
+				setButtonText(bu_trip, "Start Trip");
+				setEditText(tripSelection, getString(R.string.layout_novalue));
+			}
 		}
 	}
 	
@@ -203,6 +204,10 @@ public class Main extends SherlockActivity implements OnClickListener {
 	protected void setButtonDrawable(int button) {
 		Drawable img = getBaseContext().getResources().getDrawable(button);
 		bu_trip.setCompoundDrawablesWithIntrinsicBounds(img, null, null, null);
+	}
+	
+	protected void setButtonText(Button button, String text) {
+		button.setText(text);
 	}
 	
 	protected void setEditText(TextView tv, String message) {

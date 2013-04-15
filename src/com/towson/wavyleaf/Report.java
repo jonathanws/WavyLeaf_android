@@ -1,5 +1,8 @@
 package com.towson.wavyleaf;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -9,12 +12,15 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.format.Time;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -61,7 +67,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class Report extends SherlockFragmentActivity {
 	
 	private static final int LEGAL = 1, CAMERA = 3, NO_GPS = 4; // Used for calling dialogs. arbitrary numbers
-	private static final int CAMERA_REQUEST = 1337, EDIT_REQUEST = 1338;
+	private static final int CAMERA_REQUEST = 1337, EDIT_REQUEST = 1338, GALLERY_REQUEST = 1339;
 	private boolean gpsEnabled = false;
 	private boolean playAPKEnabled = false;
 	private boolean editedCoordinatesInOtherActivitySoDontGetGPSLocation = false;
@@ -393,12 +399,15 @@ public class Report extends SherlockFragmentActivity {
 				return new AlertDialog.Builder(this)
 				.setItems(R.array.camera_array, new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int item) {
-						if (item == 0) {
+						if (item == 0) { // Take picture
 							Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE); 
 			                startActivityForResult(cameraIntent, CAMERA_REQUEST); 
+						} else if (item == 1) { // Choose from gallery
+							Intent intent = new Intent();
+							intent.setType("image/*");
+							intent.setAction(Intent.ACTION_GET_CONTENT);
+							startActivityForResult(Intent.createChooser(intent, "Select Picture"), GALLERY_REQUEST);
 						}
-						else if (item == 1)
-							Toast.makeText(getApplicationContext(), "Choose from gallery", Toast.LENGTH_SHORT).show();
 					}
 				})
 				.create();
@@ -424,7 +433,18 @@ public class Report extends SherlockFragmentActivity {
 		if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {  
             Bitmap photo = (Bitmap) data.getExtras().get("data"); 
             ib.setImageBitmap(photo);
-        }  else if (requestCode == EDIT_REQUEST && resultCode == RESULT_OK) {
+            
+		} else if (requestCode == GALLERY_REQUEST && resultCode == RESULT_OK) {
+			Uri selectedImage = data.getData();
+            InputStream imageStream = null;
+			
+            try { imageStream = getContentResolver().openInputStream(selectedImage); }
+			catch (FileNotFoundException e) {}
+            
+			Bitmap img = BitmapFactory.decodeStream(imageStream);
+			ib.setImageBitmap(img);
+			
+        } else if (requestCode == EDIT_REQUEST && resultCode == RESULT_OK) {
         	editedCoordinatesInOtherActivitySoDontGetGPSLocation = true;
         	Location fixedLocation = data.getExtras().getParcelable("location");
         	
@@ -442,25 +462,36 @@ public class Report extends SherlockFragmentActivity {
         }
     }
 	
+	
+	// Sample json object will look like:
+//	{
+//	  "user": 
+//	  {
+//	    "username":"trogdor"
+//		"name":"slender"
+//		"percentage", "2 percent"
+//	  }
+//	}
 	private JSONObject createJSONObject() {
-		
-		// Sample json object will look like:
-//		{
-//		  "user": 
-//		  {
-//		    "name":"slender",
-//		    "username":"trogdor",
-//		    "age":"100" 
-//		  }
-//		}
+		Time now = new Time();
+		now.setToNow();
 		JSONObject parent = new JSONObject();
 		JSONObject report = new JSONObject();
 		try {
-			report.put("name", "slender");
 			report.put("username", "trogdor");
+			report.put("name", "slender");
+			report.put("percentage", "2 percent");
+			report.put("squaretype", sp.getSelectedItem().toString());
+			report.put("squarenum", etarea.getText());
+			report.put("lat", currentEditableLocation.getLatitude());
+			report.put("long", currentEditableLocation.getLongitude());
+			report.put("notes", notes.getText());
+			report.put("date", now.year);
+			//bitmap
 			report.put("age", "100");
+			
 			parent.put("user", report);
-			Toast.makeText(getApplicationContext(), "Success!", Toast.LENGTH_SHORT).show();
+			Toast.makeText(getApplicationContext(), now.year + "-" + (now.month + 1) + "-" + now.monthDay, Toast.LENGTH_SHORT).show();
 		} catch (JSONException e) {
 			Toast.makeText(getApplicationContext(), "Data not saved, try again", Toast.LENGTH_SHORT).show();
 		}
@@ -471,7 +502,7 @@ public class Report extends SherlockFragmentActivity {
 	private void peekAtJson(JSONObject json) {
 		try {
 			JSONObject itemObject = json.getJSONObject("user");
-			String lol = itemObject.getString("name");
+			String lol = itemObject.getString("username");
 			Toast.makeText(getApplicationContext(), lol + " ", Toast.LENGTH_SHORT).show();
 		} catch (JSONException e) {
 			Toast.makeText(getApplicationContext(), "nope", Toast.LENGTH_SHORT).show();
