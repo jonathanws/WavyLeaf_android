@@ -12,7 +12,7 @@ import android.content.SharedPreferences.Editor;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.SystemClock;
+import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -57,9 +57,7 @@ public class Main extends SherlockActivity implements OnClickListener {
         else if (!tripEnabled) {
         	setButtonDrawable(R.drawable.ic_main_start_light);
         	if(intervalAlarm != null)
-        	{
         		intervalAlarm.cancel(pendingAlarm);
-        	}
         }
         
         Toast.makeText(getApplicationContext(), tripEnabled + "", Toast.LENGTH_SHORT).show();
@@ -167,30 +165,35 @@ public class Main extends SherlockActivity implements OnClickListener {
 							ed.putString("TRIP_INTERVAL", "5:00 Minutes");
 							setEditText(tripSelection, "5:00 Minutes");
 							Toast.makeText(getApplicationContext(), "Five Minutes", Toast.LENGTH_SHORT).show();
+							startTimer(300000);
 						}
 						else if(which == 1) {
 //							intervalAlarm.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), 600000, pendingAlarm);
 							ed.putString("TRIP_INTERVAL", "10:00 Minutes");
 							setEditText(tripSelection, "10:00 Minutes");
 							Toast.makeText(getApplicationContext(), "Ten Minutes", Toast.LENGTH_SHORT).show();
+							startTimer(600000);
 						}
 						else if(which == 2) {
 //							intervalAlarm.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), 900000, pendingAlarm);
 							ed.putString("TRIP_INTERVAL", "15:00 Minutes");
 							setEditText(tripSelection, "15:00 Minutes");
 							Toast.makeText(getApplicationContext(), "Fifteen Minutes", Toast.LENGTH_SHORT).show();
+							startTimer(900000);
 						}
 						else if(which == 3) {
 //							intervalAlarm.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), 1200000, pendingAlarm);
 							ed.putString("TRIP_INTERVAL", "20:00 Minutes");
 							setEditText(tripSelection, "20:00 Minutes");
 							Toast.makeText(getApplicationContext(), "Twenty Minutes", Toast.LENGTH_SHORT).show();
+							startTimer(1200000);
 						}
 						else if(which == 4) {
 //							intervalAlarm.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), 1800000, pendingAlarm);
 							ed.putString("TRIP_INTERVAL", "30:00 Minutes");
 							setEditText(tripSelection, "30:00 Minutes");
 							Toast.makeText(getApplicationContext(), "Thirty Minutes", Toast.LENGTH_SHORT).show();
+							startTimer(1800000);
 						}
 						
 						ed.commit();
@@ -213,5 +216,38 @@ public class Main extends SherlockActivity implements OnClickListener {
 	protected void setEditText(TextView tv, String message) {
 		tv.setText(message);
 	}
+	
+	protected void startTimer(int countDownFrom) {
+		new CountDownTimer(countDownFrom, 1000) {
+			public void onTick(long millisUntilFinished) {
+				tripSelection.setText( (int) ((millisUntilFinished / 1000) / 60) + ":" + (int) (millisUntilFinished / 1000) % 60);
+			}			
+			public void onFinish() {
+				tripSelection.setText("done!");
+			}
+		}.start();
+	}
+	
+	
+//	protected void startTimer() {
+//		int delay = 0; // delay for 0 sec.
+//	    int period = 1000; // repeat every sec.
+//	    int x = 0;
+//	    
+//	    Timer timer = new Timer();
+//	    timer.scheduleAtFixedRate(new TimerTask() {
+//	    	public void run() {
+//	    		runOnUiThread(new Runnable() {
+//					@Override
+//					public void run() {
+//						int y = x;
+//						y++;
+//						tripSelection.setText((x + 1) + " ");
+//					}
+//	    		});
+//	    	}
+//	    }, delay, period);
+//	}
+	
 
 }

@@ -2,6 +2,10 @@ Change Log
 ===============================================================================
 
 
+Version 1.1.3 *(4-45-2013)*
+----------------------------
+* Main uses a CountDownTimer; is this what we want? Maybe put this whole thing into a service?
+
 Version 1.1.2 *(4-15-2013)*
 ----------------------------
 * Removed Done option from Report_Mapview
