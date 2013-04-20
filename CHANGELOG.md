@@ -1,8 +1,14 @@
 Change Log
 ===============================================================================
 
+Version 1.1.4 *(4-15-2013)*
+----------------------------
+* Still need to integrate CDT from Ver 1.1.3 into a service
+* Removed option to select from gallery - requested by VB
+* replaced old onClick code in Main with newer test code
+* New Record and Trip validate EditText for negative numbers
 
-Version 1.1.3 *(4-45-2013)*
+Version 1.1.3 *(4-15-2013)*
 ----------------------------
 * Main uses a CountDownTimer; is this what we want? Maybe put this whole thing into a service?
 

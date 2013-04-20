@@ -1,8 +1,5 @@
 package com.towson.wavyleaf;
 
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -12,11 +9,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.location.Location;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -67,7 +62,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class Report extends SherlockFragmentActivity {
 	
 	private static final int LEGAL = 1, CAMERA = 3, NO_GPS = 4; // Used for calling dialogs. arbitrary numbers
-	private static final int CAMERA_REQUEST = 1337, EDIT_REQUEST = 1338, GALLERY_REQUEST = 1339;
+	private static final int CAMERA_REQUEST = 1337, EDIT_REQUEST = 1338;
+	//, GALLERY_REQUEST = 1339;
 	private boolean gpsEnabled = false;
 	private boolean playAPKEnabled = false;
 	private boolean editedCoordinatesInOtherActivitySoDontGetGPSLocation = false;
@@ -129,10 +125,16 @@ public class Report extends SherlockFragmentActivity {
 		// Listener for EditText in Area Infested
 		etarea.addTextChangedListener(new TextWatcher() {
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				if (etarea.getText().length() == 0)
+				if (etarea.getText().length() == 0) {
 					tvarea_summary.setText("");
-				else
+				}
+				else if(etarea.getText().toString().contains("-")) {	//negative number sign
+					etarea.getEditableText().clear();
+					Toast.makeText(getApplicationContext(), "Negative values not allowed!", Toast.LENGTH_SHORT).show();
+				}
+				else {
 					tvarea_summary.setText(etarea.getText() + " " + sp.getSelectedItem().toString());
+				}
 			}
 			public void afterTextChanged(Editable s) {}
 			public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -396,21 +398,21 @@ public class Report extends SherlockFragmentActivity {
 				.setNegativeButton("Cancel", null)
 				.create();
 			case CAMERA:
-				return new AlertDialog.Builder(this)
-				.setItems(R.array.camera_array, new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int item) {
-						if (item == 0) { // Take picture
+//				return new AlertDialog.Builder(this)
+//				.setItems(R.array.camera_array, new DialogInterface.OnClickListener() {
+//					public void onClick(DialogInterface dialog, int item) {
+//						if (item == 0) { // Take picture
 							Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE); 
 			                startActivityForResult(cameraIntent, CAMERA_REQUEST); 
-						} else if (item == 1) { // Choose from gallery
-							Intent intent = new Intent();
-							intent.setType("image/*");
-							intent.setAction(Intent.ACTION_GET_CONTENT);
-							startActivityForResult(Intent.createChooser(intent, "Select Picture"), GALLERY_REQUEST);
-						}
-					}
-				})
-				.create();
+//						} else if (item == 1) { // Choose from gallery
+//							Intent intent = new Intent();
+//							intent.setType("image/*");
+//							intent.setAction(Intent.ACTION_GET_CONTENT);
+//							startActivityForResult(Intent.createChooser(intent, "Select Picture"), GALLERY_REQUEST);
+//						}
+//					}
+//				})
+//				.create();
 			case NO_GPS:
 				return new AlertDialog.Builder(this)
 				.setTitle(getResources().getString(R.string.gps_is_disabled))
@@ -434,15 +436,15 @@ public class Report extends SherlockFragmentActivity {
             Bitmap photo = (Bitmap) data.getExtras().get("data"); 
             ib.setImageBitmap(photo);
             
-		} else if (requestCode == GALLERY_REQUEST && resultCode == RESULT_OK) {
-			Uri selectedImage = data.getData();
-            InputStream imageStream = null;
-			
-            try { imageStream = getContentResolver().openInputStream(selectedImage); }
-			catch (FileNotFoundException e) {}
-            
-			Bitmap img = BitmapFactory.decodeStream(imageStream);
-			ib.setImageBitmap(img);
+//		} else if (requestCode == GALLERY_REQUEST && resultCode == RESULT_OK) {
+//			Uri selectedImage = data.getData();
+//            InputStream imageStream = null;
+//			
+//            try { imageStream = getContentResolver().openInputStream(selectedImage); }
+//			catch (FileNotFoundException e) {}
+//            
+//			Bitmap img = BitmapFactory.decodeStream(imageStream);
+//			ib.setImageBitmap(img);
 			
         } else if (requestCode == EDIT_REQUEST && resultCode == RESULT_OK) {
         	editedCoordinatesInOtherActivitySoDontGetGPSLocation = true;

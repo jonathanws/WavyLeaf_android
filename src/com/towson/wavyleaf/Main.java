@@ -108,6 +108,7 @@ public class Main extends SherlockActivity implements OnClickListener {
 		return super.onOptionsItemSelected(item);
 	}
 	
+	//Jon, this is the one you showed me via email -- MM
 	@Override
 	public void onClick(View view) {
 		if (view == this.bu_new) {
@@ -128,15 +129,45 @@ public class Main extends SherlockActivity implements OnClickListener {
 			// Set drawable
 			if(tripEnabled) {
 				setButtonDrawable(R.drawable.ic_main_end);
-				setButtonText(bu_trip, "End Trip");
 				showDialog(ONSTART);
-			} else if (!tripEnabled) {
+			} else if (!tripEnabled)
 				setButtonDrawable(R.drawable.ic_main_start_light);
-				setButtonText(bu_trip, "Start Trip");
-				setEditText(tripSelection, getString(R.string.layout_novalue));
-			}
+				
+//			Intent sessionIntent = new Intent(this, Trip.class);
+//			this.startActivity(sessionIntent);
 		}
 	}
+	
+	
+//	@Override
+//	public void onClick(View view) {
+//		if (view == this.bu_new) {
+//			Intent newReportIntent = new Intent(this, Report.class);
+//			this.startActivity(newReportIntent);	
+//			
+//		} else if (view == this.bu_trip) {	        
+//			// Toggle boolean
+//			tripEnabled = !tripEnabled;
+//			
+//			// Commit change
+//			SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+//			Editor ed = sp.edit();
+//			ed.putBoolean(TRIP_ENABLED_KEY, tripEnabled);
+//			ed.commit();
+//			Toast.makeText(getApplicationContext(), tripEnabled + "", Toast.LENGTH_SHORT).show();
+//			
+//			// Set drawable
+//			if(tripEnabled) {
+//				setButtonDrawable(R.drawable.ic_main_end);
+//				setButtonText(bu_trip, "End Trip");
+//				showDialog(ONSTART);
+//			} else if (!tripEnabled) {
+//				setButtonDrawable(R.drawable.ic_main_start_light);
+//				setButtonText(bu_trip, "Start Trip");
+//				setEditText(tripSelection, getString(R.string.layout_novalue));
+//			}
+//		}
+//	}
 	
 	@Override
 	protected Dialog onCreateDialog(int id) {

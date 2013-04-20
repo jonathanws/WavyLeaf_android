@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     
-    <string-array name="camera_array">
-        <item>Take Picture</item>
-        <item>Choose From Gallery</item>
-    </string-array>
+<!--     <string-array name="camera_array"> -->
+<!--         <item>Take Picture</item> -->
+<!--         <item>Choose From Gallery</item> -->
+<!--     </string-array> -->
     
     <string-array name="maptype_array">
         <item>Satellite</item>
