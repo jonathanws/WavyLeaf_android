@@ -1,16 +1,19 @@
 package com.towson.wavyleaf;
 
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,15 +24,14 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
-import android.widget.AdapterView.OnItemSelectedListener;
 
 import com.actionbarsherlock.app.SherlockActivity;
-import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 
 public class Trip extends SherlockActivity {
 	
-	private static final int CAMERA = 3;
+	private static final int CAMERA_REQUEST = 1337;
+//	private static final int CAMERA = 3;
 	protected TextView tripInterval, tripSelection, tally, tallyNumber, tvlat, tvlong, tvpicnotes, 
 		tvper, tvper_summary, tvcoor, tvarea, tvarea_summary;
 	protected EditText notes, etarea;
@@ -37,14 +39,20 @@ public class Trip extends SherlockActivity {
 	protected RadioGroup rg;
 	protected Spinner sp;
 	protected ImageButton ib;
+	NotificationManager nm;
 	
 	@Override
 	protected void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
 		setContentView(R.layout.layout_trip);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		//showDialog(ONSTART);
 		init();
+		
+		nm = ((NotificationManager) getSystemService(NOTIFICATION_SERVICE));
+		nm.cancel(Main.mUniqueId);
+		
+		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+		tallyNumber.setText(sp.getInt(Settings.KEY_TRIPTALLY_CURRENT, 0) + "");
 	}
 	
 	private void init() {
@@ -81,7 +89,7 @@ public class Trip extends SherlockActivity {
 		// Listener for camera button
 		ib.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				showDialog(CAMERA);
+				takePicture();
 			}
 		});
 		
@@ -91,9 +99,9 @@ public class Trip extends SherlockActivity {
 				if (etarea.getText().length() == 0) {
 					tvarea_summary.setText("");
 				}
-				else if(etarea.getText().toString().contains("-")) {	//negative number sign
+				else if (etarea.getText().toString().contains("-")) {	//negative number sign
 					etarea.getEditableText().clear();
-					Toast.makeText(getApplicationContext(), "Negative values not allowed!", Toast.LENGTH_SHORT).show();
+					Toast.makeText(getApplicationContext(), "Negative values not allowed", Toast.LENGTH_SHORT).show();
 				}
 				else {
 					tvarea_summary.setText(etarea.getText() + " " + sp.getSelectedItem().toString());
@@ -143,10 +151,9 @@ public class Trip extends SherlockActivity {
 	}
 	
 	@Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-    	super.onCreateOptionsMenu(menu);
-//    	getSupportMenuInflater().inflate(R.menu.menu_report, menu);
-    	return true;
+	protected void onResume() {
+		super.onResume();
+		nm.cancel(Main.mUniqueId);
 	}
 	
 	@Override
@@ -163,22 +170,22 @@ public class Trip extends SherlockActivity {
 	}
 	
 	// Method only allows one ToggleButton to be set to true at a time
-		// Call to this method is defined in xml for each togglebutton
-		public void onToggle(View view) {
-			//loop through all children in radiogroup.  In this case, two lin layouts
-			for (int i = 0; i < rg.getChildCount(); i++) {
-				View child = rg.getChildAt(i);
-				//if child is lin layout (we already know all children are lin layouts)
-				if (child instanceof LinearLayout) {
-					//then loop through three toggles
-					for (int j = 0; j < ((ViewGroup)child).getChildCount(); j++) {
-						final ToggleButton tog = (ToggleButton) ((ViewGroup)child).getChildAt(j);
-						//have only one togglebutton selected at one time
-						if (tog != view)
-							tog.setChecked(false);
-					}
+	// Call to this method is defined in xml for each togglebutton
+	public void onToggle(View view) {
+		//loop through all children in radiogroup.  In this case, two lin layouts
+		for (int i = 0; i < rg.getChildCount(); i++) {
+			View child = rg.getChildAt(i);
+			//if child is lin layout (we already know all children are lin layouts)
+			if (child instanceof LinearLayout) {
+				//then loop through three toggles
+				for (int j = 0; j < ((ViewGroup)child).getChildCount(); j++) {
+					final ToggleButton tog = (ToggleButton) ((ViewGroup)child).getChildAt(j);
+					//have only one togglebutton selected at one time
+					if (tog != view)
+						tog.setChecked(false);
 				}
 			}
+		}
 		
 		// Determine text to set to textview
 		switch (view.getId()) {
@@ -204,9 +211,23 @@ public class Trip extends SherlockActivity {
 				tvper_summary.setText("");
 		}
 	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
 		
+		if ((requestCode == CAMERA_REQUEST) && (resultCode == RESULT_OK)) {
+			Bitmap bm = (Bitmap) data.getExtras().get("data");
+			ib.setImageBitmap(bm);
+		}
+	}
+
 	public void onSaveButtonClick(View view) {
 		finish();
+	}
+	
+	protected void takePicture() {
+		startActivityForResult(new Intent("android.media.action.IMAGE_CAPTURE"), CAMERA_REQUEST);
 	}
 
 }

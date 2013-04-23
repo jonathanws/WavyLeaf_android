@@ -2,6 +2,14 @@ Change Log
 ===============================================================================
 
 
+Version 1.1.7 *(4.22-2013)*
+----------------------------
+* Deleted paper airplane icon
+* Changed order of attributes in Trip and Record layouts
+* Made attributes in forms all white
+* JSON almost done except for bitmap
+* Added age to settings
+
 Version 1.1.6 *(4-22-2013)*
 ----------------------------
 * Added notifications

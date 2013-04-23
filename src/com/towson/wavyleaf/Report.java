@@ -8,11 +8,13 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.Time;
@@ -118,7 +120,7 @@ public class Report extends SherlockFragmentActivity {
 		// Listener for camera button
 		ib.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-                showDialog(CAMERA);
+                takePicture();
             }
         });
 		
@@ -128,9 +130,9 @@ public class Report extends SherlockFragmentActivity {
 				if (etarea.getText().length() == 0) {
 					tvarea_summary.setText("");
 				}
-				else if(etarea.getText().toString().contains("-")) {	//negative number sign
+				else if (etarea.getText().toString().contains("-")) {	//negative number sign
 					etarea.getEditableText().clear();
-					Toast.makeText(getApplicationContext(), "Negative values not allowed!", Toast.LENGTH_SHORT).show();
+					Toast.makeText(getApplicationContext(), "Negative values not allowed", Toast.LENGTH_SHORT).show();
 				}
 				else {
 					tvarea_summary.setText(etarea.getText() + " " + sp.getSelectedItem().toString());
@@ -275,6 +277,21 @@ public class Report extends SherlockFragmentActivity {
 		}
 	}
 	
+	public String loopThroughToggles() {
+		String str = "";
+		for (int i = 0; i < rg.getChildCount(); i++) {
+			View child = rg.getChildAt(i);
+			if (child instanceof LinearLayout) {
+				for (int j = 0; j < ((ViewGroup)child).getChildCount(); j++) {
+					final ToggleButton tog = (ToggleButton) ((ViewGroup)child).getChildAt(j);
+					if (tog.isChecked())
+						str = tog.getText().toString();
+				}
+			}
+		}
+		return str;
+	}
+	
 	public void onEdit(View view) {
 		Intent editIntent = new Intent(this, Report_Mapview.class);
 		editIntent.putExtra("location", currentEditableLocation);
@@ -397,22 +414,7 @@ public class Report extends SherlockFragmentActivity {
 				.setPositiveButton("Got it", null)
 				.setNegativeButton("Cancel", null)
 				.create();
-			case CAMERA:
-//				return new AlertDialog.Builder(this)
-//				.setItems(R.array.camera_array, new DialogInterface.OnClickListener() {
-//					public void onClick(DialogInterface dialog, int item) {
-//						if (item == 0) { // Take picture
-							Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE); 
-			                startActivityForResult(cameraIntent, CAMERA_REQUEST); 
-//						} else if (item == 1) { // Choose from gallery
-//							Intent intent = new Intent();
-//							intent.setType("image/*");
-//							intent.setAction(Intent.ACTION_GET_CONTENT);
-//							startActivityForResult(Intent.createChooser(intent, "Select Picture"), GALLERY_REQUEST);
-//						}
-//					}
-//				})
-//				.create();
+				
 			case NO_GPS:
 				return new AlertDialog.Builder(this)
 				.setTitle(getResources().getString(R.string.gps_is_disabled))
@@ -425,28 +427,35 @@ public class Report extends SherlockFragmentActivity {
 					}
 				})
 				.create();
+				
+//			case CAMERA:
+//				return new AlertDialog.Builder(this)
+//				.setItems(R.array.camera_array, new DialogInterface.OnClickListener() {
+//					public void onClick(DialogInterface dialog, int item) {
+//						if (item == 0) { // Take picture
+//							Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE); 
+//			                startActivityForResult(cameraIntent, CAMERA_REQUEST); 
+//						} else if (item == 1) { // Choose from gallery
+//							Intent intent = new Intent();
+//							intent.setType("image/*");
+//							intent.setAction(Intent.ACTION_GET_CONTENT);
+//							startActivityForResult(Intent.createChooser(intent, "Select Picture"), GALLERY_REQUEST);
+//						}
+//					}
+//				})
+//				.create();
 		}
 		return super.onCreateDialog(id);
 		//http://stackoverflow.com/questions/3326366/what-context-should-i-use-alertdialog-builder-in
 	}
 	
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {  
-        // User took a picture with the camera
+		
 		if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {  
-            Bitmap photo = (Bitmap) data.getExtras().get("data"); 
-            ib.setImageBitmap(photo);
+            Bitmap bm = (Bitmap) data.getExtras().get("data"); 
+            ib.setImageBitmap(bm);
             
-//		} else if (requestCode == GALLERY_REQUEST && resultCode == RESULT_OK) {
-//			Uri selectedImage = data.getData();
-//            InputStream imageStream = null;
-//			
-//            try { imageStream = getContentResolver().openInputStream(selectedImage); }
-//			catch (FileNotFoundException e) {}
-//            
-//			Bitmap img = BitmapFactory.decodeStream(imageStream);
-//			ib.setImageBitmap(img);
-			
-        } else if (requestCode == EDIT_REQUEST && resultCode == RESULT_OK) {
+		} else if (requestCode == EDIT_REQUEST && resultCode == RESULT_OK) {
         	editedCoordinatesInOtherActivitySoDontGetGPSLocation = true;
         	Location fixedLocation = data.getExtras().getParcelable("location");
         	
@@ -460,55 +469,56 @@ public class Report extends SherlockFragmentActivity {
         	currentEditableLocation.setLatitude(fixedLocation.getLatitude());
         	currentEditableLocation.setLongitude(fixedLocation.getLongitude());
         	
-        	Toast.makeText(getApplicationContext(), "new position set", Toast.LENGTH_SHORT).show();
+        	Toast.makeText(getApplicationContext(), "New position set", Toast.LENGTH_SHORT).show();
         }
+            
+//		} else if (requestCode == GALLERY_REQUEST && resultCode == RESULT_OK) {
+//			Uri selectedImage = data.getData();
+//            InputStream imageStream = null;
+//			
+//            try { imageStream = getContentResolver().openInputStream(selectedImage); }
+//			catch (FileNotFoundException e) {}
+//            
+//			Bitmap img = BitmapFactory.decodeStream(imageStream);
+//			ib.setImageBitmap(img);
     }
 	
-	
-	// Sample json object will look like:
-//	{
-//	  "user": 
-//	  {
-//	    "username":"trogdor"
-//		"name":"slender"
-//		"percentage", "2 percent"
-//	  }
-//	}
 	private JSONObject createJSONObject() {
 		Time now = new Time();
 		now.setToNow();
-		JSONObject parent = new JSONObject();
+		SharedPreferences spref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+		
 		JSONObject report = new JSONObject();
 		try {
-			report.put("username", "trogdor");
-			report.put("name", "slender");
-			report.put("percentage", "2 percent");
-			report.put("squaretype", sp.getSelectedItem().toString());
-			report.put("squarenum", etarea.getText());
-			report.put("lat", currentEditableLocation.getLatitude());
-			report.put("long", currentEditableLocation.getLongitude());
+			report.put("user_id", spref.getString(Settings.KEY_USERNAME, "null"));
+			report.put("name", spref.getString(Settings.KEY_USERNAME, "null"));
+			report.put("percent", loopThroughToggles());
+			report.put("areatype", sp.getSelectedItem().toString());
+			report.put("areavalue", etarea.getText());
+			report.put("latitude", currentEditableLocation.getLatitude());
+			report.put("longitude", currentEditableLocation.getLongitude());
 			report.put("notes", notes.getText());
-			report.put("date", now.year);
+			report.put("datetime", now.monthDay + " - " + (now.month + 1) + " - " + now.year);
 			//bitmap
-			report.put("age", "100");
+			report.put("age", spref.getString(Settings.KEY_EDITTEXT_AGE, "0"));
 			
-			parent.put("user", report);
-			Toast.makeText(getApplicationContext(), now.year + "-" + (now.month + 1) + "-" + now.monthDay, Toast.LENGTH_SHORT).show();
 		} catch (JSONException e) {
 			Toast.makeText(getApplicationContext(), "Data not saved, try again", Toast.LENGTH_SHORT).show();
 		}
-		return parent;
+		return report;
 	}
 	
 	// Used for testing
 	private void peekAtJson(JSONObject json) {
 		try {
-			JSONObject itemObject = json.getJSONObject("user");
-			String lol = itemObject.getString("username");
-			Toast.makeText(getApplicationContext(), lol + " ", Toast.LENGTH_SHORT).show();
+			Toast.makeText(getApplicationContext(), json.getString("datetime") + " ", Toast.LENGTH_SHORT).show();
 		} catch (JSONException e) {
 			Toast.makeText(getApplicationContext(), "nope", Toast.LENGTH_SHORT).show();
 		}
+	}
+	
+	protected void takePicture() {
+		startActivityForResult(new Intent("android.media.action.IMAGE_CAPTURE"), CAMERA_REQUEST);
 	}
 
 }

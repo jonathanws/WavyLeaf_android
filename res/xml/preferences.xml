@@ -1,17 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
-    <PreferenceCategory android:title="Naming" >
+    <PreferenceCategory android:title="User" >
         
         <EditTextPreference
             android:key="preference_name"
-            android:title="Name"
-            android:summary="null" />
+            android:title="Name" />
         
         <Preference
             android:key="preference_username"
-            android:title="Username"
-            android:summary="null" />
+            android:title="Username" />
+        
+        <EditTextPreference
+            android:key="preference_age"
+            android:title="Age"
+            android:inputType="number" />
         
     </PreferenceCategory>
     

@@ -33,7 +33,7 @@ public class Main extends SherlockActivity implements OnClickListener {
 	private static final int HELP = 0;
 	private static final String TRIP_ENABLED_KEY = "trip_enabled";
 	private static final String TRIP_INTERVAL = "trip_interval";
-	protected static final int mUniqueId = 24885251;
+	protected static final int mUniqueId = 24885251; // Used for notifications
 	public boolean tripEnabled = false;
 	protected Button bu_new, bu_trip;
 	protected TextView tripInterval, tripSelection, tally, tallyNumber;
@@ -228,7 +228,10 @@ public class Main extends SherlockActivity implements OnClickListener {
 	protected void startTimer(int countDownFrom) {
 		new CountDownTimer(countDownFrom, 1000) {
 			public void onTick(long millisUntilFinished) {
-				tripSelection.setText( (int) ((millisUntilFinished / 1000) / 60) + ":" + (int) (millisUntilFinished / 1000) % 60);
+//				tripSelection.setText( (int) ((millisUntilFinished / 1000) / 60) + ":" + (int) (millisUntilFinished / 1000) % 60);
+				tripSelection.setText(String.format("%d:%02d",
+						((millisUntilFinished / 1000) / 60),
+						((millisUntilFinished / 1000) % 60)));
 			}
 			public void onFinish() {
 				tripSelection.setText("- - -");

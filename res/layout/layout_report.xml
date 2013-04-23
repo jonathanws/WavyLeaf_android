@@ -12,67 +12,12 @@
         android:paddingRight="16dp"
         android:paddingTop="16dp" >
 
-<!-- ================================================== Picture/notes ================================================== -->
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#F2F2F2"
-            android:orientation="vertical" >
-
-            <TextView
-                android:id="@+id/tv_picturenotes"
-                android:layout_width="match_parent"
-                android:layout_height="24dp"
-                android:background="#FFFFFF"
-                android:gravity="center_vertical"
-                android:paddingLeft="8dp"
-                android:text="@string/layout_report_picturenotes" />
-            
-            <View
-                android:layout_width="fill_parent"
-                android:layout_height="1dp"
-                android:background="#669900" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="4dp" >
-
-                <ImageButton
-                    android:id="@+id/report_imagebutton"
-                    android:layout_width="120dp"
-                    android:layout_height="120dp"
-                    android:layout_marginRight="4dp"
-                    android:contentDescription="@string/layout_report_camera"
-                    android:src="@drawable/camera" />
-
-                <EditText
-                    android:id="@+id/notes"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:ems="10"
-                    android:inputType="textMultiLine"
-                    android:maxHeight="120dp" />
-                
-            </LinearLayout>
-            
-        </LinearLayout>
-
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="3dp"
-            android:layout_marginBottom="16dp"
-            android:background="@drawable/drop_shadow" />
-
 <!-- ================================================== Percentage Seen ================================================== -->
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#F2F2F2"
+            android:background="#FFFFFF"
             android:orientation="vertical" >
 
             <LinearLayout
@@ -202,7 +147,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#F2F2F2"
+            android:background="#FFFFFF"
             android:orientation="vertical" >
             
             <LinearLayout
@@ -270,7 +215,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#F2F2F2"
+            android:background="#FFFFFF"
             android:orientation="vertical" >
 
             <TextView
@@ -343,6 +288,61 @@
 
         <View
             android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/drop_shadow" />
+        
+<!-- ================================================== Picture/notes ================================================== -->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#FFFFFF"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/tv_picturenotes"
+                android:layout_width="match_parent"
+                android:layout_height="24dp"
+                android:background="#FFFFFF"
+                android:gravity="center_vertical"
+                android:paddingLeft="8dp"
+                android:text="@string/layout_report_picturenotes" />
+            
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:background="#669900" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="4dp" >
+
+                <ImageButton
+                    android:id="@+id/report_imagebutton"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_marginRight="4dp"
+                    android:contentDescription="@string/layout_report_camera"
+                    android:src="@drawable/camera" />
+
+                <EditText
+                    android:id="@+id/notes"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:inputType="textMultiLine"
+                    android:maxHeight="120dp" />
+                
+            </LinearLayout>
+            
+        </LinearLayout>
+
+        <View
+            android:layout_width="fill_parent"
             android:layout_height="3dp"
             android:layout_marginBottom="16dp"
             android:background="@drawable/drop_shadow" />

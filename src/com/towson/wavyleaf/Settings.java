@@ -11,10 +11,13 @@ import com.actionbarsherlock.view.MenuItem;
 
 public class Settings extends SherlockPreferenceActivity implements OnSharedPreferenceChangeListener {
 	
-	public static final String KEY_EDITTEXT_USERNAME = "preference_name";
-	public static final String KEY_NAME = "preference_username";
+	public static final String KEY_EDITTEXT_NAME = "preference_name";
+	public static final String KEY_EDITTEXT_AGE = "preference_age";
+	public static final String KEY_USERNAME = "preference_username";
 	public static final String KEY_SINGLETALLY = "preference_singletally";
 	public static final String KEY_TRIPTALLY = "preference_triptally";
+		// Key for tally for only current trip
+	public static final String KEY_TRIPTALLY_CURRENT = "preference_triptally_current";
 
 	@Deprecated
 	@Override
@@ -61,22 +64,25 @@ public class Settings extends SherlockPreferenceActivity implements OnSharedPref
 	@Deprecated
 	private void setSummaries() {
 		
-		SharedPreferences localSharedPreferences = getPreferenceScreen().getSharedPreferences();
+		SharedPreferences sp = getPreferenceScreen().getSharedPreferences();
 		
 		// Instantiation
-		EditTextPreference etp_name = (EditTextPreference) findPreference("preference_name");
-		Preference p_username = findPreference("preference_username");
-		Preference p_tally_single = findPreference("preference_singletally");
-		Preference p_tally_trip = findPreference("preference_triptally");
+		EditTextPreference etp_name = (EditTextPreference) findPreference(KEY_EDITTEXT_NAME);
+		EditTextPreference etp_age = (EditTextPreference) findPreference(KEY_EDITTEXT_AGE);
+		Preference p_username = findPreference(KEY_USERNAME);
+		Preference p_tally_single = findPreference(KEY_SINGLETALLY);
+		Preference p_tally_trip = findPreference(KEY_TRIPTALLY);
 		
 		// Read values
-		String string_name = localSharedPreferences.getString("preference_name", "null");
-		String string_username = localSharedPreferences.getString("preference_username", "null");
-		int int_tally_single = localSharedPreferences.getInt("preference_singletally", 0);
-		int int_tally_trip = localSharedPreferences.getInt("preference_triptally", 0);
+		String string_name = sp.getString(KEY_EDITTEXT_NAME, "null");
+		String string_username = sp.getString(KEY_USERNAME, "null");
+		int int_tally_single = sp.getInt(KEY_SINGLETALLY, 0);
+		int int_tally_trip = sp.getInt(KEY_TRIPTALLY, 0);
+		int int_age = Integer.parseInt(sp.getString(KEY_EDITTEXT_AGE, "0"));
 		
 		// Set Summaries
 		etp_name.setSummary(capitalizeFirstLetter(string_name));
+		etp_age.setSummary(int_age + "");
 		p_username.setSummary(capitalizeFirstLetter(string_username));
 		p_tally_single.setSummary(int_tally_single + "");
 		p_tally_trip.setSummary(int_tally_trip + "");
