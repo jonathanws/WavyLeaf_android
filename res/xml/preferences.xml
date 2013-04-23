@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory android:title="Naming" >
+        
+        <EditTextPreference
+            android:key="preference_name"
+            android:title="Name"
+            android:summary="null" />
+        
+        <Preference
+            android:key="preference_username"
+            android:title="Username"
+            android:summary="null" />
+        
+    </PreferenceCategory>
+    
+    <PreferenceCategory android:title="Statistics" >
+        
+        <Preference
+            android:key="preference_singletally"
+            android:title="Single points submitted"
+            android:summary="0" />
+        
+        <Preference
+            android:key="preference_triptally"
+            android:title="Trip points submitted"
+            android:summary="0" />
+               
+    </PreferenceCategory>
+    
+</PreferenceScreen>

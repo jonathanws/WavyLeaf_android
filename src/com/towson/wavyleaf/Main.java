@@ -94,7 +94,8 @@ public class Main extends SherlockActivity implements OnClickListener {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 			case R.id.menu_settings:
-				Toast.makeText(this, "settings", Toast.LENGTH_SHORT).show();
+				Intent settingsIntent = new Intent(this, Settings.class);
+				this.startActivity(settingsIntent);
 				return true;
 			case R.id.menu_help:
 				showDialog(HELP);

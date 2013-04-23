@@ -59,6 +59,11 @@
             android:theme="@style/Theme.Sherlock" />
         
         <activity
+            android:name="com.towson.wavyleaf.Settings"
+            android:label="Wavy Leaf"
+            android:theme="@style/Theme.Sherlock" />
+        
+        <activity
             android:name="com.towson.wavyleaf.Trip"
             android:label="Trip"
             android:screenOrientation="portrait"

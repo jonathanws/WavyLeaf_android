@@ -1,6 +1,12 @@
 Change Log
 ===============================================================================
 
+
+Version 1.1.5 *(4-22-2013)*
+----------------------------
+* Added settings.
+* Added xml folder for file that defines settings
+
 Version 1.1.4 *(4-15-2013)*
 ----------------------------
 * Still need to integrate CDT from Ver 1.1.3 into a service
