@@ -2,6 +2,12 @@ Change Log
 ===============================================================================
 
 
+Version 1.1.6 *(4-22-2013)*
+----------------------------
+* Added notifications
+* Added android compat lib jar (goes in /libs/ folder)
+* Added vibration to phone
+
 Version 1.1.5 *(4-22-2013)*
 ----------------------------
 * Added settings.

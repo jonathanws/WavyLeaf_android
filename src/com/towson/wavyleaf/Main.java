@@ -3,6 +3,7 @@ package com.towson.wavyleaf;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -13,7 +14,9 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Vibrator;
 import android.preference.PreferenceManager;
+import android.support.v4.app.NotificationCompat;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -29,12 +32,15 @@ public class Main extends SherlockActivity implements OnClickListener {
 	private static final int ONSTART = 6;
 	private static final int HELP = 0;
 	private static final String TRIP_ENABLED_KEY = "trip_enabled";
+	private static final String TRIP_INTERVAL = "trip_interval";
+	protected static final int mUniqueId = 24885251;
 	public boolean tripEnabled = false;
 	protected Button bu_new, bu_trip;
 	protected TextView tripInterval, tripSelection, tally, tallyNumber;
 	private AlarmManager intervalAlarm;
 	private Intent alarmIntent;
 	private PendingIntent pendingAlarm;
+	NotificationManager nm;
 	
 	@Override
 	public void onCreate(Bundle bundle) {
@@ -45,6 +51,9 @@ public class Main extends SherlockActivity implements OnClickListener {
 		
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         tripEnabled = sp.getBoolean(TRIP_ENABLED_KEY, false);
+        int int_single = sp.getInt(Settings.KEY_SINGLETALLY, 0);
+        int int_trip = sp.getInt(Settings.KEY_TRIPTALLY, 0);
+        this.tallyNumber.setText(int_single + " / " + int_trip);
         
         if (tripEnabled) {
         	setButtonDrawable(R.drawable.ic_main_end);
@@ -59,9 +68,7 @@ public class Main extends SherlockActivity implements OnClickListener {
         	if(intervalAlarm != null)
         		intervalAlarm.cancel(pendingAlarm);
         }
-        
-        Toast.makeText(getApplicationContext(), tripEnabled + "", Toast.LENGTH_SHORT).show();
-	}
+    }
 	
 	protected void initLayout() {
 		Typeface tf_light = Typeface.createFromAsset(getAssets(), "fonts/roboto_light.ttf");
@@ -85,11 +92,25 @@ public class Main extends SherlockActivity implements OnClickListener {
 	}
 	
 	@Override
+	protected void onResume() {
+		super.onResume();
+		nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+		nm.cancel(mUniqueId);
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		nm.cancel(mUniqueId);
+	}
+
+	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getSupportMenuInflater().inflate(R.menu.menu_main, menu);
 		return true;
 	}
 	
+	@Deprecated
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
@@ -110,6 +131,7 @@ public class Main extends SherlockActivity implements OnClickListener {
 	}
 	
 	//Jon, this is the one you showed me via email -- MM
+	@Deprecated
 	@Override
 	public void onClick(View view) {
 		if (view == this.bu_new) {
@@ -139,37 +161,7 @@ public class Main extends SherlockActivity implements OnClickListener {
 		}
 	}
 	
-	
-//	@Override
-//	public void onClick(View view) {
-//		if (view == this.bu_new) {
-//			Intent newReportIntent = new Intent(this, Report.class);
-//			this.startActivity(newReportIntent);	
-//			
-//		} else if (view == this.bu_trip) {	        
-//			// Toggle boolean
-//			tripEnabled = !tripEnabled;
-//			
-//			// Commit change
-//			SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-//			Editor ed = sp.edit();
-//			ed.putBoolean(TRIP_ENABLED_KEY, tripEnabled);
-//			ed.commit();
-//			Toast.makeText(getApplicationContext(), tripEnabled + "", Toast.LENGTH_SHORT).show();
-//			
-//			// Set drawable
-//			if(tripEnabled) {
-//				setButtonDrawable(R.drawable.ic_main_end);
-//				setButtonText(bu_trip, "End Trip");
-//				showDialog(ONSTART);
-//			} else if (!tripEnabled) {
-//				setButtonDrawable(R.drawable.ic_main_start_light);
-//				setButtonText(bu_trip, "Start Trip");
-//				setEditText(tripSelection, getString(R.string.layout_novalue));
-//			}
-//		}
-//	}
-	
+	@Deprecated
 	@Override
 	protected Dialog onCreateDialog(int id) {
 		switch(id) {
@@ -180,60 +172,44 @@ public class Main extends SherlockActivity implements OnClickListener {
 				.setPositiveButton("Phew!", null)
 				.setNegativeButton("cancel", null)
 				.create();
+				
 			case ONSTART:
 				return new AlertDialog.Builder(this)
 				.setTitle("Choose Interval")
 				.setItems(R.array.tripinterval_array, new DialogInterface.OnClickListener() {
 					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-						Editor ed = sp.edit();
-						
-						// Nullpointerexceptions are coming from calls to setRepeating()
-						// Commented just so I could work with edittexts
-						
+					public void onClick(DialogInterface dialog, int which) {						
 						if (which == 0) {
-//							intervalAlarm.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), 300000, pendingAlarm);
-							ed.putString("TRIP_INTERVAL", "5:00 Minutes");
-							setEditText(tripSelection, "5:00 Minutes");
-							Toast.makeText(getApplicationContext(), "Five Minutes", Toast.LENGTH_SHORT).show();
-							startTimer(300000);
+							intervalSelected("5:00 Minutes", "Five Minutes", 3000); // TODO change back to five minutes
 						}
 						else if(which == 1) {
-//							intervalAlarm.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), 600000, pendingAlarm);
-							ed.putString("TRIP_INTERVAL", "10:00 Minutes");
-							setEditText(tripSelection, "10:00 Minutes");
-							Toast.makeText(getApplicationContext(), "Ten Minutes", Toast.LENGTH_SHORT).show();
-							startTimer(600000);
+							intervalSelected("10:00 Minutes", "Ten Minutes", 600000);
 						}
 						else if(which == 2) {
-//							intervalAlarm.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), 900000, pendingAlarm);
-							ed.putString("TRIP_INTERVAL", "15:00 Minutes");
-							setEditText(tripSelection, "15:00 Minutes");
-							Toast.makeText(getApplicationContext(), "Fifteen Minutes", Toast.LENGTH_SHORT).show();
-							startTimer(900000);
+							intervalSelected("15:00 Minutes", "Fifteen Minutes", 900000);
 						}
 						else if(which == 3) {
-//							intervalAlarm.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), 1200000, pendingAlarm);
-							ed.putString("TRIP_INTERVAL", "20:00 Minutes");
-							setEditText(tripSelection, "20:00 Minutes");
-							Toast.makeText(getApplicationContext(), "Twenty Minutes", Toast.LENGTH_SHORT).show();
-							startTimer(1200000);
+							intervalSelected("20:00 Minutes", "Twenty Minutes", 1200000);
 						}
 						else if(which == 4) {
-//							intervalAlarm.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), 1800000, pendingAlarm);
-							ed.putString("TRIP_INTERVAL", "30:00 Minutes");
-							setEditText(tripSelection, "30:00 Minutes");
-							Toast.makeText(getApplicationContext(), "Thirty Minutes", Toast.LENGTH_SHORT).show();
-							startTimer(1800000);
+							intervalSelected("30:00 Minutes", "Thirty Minutes", 1800000);
 						}
-						
-						ed.commit();
 					}
 				})
 				.create();
 		}
 		return super.onCreateDialog(id);
+	}
+	
+	protected void intervalSelected(String timeNum, String timeString, int milli) {
+		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+		Editor ed = sp.edit();
+		
+		ed.putString(TRIP_INTERVAL, timeNum);
+	    ed.commit();
+	    setEditText(this.tripSelection, timeNum);
+	    Toast.makeText(getApplicationContext(), timeString, Toast.LENGTH_SHORT).show();
+	    startTimer(milli);
 	}
 	
 	protected void setButtonDrawable(int button) {
@@ -253,33 +229,38 @@ public class Main extends SherlockActivity implements OnClickListener {
 		new CountDownTimer(countDownFrom, 1000) {
 			public void onTick(long millisUntilFinished) {
 				tripSelection.setText( (int) ((millisUntilFinished / 1000) / 60) + ":" + (int) (millisUntilFinished / 1000) % 60);
-			}			
+			}
 			public void onFinish() {
-				tripSelection.setText("done!");
+				tripSelection.setText("- - -");
+				vibratePhone();
+				createNotification();
 			}
 		}.start();
 	}
 	
+	protected void vibratePhone() {
+		int buzz = 150;
+		int gap = 100;
+		long[] pattern = {0, buzz, gap, buzz};
+		Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+		v.vibrate(pattern, -1);
+	}
 	
-//	protected void startTimer() {
-//		int delay = 0; // delay for 0 sec.
-//	    int period = 1000; // repeat every sec.
-//	    int x = 0;
-//	    
-//	    Timer timer = new Timer();
-//	    timer.scheduleAtFixedRate(new TimerTask() {
-//	    	public void run() {
-//	    		runOnUiThread(new Runnable() {
-//					@Override
-//					public void run() {
-//						int y = x;
-//						y++;
-//						tripSelection.setText((x + 1) + " ");
-//					}
-//	    		});
-//	    	}
-//	    }, delay, period);
-//	}
-	
+	protected void createNotification() {
+		Intent tripIntent = new Intent(this, Trip.class);
+		tripIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP); //Resume activity instead of creating a new one
+		PendingIntent pi = PendingIntent.getActivity(this, 0, tripIntent, 0);
+		
+		NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
+				.setAutoCancel(true)
+				.setContentIntent(pi)
+				.setContentTitle("Timing interval elapsed")
+				.setContentText("Record your next point.")
+				.setSmallIcon(R.drawable.ic_launcher)
+				.setTicker("Hidden Text!")
+				.setWhen(System.currentTimeMillis());
+		
+		nm.notify(mUniqueId, builder.build());
+	}
 
 }
