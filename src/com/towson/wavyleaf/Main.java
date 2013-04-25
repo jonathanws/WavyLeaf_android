@@ -175,24 +175,18 @@ public class Main extends SherlockActivity implements OnClickListener {
 				
 			case ONSTART:
 				return new AlertDialog.Builder(this)
-				.setTitle("Choose Interval")
+				.setTitle("Choose Reminder Interval")
 				.setItems(R.array.tripinterval_array, new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {						
 						if (which == 0) {
-							intervalSelected("5:00 Minutes", "Five Minutes", 3000); // TODO change back to five minutes
+							intervalSelected("5:00 Minutes", "Five Minutes", 300000);
 						}
 						else if(which == 1) {
 							intervalSelected("10:00 Minutes", "Ten Minutes", 600000);
 						}
 						else if(which == 2) {
 							intervalSelected("15:00 Minutes", "Fifteen Minutes", 900000);
-						}
-						else if(which == 3) {
-							intervalSelected("20:00 Minutes", "Twenty Minutes", 1200000);
-						}
-						else if(which == 4) {
-							intervalSelected("30:00 Minutes", "Thirty Minutes", 1800000);
 						}
 					}
 				})

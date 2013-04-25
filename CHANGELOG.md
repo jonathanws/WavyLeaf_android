@@ -2,6 +2,13 @@ Change Log
 ===============================================================================
 
 
+Version 1.1.8 *(4.25-2013)*
+----------------------------
+* Removed landscape Main and locked to Portrait
+* Timer has max choice of 15 minute interval
+* Main - Text at bottom changed 'Time Interval' to 'next reminder in'
+* Main - Dialog title should be 'Choose reminder interval'
+
 Version 1.1.7 *(4.22-2013)*
 ----------------------------
 * Deleted paper airplane icon
