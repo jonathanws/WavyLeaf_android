@@ -5,7 +5,7 @@ lint.xml
 
 #Eclipse
 .project
-.properties
+*.properties
 .classpath
 .settings
 .checkstyle
