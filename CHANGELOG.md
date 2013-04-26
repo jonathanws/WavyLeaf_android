@@ -2,7 +2,15 @@ Change Log
 ===============================================================================
 
 
-Version 1.1.9 *(4.25-2013)*
+Version 1.2.0 *(4-25-2013)*
+----------------------------
+* Added strings for togglebuttons to bold
+* Added different drawable for camera
+* Added menu for trip
+* Disabled compass in Report
+* Deleted save button from Trip
+
+Version 1.1.9 *(4-25-2013)*
 ----------------------------
 * Main - Trip button changes text when selected
 * Created an layout_main_endtrip string as part of above

@@ -25,5 +25,18 @@
     
     <string name="gps_is_disabled">GPS is disabled</string>
     <string name="show_location_settings">Show Location Settings</string>
+    
+    <string name="toggle_zero_reg">0%</string>
+    <string name="toggle_zero_bold"><b>0%</b></string>
+    <string name="toggle_one_reg">1-10%</string>
+    <string name="toggle_one_bold"><b>1-10%</b></string>
+    <string name="toggle_ten_reg">10-25%</string>
+    <string name="toggle_ten_bold"><b>10-25%</b></string>
+    <string name="toggle_twentyfive_reg">25-50%</string>
+    <string name="toggle_twentyfive_bold"><b>25-50%</b></string>
+    <string name="toggle_fifty_reg">50-75%</string>
+    <string name="toggle_fifty_bold"><b>50-75%</b></string>
+    <string name="toggle_seventyfive_reg">75-100%</string>
+    <string name="toggle_seventyfive_bold"><b>75-100%</b></string>
 
 </resources>

@@ -310,6 +310,7 @@ public class Report extends SherlockFragmentActivity {
         updateMyLocation();
         mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
         mUiSettings = mMap.getUiSettings();
+        mUiSettings.setCompassEnabled(false);
         mUiSettings.setMyLocationButtonEnabled(false);
         mUiSettings.setAllGesturesEnabled(false);
     }

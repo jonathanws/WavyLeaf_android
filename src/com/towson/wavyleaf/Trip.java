@@ -26,6 +26,7 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 
 public class Trip extends SherlockActivity {
@@ -35,7 +36,7 @@ public class Trip extends SherlockActivity {
 	protected TextView tripInterval, tripSelection, tally, tallyNumber, tvlat, tvlong, tvpicnotes, 
 		tvper, tvper_summary, tvcoor, tvarea, tvarea_summary;
 	protected EditText notes, etarea;
-	protected Button doneTrip, save, b1, b2, b3, b4, b5, b6;
+	protected Button doneTrip, b1, b2, b3, b4, b5, b6;
 	protected RadioGroup rg;
 	protected Spinner sp;
 	protected ImageButton ib;
@@ -84,7 +85,6 @@ public class Trip extends SherlockActivity {
 		rg = (RadioGroup) findViewById(R.id.toggleGroup);
 		sp = (Spinner) findViewById(R.id.sp_areainfested);
 		ib = (ImageButton) findViewById(R.id.report_imagebutton);
-		save = (Button) findViewById(R.id.save);
 		
 		// Listener for camera button
 		ib.setOnClickListener(new OnClickListener() {
@@ -130,7 +130,6 @@ public class Trip extends SherlockActivity {
 		tripSelection.setTypeface(tf_light);
 		tally.setTypeface(tf_light);
 		tallyNumber.setTypeface(tf_light);
-		save.setTypeface(tf_light);
 		tvlat.setTypeface(tf_light);
 		tvlong.setTypeface(tf_light);
 		tvcoor.setTypeface(tf_bold);
@@ -157,12 +156,22 @@ public class Trip extends SherlockActivity {
 	}
 	
 	@Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+    	super.onCreateOptionsMenu(menu);
+    	getSupportMenuInflater().inflate(R.menu.menu_trip, menu);
+    	return true;
+	}
+	
+	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch(item.getItemId()) {
 			case android.R.id.home:
 				Intent mainIntent = new Intent(this, Main.class);
 				mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 				startActivity(mainIntent);
+				finish();
+				return true;
+			case R.id.menu_submit:
 				finish();
 				return true;
 		}
@@ -220,10 +229,6 @@ public class Trip extends SherlockActivity {
 			Bitmap bm = (Bitmap) data.getExtras().get("data");
 			ib.setImageBitmap(bm);
 		}
-	}
-
-	public void onSaveButtonClick(View view) {
-		finish();
 	}
 	
 	protected void takePicture() {
