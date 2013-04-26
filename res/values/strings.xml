@@ -5,6 +5,7 @@
     
     <string name="layout_main_new">New Record</string>
     <string name="layout_main_trip">Start Trip</string>
+    <string name="layout_main_endtrip">End Trip</string>
     <string name="layout_main_upload">Upload Records</string>
     
     <string name="layout_numrecorded"># Recorded</string>

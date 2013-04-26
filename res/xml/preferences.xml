@@ -13,7 +13,7 @@
         
         <EditTextPreference
             android:key="preference_age"
-            android:title="Age"
+            android:title="DoB"
             android:inputType="number" />
         
     </PreferenceCategory>

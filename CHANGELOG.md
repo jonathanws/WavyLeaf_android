@@ -2,12 +2,19 @@ Change Log
 ===============================================================================
 
 
+Version 1.1.9 *(4.25-2013)*
+----------------------------
+* Main - Trip button changes text when selected
+* Created an layout_main_endtrip string as part of above
+* Corrected 'age' in Report JSON to 'dob'
+* Jon: Trip notification plays vibrates, creates system notification
+
 Version 1.1.8 *(4.25-2013)*
 ----------------------------
 * Removed landscape Main and locked to Portrait
 * Timer has max choice of 15 minute interval
 * Main - Text at bottom changed 'Time Interval' to 'next reminder in'
-* Main - Dialog title should be 'Choose reminder interval'
+* Main - Dialog title changed to 'Choose reminder interval'
 
 Version 1.1.7 *(4.22-2013)*
 ----------------------------

@@ -57,6 +57,8 @@ public class Main extends SherlockActivity implements OnClickListener {
         
         if (tripEnabled) {
         	setButtonDrawable(R.drawable.ic_main_end);
+        	//change Trip button text to "end trip"
+        	bu_trip.setText(R.string.layout_main_endtrip);	//set text to End Trip
         	//setup alarm for trips
         	intervalAlarm = (AlarmManager)getApplicationContext().getSystemService(Context.ALARM_SERVICE);
 			alarmIntent = new Intent(getApplicationContext(), Trip.class);
@@ -65,6 +67,7 @@ public class Main extends SherlockActivity implements OnClickListener {
         } 
         else if (!tripEnabled) {
         	setButtonDrawable(R.drawable.ic_main_start_light);
+        	bu_trip.setText(R.string.layout_main_trip);	//set text back to Start Trip
         	if(intervalAlarm != null)
         		intervalAlarm.cancel(pendingAlarm);
         }
@@ -229,6 +232,7 @@ public class Main extends SherlockActivity implements OnClickListener {
 			}
 			public void onFinish() {
 				tripSelection.setText("- - -");
+				
 				vibratePhone();
 				createNotification();
 			}
