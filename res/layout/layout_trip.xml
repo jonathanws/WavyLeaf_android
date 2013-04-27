@@ -360,7 +360,7 @@
                     android:layout_height="120dp"
                     android:layout_marginRight="4dp"
                     android:contentDescription="@string/layout_report_camera"
-                    android:src="@drawable/camera" />
+                    android:src="@drawable/ib_camera" />
 
                 <EditText
                     android:id="@+id/notes"

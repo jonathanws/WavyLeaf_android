@@ -183,7 +183,7 @@ public class Main extends SherlockActivity implements OnClickListener {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {						
 						if (which == 0) {
-							intervalSelected("5:00 Minutes", "Five Minutes", 300000);
+							intervalSelected("5:00 Minutes", "Five Minutes", 3000); //300000
 						}
 						else if(which == 1) {
 							intervalSelected("10:00 Minutes", "Ten Minutes", 600000);
@@ -257,7 +257,7 @@ public class Main extends SherlockActivity implements OnClickListener {
 				.setContentIntent(pi)
 				.setContentTitle("Timing interval elapsed")
 				.setContentText("Record your next point.")
-				.setSmallIcon(R.drawable.ic_launcher)
+				.setSmallIcon(R.drawable.ic_notification)
 				.setTicker("Hidden Text!")
 				.setWhen(System.currentTimeMillis());
 		
