@@ -12,6 +12,9 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Vibrator;
@@ -34,12 +37,12 @@ public class Main extends SherlockActivity implements OnClickListener {
 	private static final String TRIP_ENABLED_KEY = "trip_enabled";
 	private static final String TRIP_INTERVAL = "trip_interval";
 	protected static final int mUniqueId = 24885251; // Used for notifications
-	public boolean tripEnabled = false;
+//	public boolean tripEnabled = false;
 	protected Button bu_new, bu_trip;
 	protected TextView tripInterval, tripSelection, tally, tallyNumber;
-	private AlarmManager intervalAlarm;
-	private Intent alarmIntent;
-	private PendingIntent pendingAlarm;
+//	private AlarmManager intervalAlarm;
+//	private Intent alarmIntent;
+//	private PendingIntent pendingAlarm;
 	NotificationManager nm;
 	
 	@Override
@@ -48,29 +51,21 @@ public class Main extends SherlockActivity implements OnClickListener {
 		
 		setContentView(R.layout.layout_main);
 		initLayout();
+		determineButtonDrawable();
 		
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-        tripEnabled = sp.getBoolean(TRIP_ENABLED_KEY, false);
         int int_single = sp.getInt(Settings.KEY_SINGLETALLY, 0);
         int int_trip = sp.getInt(Settings.KEY_TRIPTALLY, 0);
         this.tallyNumber.setText(int_single + " / " + int_trip);
         
-        if (tripEnabled) {
-        	setButtonDrawable(R.drawable.ic_main_end);
-        	//change Trip button text to "end trip"
-        	bu_trip.setText(R.string.layout_main_endtrip);	//set text to End Trip
-        	//setup alarm for trips
-        	intervalAlarm = (AlarmManager)getApplicationContext().getSystemService(Context.ALARM_SERVICE);
-			alarmIntent = new Intent(getApplicationContext(), Trip.class);
-			pendingAlarm = PendingIntent.getBroadcast(getApplicationContext(), 117, alarmIntent, 0);
-			
-        } 
-        else if (!tripEnabled) {
-        	setButtonDrawable(R.drawable.ic_main_start_light);
-        	bu_trip.setText(R.string.layout_main_trip);	//set text back to Start Trip
-        	if(intervalAlarm != null)
-        		intervalAlarm.cancel(pendingAlarm);
-        }
+//    	//setup alarm for trips
+//    	intervalAlarm = (AlarmManager)getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+//		alarmIntent = new Intent(getApplicationContext(), Trip.class);
+//		pendingAlarm = PendingIntent.getBroadcast(getApplicationContext(), 117, alarmIntent, 0);
+        
+//    	if(intervalAlarm != null)
+//		intervalAlarm.cancel(pendingAlarm);
+		
     }
 	
 	protected void initLayout() {
@@ -124,7 +119,7 @@ public class Main extends SherlockActivity implements OnClickListener {
 			case R.id.menu_help:
 				showDialog(HELP);
 				return true;
-			// Delete this!
+			// TODO Delete this!
 			case R.id.deleteme:
 				Intent sessionIntent = new Intent(this, Trip.class);
 				this.startActivity(sessionIntent);
@@ -133,7 +128,6 @@ public class Main extends SherlockActivity implements OnClickListener {
 		return super.onOptionsItemSelected(item);
 	}
 	
-	//Jon, this is the one you showed me via email -- MM
 	@Deprecated
 	@Override
 	public void onClick(View view) {
@@ -141,26 +135,16 @@ public class Main extends SherlockActivity implements OnClickListener {
 			Intent newReportIntent = new Intent(this, Report.class);
 			this.startActivity(newReportIntent);	
 			
-		} else if (view == this.bu_trip) {	        
-			// Toggle boolean
-			tripEnabled = !tripEnabled;
+		} else if (view == this.bu_trip) {
 			
-			// Commit change
 			SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-			Editor ed = sp.edit();
-			ed.putBoolean(TRIP_ENABLED_KEY, tripEnabled);
-			ed.commit();
-			Toast.makeText(getApplicationContext(), tripEnabled + "", Toast.LENGTH_SHORT).show();
-			
-			// Set drawable
-			if(tripEnabled) {
-				setButtonDrawable(R.drawable.ic_main_end);
+			if (sp.getBoolean(TRIP_ENABLED_KEY, true) == false) // if user wants to start a new trip
 				showDialog(ONSTART);
-			} else if (!tripEnabled)
-				setButtonDrawable(R.drawable.ic_main_start_light);
-				
-//			Intent sessionIntent = new Intent(this, Trip.class);
-//			this.startActivity(sessionIntent);
+			else if (sp.getBoolean(TRIP_ENABLED_KEY, false) == true) { // If trip already in session
+				Editor ed = sp.edit();
+				ed.putBoolean(TRIP_ENABLED_KEY, false).commit(); // Turn it off
+				determineButtonDrawable();
+			}
 		}
 	}
 	
@@ -183,7 +167,7 @@ public class Main extends SherlockActivity implements OnClickListener {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {						
 						if (which == 0) {
-							intervalSelected("5:00 Minutes", "Five Minutes", 3000); //300000
+							intervalSelected("5:00 Minutes", "Five Minutes", 3000); // TODO change back to 300000
 						}
 						else if(which == 1) {
 							intervalSelected("10:00 Minutes", "Ten Minutes", 600000);
@@ -198,13 +182,28 @@ public class Main extends SherlockActivity implements OnClickListener {
 		return super.onCreateDialog(id);
 	}
 	
+	protected void determineButtonDrawable() {
+		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+		
+		if (sp.getBoolean(TRIP_ENABLED_KEY, false) == true) { // There is a trip in progress
+        	setButtonDrawable(R.drawable.ic_main_end); // Set to red button
+        	bu_trip.setText(R.string.layout_main_endtrip);	// Set text to "End Trip"
+        } 
+        else {
+        	setButtonDrawable(R.drawable.ic_main_start_light); // Set to blue button
+        	bu_trip.setText(R.string.layout_main_trip);	// Set text back to "Start Trip"
+        }
+	}
+	
 	protected void intervalSelected(String timeNum, String timeString, int milli) {
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 		Editor ed = sp.edit();
 		
 		ed.putString(TRIP_INTERVAL, timeNum);
+		ed.putBoolean(TRIP_ENABLED_KEY, true);
 	    ed.commit();
 	    setEditText(this.tripSelection, timeNum);
+	    determineButtonDrawable();
 	    Toast.makeText(getApplicationContext(), timeString, Toast.LENGTH_SHORT).show();
 	    startTimer(milli);
 	}
@@ -225,18 +224,24 @@ public class Main extends SherlockActivity implements OnClickListener {
 	protected void startTimer(int countDownFrom) {
 		new CountDownTimer(countDownFrom, 1000) {
 			public void onTick(long millisUntilFinished) {
-//				tripSelection.setText( (int) ((millisUntilFinished / 1000) / 60) + ":" + (int) (millisUntilFinished / 1000) % 60);
 				tripSelection.setText(String.format("%d:%02d",
 						((millisUntilFinished / 1000) / 60),
 						((millisUntilFinished / 1000) % 60)));
 			}
 			public void onFinish() {
 				tripSelection.setText("- - -");
-				
-				vibratePhone();
 				createNotification();
+				playSounds();
 			}
 		}.start();
+	}
+	
+	protected void playSounds() {
+		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        if (sp.getBoolean(Settings.KEY_CHECKBOX_NOISE, true))
+        	playNoise();
+        if (sp.getBoolean(Settings.KEY_CHECKBOX_VIBRATE, true))
+        	vibratePhone();
 	}
 	
 	protected void vibratePhone() {
@@ -245,6 +250,12 @@ public class Main extends SherlockActivity implements OnClickListener {
 		long[] pattern = {0, buzz, gap, buzz};
 		Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 		v.vibrate(pattern, -1);
+	}
+	
+	protected void playNoise() {
+		Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+		Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
+		r.play();
 	}
 	
 	protected void createNotification() {

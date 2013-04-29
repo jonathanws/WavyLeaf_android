@@ -32,4 +32,16 @@
                
     </PreferenceCategory>
     
+    <PreferenceCategory android:title="Noise" >
+        
+        <CheckBoxPreference 
+            android:key="preference_vibrate"
+            android:title="Vibrate during trips" />
+        
+        <CheckBoxPreference 
+            android:key="preference_noise"
+            android:title="Play sound during trips" />
+        
+    </PreferenceCategory>
+    
 </PreferenceScreen>

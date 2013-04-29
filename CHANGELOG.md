@@ -2,7 +2,13 @@ Change Log
 ===============================================================================
 
 
-Version 1.2.1 *(4.26-2013)*
+Version 1.2.2 *(4-28-2013)*
+----------------------------
+* Changed entire activity to portrait
+* Added settings for turning off vibrate / noise
+* Changed how trip button state is determined
+
+Version 1.2.1 *(4-26-2013)*
 ----------------------------
 * Added notification icons!
 

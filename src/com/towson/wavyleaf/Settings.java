@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
 import com.actionbarsherlock.app.SherlockPreferenceActivity;
@@ -13,6 +14,8 @@ public class Settings extends SherlockPreferenceActivity implements OnSharedPref
 	
 	public static final String KEY_EDITTEXT_NAME = "preference_name";
 	public static final String KEY_EDITTEXT_AGE = "preference_age";
+	public static final String KEY_CHECKBOX_VIBRATE = "preference_vibrate";
+	public static final String KEY_CHECKBOX_NOISE = "preference_noise";
 	public static final String KEY_USERNAME = "preference_username";
 	public static final String KEY_SINGLETALLY = "preference_singletally";
 	public static final String KEY_TRIPTALLY = "preference_triptally";
@@ -72,6 +75,8 @@ public class Settings extends SherlockPreferenceActivity implements OnSharedPref
 		Preference p_username = findPreference(KEY_USERNAME);
 		Preference p_tally_single = findPreference(KEY_SINGLETALLY);
 		Preference p_tally_trip = findPreference(KEY_TRIPTALLY);
+		CheckBoxPreference cbp_vibrate = (CheckBoxPreference) findPreference(KEY_CHECKBOX_VIBRATE);
+		CheckBoxPreference cbp_noise = (CheckBoxPreference) findPreference(KEY_CHECKBOX_NOISE);
 		
 		// Read values
 		String string_name = sp.getString(KEY_EDITTEXT_NAME, "null");
@@ -79,6 +84,8 @@ public class Settings extends SherlockPreferenceActivity implements OnSharedPref
 		int int_tally_single = sp.getInt(KEY_SINGLETALLY, 0);
 		int int_tally_trip = sp.getInt(KEY_TRIPTALLY, 0);
 		int int_age = Integer.parseInt(sp.getString(KEY_EDITTEXT_AGE, "0"));
+		boolean boolean_vibrate = sp.getBoolean(KEY_CHECKBOX_VIBRATE, true);
+		boolean boolean_noise = sp.getBoolean(KEY_CHECKBOX_NOISE, true);
 		
 		// Set Summaries
 		etp_name.setSummary(capitalizeFirstLetter(string_name));
@@ -86,6 +93,8 @@ public class Settings extends SherlockPreferenceActivity implements OnSharedPref
 		p_username.setSummary(capitalizeFirstLetter(string_username));
 		p_tally_single.setSummary(int_tally_single + "");
 		p_tally_trip.setSummary(int_tally_trip + "");
+		cbp_vibrate.setChecked(boolean_vibrate);
+		cbp_noise.setChecked(boolean_noise);
 	}
 	
 	private String capitalizeFirstLetter(String paramString) {
