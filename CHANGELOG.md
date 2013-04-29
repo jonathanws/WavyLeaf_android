@@ -2,6 +2,12 @@ Change Log
 ===============================================================================
 
 
+Version 1.2.3 *(4-28-2013)*
+----------------------------
+* Made countdowntimer cancelable
+* Made countdowntimer display numeric value
+* Deleted save button in Trip
+
 Version 1.2.2 *(4-28-2013)*
 ----------------------------
 * Changed entire activity to portrait

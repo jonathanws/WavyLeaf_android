@@ -44,6 +44,7 @@ public class Main extends SherlockActivity implements OnClickListener {
 //	private Intent alarmIntent;
 //	private PendingIntent pendingAlarm;
 	NotificationManager nm;
+	public CountDownTimer ctd;
 	
 	@Override
 	public void onCreate(Bundle bundle) {
@@ -143,7 +144,10 @@ public class Main extends SherlockActivity implements OnClickListener {
 			else if (sp.getBoolean(TRIP_ENABLED_KEY, false) == true) { // If trip already in session
 				Editor ed = sp.edit();
 				ed.putBoolean(TRIP_ENABLED_KEY, false).commit(); // Turn it off
+				tripSelection.setText("- - -");
 				determineButtonDrawable();
+				if (ctd != null)
+					ctd.cancel();
 			}
 		}
 	}
@@ -167,13 +171,13 @@ public class Main extends SherlockActivity implements OnClickListener {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {						
 						if (which == 0) {
-							intervalSelected("5:00 Minutes", "Five Minutes", 3000); // TODO change back to 300000
+							intervalSelected("5:00", "Five Minutes", 3000); // TODO change back to 300000
 						}
 						else if(which == 1) {
-							intervalSelected("10:00 Minutes", "Ten Minutes", 600000);
+							intervalSelected("10:00", "Ten Minutes", 600000);
 						}
 						else if(which == 2) {
-							intervalSelected("15:00 Minutes", "Fifteen Minutes", 900000);
+							intervalSelected("15:00", "Fifteen Minutes", 900000);
 						}
 					}
 				})
@@ -222,7 +226,7 @@ public class Main extends SherlockActivity implements OnClickListener {
 	}
 	
 	protected void startTimer(int countDownFrom) {
-		new CountDownTimer(countDownFrom, 1000) {
+		ctd = new CountDownTimer(countDownFrom, 1000) {
 			public void onTick(long millisUntilFinished) {
 				tripSelection.setText(String.format("%d:%02d",
 						((millisUntilFinished / 1000) / 60),

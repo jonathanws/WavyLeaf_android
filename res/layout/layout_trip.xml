@@ -380,22 +380,6 @@
             android:layout_height="3dp"
             android:layout_marginBottom="16dp"
             android:background="@drawable/drop_shadow" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="48dp" >
-
-            <Button
-                android:id="@+id/save"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/button_drawable"
-                android:text="@string/layout_trip_save"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="#ffffff"
-                android:onClick="onSaveButtonClick" />
-            
-        </LinearLayout>
         
     </LinearLayout>
 
