@@ -8,12 +8,17 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -22,6 +27,7 @@ import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.preference.PreferenceManager;
@@ -237,16 +243,17 @@ public class Report extends SherlockFragmentActivity {
             return true;
         case R.id.menu_submit:
         	JSONObject jobj = createJSONObject();
-        	peekAtJson(jobj);
-        	try {
-				submitToServer(jobj);
-			} catch (ClientProtocolException e) {
-				Toast.makeText(getApplicationContext(), "client exception", Toast.LENGTH_SHORT).show();
-			} catch (JSONException e) {
-				Toast.makeText(getApplicationContext(), "json exception", Toast.LENGTH_SHORT).show();
-			} catch (IOException e) {
-				Toast.makeText(getApplicationContext(), "io exception", Toast.LENGTH_SHORT).show();
-			}
+        	new Server().execute(jobj);
+//        	peekAtJson(jobj);
+//        	try {
+//				submitToServer(jobj);
+//			} catch (ClientProtocolException e) {
+//				Toast.makeText(getApplicationContext(), "client exception", Toast.LENGTH_SHORT).show();
+//			} catch (JSONException e) {
+//				Toast.makeText(getApplicationContext(), "json exception", Toast.LENGTH_SHORT).show();
+//			} catch (IOException e) {
+//				Toast.makeText(getApplicationContext(), "io exception", Toast.LENGTH_SHORT).show();
+//			}
         	return true;
         case R.id.menu_legal:
         	showDialog(LEGAL);
@@ -590,12 +597,19 @@ public class Report extends SherlockFragmentActivity {
 		startActivityForResult(new Intent("android.media.action.IMAGE_CAPTURE"), CAMERA_REQUEST);
 	}
 	
-//	protected class Server extends AsyncTask {
-//
-//		@Override
-//		protected Object doInBackground(Object... jobj) {
-//			
-//			try {
+	protected class Server extends AsyncTask<JSONObject, Void, String> {
+		
+		public ProgressDialog progressDialog = new ProgressDialog(Report.this);
+		
+		protected void onPreExecute() {
+	        progressDialog.setMessage("Submitting Data to Server...");
+	        progressDialog.show();
+	    }
+
+		@Override
+		protected String doInBackground(JSONObject... jobj) {
+			
+			try {
 //				ArrayList<String> stringData = new ArrayList<String>();
 //				DefaultHttpClient httpClient = new DefaultHttpClient();
 //				ResponseHandler <String> resonseHandler = new BasicResponseHandler();
@@ -605,16 +619,24 @@ public class Report extends SherlockFragmentActivity {
 //				postMethod.setEntity(new ByteArrayEntity(jobj.toString().getBytes("UTF8")));
 //				String response = httpClient.execute(postMethod,resonseHandler);
 //				Toast.makeText(getApplicationContext(), response + "", Toast.LENGTH_SHORT).show();
-//		    
-//			} catch (ClientProtocolException e) {
-//				return null;
-//			} catch (JSONException e) {
-//				return null;
-//			} catch (IOException e) {
-//				return null;
-//			}
-//		}
-//		
-//	}
+				
+				HttpPost httpPost = new HttpPost(SERVER_URL);
+	            HttpClient httpClient = new DefaultHttpClient();
+	            
+	            httpPost.setEntity(new StringEntity(jobj.toString(), "UTF8"));
+	            httpPost.setHeader("Accept", "application/json");
+	            httpPost.setHeader("Content-type", "application/json");
+			}
+			catch (IOException e) {}
+			
+			return "cool";
+		}
+		
+		protected void onPostExecute(String s) {
+			this.progressDialog.dismiss();
+			Toast.makeText(Report.this, s, Toast.LENGTH_SHORT).show();
+		}
+		
+	}
 
 }
