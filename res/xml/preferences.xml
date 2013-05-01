@@ -3,7 +3,7 @@
 
     <PreferenceCategory android:title="User" >
         
-        <EditTextPreference
+        <Preference
             android:key="preference_name"
             android:title="Name" />
         
@@ -11,10 +11,9 @@
             android:key="preference_username"
             android:title="Username" />
         
-        <EditTextPreference
-            android:key="preference_age"
-            android:title="DoB"
-            android:inputType="number" />
+        <Preference
+            android:key="preference_dob"
+            android:title="DoB" />
         
     </PreferenceCategory>
     

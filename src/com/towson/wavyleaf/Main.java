@@ -36,6 +36,7 @@ public class Main extends SherlockActivity implements OnClickListener {
 	private static final int HELP = 0;
 	private static final String TRIP_ENABLED_KEY = "trip_enabled";
 	private static final String TRIP_INTERVAL = "trip_interval";
+	private static final String FIRST_RUN = "first_run"; 
 	protected static final int mUniqueId = 24885251; // Used for notifications
 //	public boolean tripEnabled = false;
 	protected Button bu_new, bu_trip;
@@ -53,6 +54,7 @@ public class Main extends SherlockActivity implements OnClickListener {
 		setContentView(R.layout.layout_main);
 		initLayout();
 		determineButtonDrawable();
+		checkForFirstRun();
 		
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         int int_single = sp.getInt(Settings.KEY_SINGLETALLY, 0);
@@ -125,6 +127,10 @@ public class Main extends SherlockActivity implements OnClickListener {
 				Intent sessionIntent = new Intent(this, Trip.class);
 				this.startActivity(sessionIntent);
 				return true;
+			case R.id.deleteme2:
+				Intent loginIntent = new Intent(this, Login.class);
+				this.startActivity(loginIntent);
+				return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -139,7 +145,7 @@ public class Main extends SherlockActivity implements OnClickListener {
 		} else if (view == this.bu_trip) {
 			
 			SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-			if (sp.getBoolean(TRIP_ENABLED_KEY, true) == false) // if user wants to start a new trip
+			if (sp.getBoolean(TRIP_ENABLED_KEY, false) == false) // if user wants to start a new trip
 				showDialog(ONSTART);
 			else if (sp.getBoolean(TRIP_ENABLED_KEY, false) == true) { // If trip already in session
 				Editor ed = sp.edit();
@@ -277,6 +283,16 @@ public class Main extends SherlockActivity implements OnClickListener {
 				.setWhen(System.currentTimeMillis());
 		
 		nm.notify(mUniqueId, builder.build());
+	}
+	
+	protected void checkForFirstRun() {
+		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+		if (sp.getBoolean(FIRST_RUN, true)) {
+			Editor ed = sp.edit();
+			ed.putBoolean(FIRST_RUN, false).commit();
+			Intent newReportIntent = new Intent(this, Login.class);
+			this.startActivity(newReportIntent);
+		}
 	}
 
 }

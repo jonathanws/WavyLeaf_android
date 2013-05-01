@@ -49,6 +49,12 @@
         </activity>
         
         <activity
+            android:name="com.towson.wavyleaf.Login"
+            android:label="Create Account"
+            android:theme="@style/Theme.greeeeeen"
+            android:uiOptions="splitActionBarWhenNarrow" />
+        
+        <activity
             android:name="com.towson.wavyleaf.Report"
             android:label="New Record"
             android:theme="@style/Theme.greeeeeen"

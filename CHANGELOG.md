@@ -2,6 +2,16 @@ Change Log
 ===============================================================================
 
 
+Version 1.2.4 *(4-30-2013)*
+----------------------------
+* Added login activity
+* If phone is on first install, it will run login activity
+* Tweaked drop shadows for attributes (Notes, coordinates, percentage, etc)
+* Added dummy view
+* Changed edittextpreferences in Settings to be regular non-editable preferences
+* Changed some attributes from Age to DOB
+* Added thin roboto font
+
 Version 1.2.3 *(4-28-2013)*
 ----------------------------
 * Made countdowntimer cancelable

@@ -47,7 +47,7 @@
             </LinearLayout>
             
             <View
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="#669900" />
 
@@ -137,7 +137,7 @@
         </LinearLayout>
 
         <View
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="3dp"
             android:layout_marginBottom="16dp"
             android:background="@drawable/drop_shadow" />
@@ -177,7 +177,7 @@
             </LinearLayout>
             
             <View
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="#669900" />
 
@@ -205,7 +205,7 @@
         </LinearLayout>
 
         <View
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="3dp"
             android:layout_marginBottom="16dp"
             android:background="@drawable/drop_shadow" />
@@ -228,7 +228,7 @@
                 android:text="@string/layout_report_coordinates" />
             
             <View
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="#669900" />
 
@@ -310,7 +310,7 @@
                 android:text="@string/layout_report_picturenotes" />
             
             <View
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="#669900" />
 
@@ -342,10 +342,16 @@
         </LinearLayout>
 
         <View
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="3dp"
             android:layout_marginBottom="16dp"
             android:background="@drawable/drop_shadow" />
+        
+        <EditText
+            android:id="@+id/serverresponse"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
         
     </LinearLayout>
 

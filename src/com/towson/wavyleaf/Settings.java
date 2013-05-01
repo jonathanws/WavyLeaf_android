@@ -12,15 +12,14 @@ import com.actionbarsherlock.view.MenuItem;
 
 public class Settings extends SherlockPreferenceActivity implements OnSharedPreferenceChangeListener {
 	
-	public static final String KEY_EDITTEXT_NAME = "preference_name";
-	public static final String KEY_EDITTEXT_AGE = "preference_age";
+	public static final String KEY_DOB = "preference_dob";
 	public static final String KEY_CHECKBOX_VIBRATE = "preference_vibrate";
 	public static final String KEY_CHECKBOX_NOISE = "preference_noise";
+	public static final String KEY_NAME = "preference_name";
 	public static final String KEY_USERNAME = "preference_username";
 	public static final String KEY_SINGLETALLY = "preference_singletally";
 	public static final String KEY_TRIPTALLY = "preference_triptally";
-		// Key for tally for only current trip
-	public static final String KEY_TRIPTALLY_CURRENT = "preference_triptally_current";
+	public static final String KEY_TRIPTALLY_CURRENT = "preference_triptally_current"; // Key for tally for only current trip
 
 	@Deprecated
 	@Override
@@ -70,8 +69,8 @@ public class Settings extends SherlockPreferenceActivity implements OnSharedPref
 		SharedPreferences sp = getPreferenceScreen().getSharedPreferences();
 		
 		// Instantiation
-		EditTextPreference etp_name = (EditTextPreference) findPreference(KEY_EDITTEXT_NAME);
-		EditTextPreference etp_age = (EditTextPreference) findPreference(KEY_EDITTEXT_AGE);
+		Preference etp_age = (Preference) findPreference(KEY_DOB);
+		Preference etp_name = (Preference) findPreference(KEY_NAME);
 		Preference p_username = findPreference(KEY_USERNAME);
 		Preference p_tally_single = findPreference(KEY_SINGLETALLY);
 		Preference p_tally_trip = findPreference(KEY_TRIPTALLY);
@@ -79,18 +78,18 @@ public class Settings extends SherlockPreferenceActivity implements OnSharedPref
 		CheckBoxPreference cbp_noise = (CheckBoxPreference) findPreference(KEY_CHECKBOX_NOISE);
 		
 		// Read values
-		String string_name = sp.getString(KEY_EDITTEXT_NAME, "null");
+		String string_name = sp.getString(KEY_NAME, "null");
 		String string_username = sp.getString(KEY_USERNAME, "null");
+		String string_age = sp.getString(KEY_DOB, "null");
 		int int_tally_single = sp.getInt(KEY_SINGLETALLY, 0);
 		int int_tally_trip = sp.getInt(KEY_TRIPTALLY, 0);
-		int int_age = Integer.parseInt(sp.getString(KEY_EDITTEXT_AGE, "0"));
 		boolean boolean_vibrate = sp.getBoolean(KEY_CHECKBOX_VIBRATE, true);
 		boolean boolean_noise = sp.getBoolean(KEY_CHECKBOX_NOISE, true);
 		
 		// Set Summaries
 		etp_name.setSummary(capitalizeFirstLetter(string_name));
-		etp_age.setSummary(int_age + "");
 		p_username.setSummary(capitalizeFirstLetter(string_username));
+		etp_age.setSummary(capitalizeFirstLetter(string_age));
 		p_tally_single.setSummary(int_tally_single + "");
 		p_tally_trip.setSummary(int_tally_trip + "");
 		cbp_vibrate.setChecked(boolean_vibrate);

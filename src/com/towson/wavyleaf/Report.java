@@ -1,8 +1,17 @@
 package com.towson.wavyleaf;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -14,6 +23,7 @@ import android.graphics.Typeface;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -66,6 +76,7 @@ public class Report extends SherlockFragmentActivity {
 	private static final int LEGAL = 1, CAMERA = 3, NO_GPS = 4; // Used for calling dialogs. arbitrary numbers
 	private static final int CAMERA_REQUEST = 1337, EDIT_REQUEST = 1338;
 	//, GALLERY_REQUEST = 1339;
+	private static final String SERVER_URL = "http://skappsrv.towson.edu/";
 	private boolean gpsEnabled = false;
 	private boolean playAPKEnabled = false;
 	private boolean editedCoordinatesInOtherActivitySoDontGetGPSLocation = false;
@@ -225,7 +236,17 @@ public class Report extends SherlockFragmentActivity {
             finish();
             return true;
         case R.id.menu_submit:
-        	peekAtJson(createJSONObject());
+        	JSONObject jobj = createJSONObject();
+        	peekAtJson(jobj);
+        	try {
+				submitToServer(jobj);
+			} catch (ClientProtocolException e) {
+				Toast.makeText(getApplicationContext(), "client exception", Toast.LENGTH_SHORT).show();
+			} catch (JSONException e) {
+				Toast.makeText(getApplicationContext(), "json exception", Toast.LENGTH_SHORT).show();
+			} catch (IOException e) {
+				Toast.makeText(getApplicationContext(), "io exception", Toast.LENGTH_SHORT).show();
+			}
         	return true;
         case R.id.menu_legal:
         	showDialog(LEGAL);
@@ -501,7 +522,7 @@ public class Report extends SherlockFragmentActivity {
 			report.put("notes", notes.getText());
 			report.put("datetime", now.monthDay + " - " + (now.month + 1) + " - " + now.year);
 			//bitmap
-			report.put("dob", spref.getString(Settings.KEY_EDITTEXT_AGE, "0"));
+			report.put("dob", spref.getString(Settings.KEY_DOB, "0"));
 			
 		} catch (JSONException e) {
 			Toast.makeText(getApplicationContext(), "Data not saved, try again", Toast.LENGTH_SHORT).show();
@@ -518,8 +539,82 @@ public class Report extends SherlockFragmentActivity {
 		}
 	}
 	
+	@SuppressLint("NewApi")
+	protected void submitToServer(JSONObject jobj) throws JSONException, ClientProtocolException, IOException {
+		
+		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+		StrictMode.setThreadPolicy(policy);
+		
+		EditText tv = (EditText) findViewById(R.id.serverresponse);
+		
+		HttpURLConnection connection;
+		OutputStreamWriter request = null;
+		
+		URL url = null;
+		String response = null;
+		String parameters = "test";
+		
+		try {
+			Toast.makeText(getApplicationContext(), "try", Toast.LENGTH_SHORT).show();
+			url = new URL(SERVER_URL);
+			connection = (HttpURLConnection) url.openConnection();
+			connection.setDoOutput(true);
+			connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+			connection.setRequestMethod("POST");
+			
+			request = new OutputStreamWriter(connection.getOutputStream());
+			request.write(parameters);
+			request.flush();
+			request.close();
+			String line = "";
+			InputStreamReader isr = new InputStreamReader(connection.getInputStream());
+			BufferedReader reader = new BufferedReader(isr);
+			StringBuilder sb = new StringBuilder();
+			while ((line = reader.readLine()) != null) {
+				sb.append(line + "\n");
+			}
+			
+			// Response from server after login process will be stored in response variable.
+			response = sb.toString();
+			// You can perform UI operations here
+			tv.setText(response);
+			isr.close();
+			reader.close();
+		}
+		catch(IOException e) {
+			Toast.makeText(getApplicationContext(), "io exception", Toast.LENGTH_SHORT).show();
+		}
+	}
+	
 	protected void takePicture() {
 		startActivityForResult(new Intent("android.media.action.IMAGE_CAPTURE"), CAMERA_REQUEST);
 	}
+	
+//	protected class Server extends AsyncTask {
+//
+//		@Override
+//		protected Object doInBackground(Object... jobj) {
+//			
+//			try {
+//				ArrayList<String> stringData = new ArrayList<String>();
+//				DefaultHttpClient httpClient = new DefaultHttpClient();
+//				ResponseHandler <String> resonseHandler = new BasicResponseHandler();
+//				HttpPost postMethod = new HttpPost("http://skappsrv.towson.edu/");
+//				
+//				postMethod.setHeader("Content-type", "application/json");
+//				postMethod.setEntity(new ByteArrayEntity(jobj.toString().getBytes("UTF8")));
+//				String response = httpClient.execute(postMethod,resonseHandler);
+//				Toast.makeText(getApplicationContext(), response + "", Toast.LENGTH_SHORT).show();
+//		    
+//			} catch (ClientProtocolException e) {
+//				return null;
+//			} catch (JSONException e) {
+//				return null;
+//			} catch (IOException e) {
+//				return null;
+//			}
+//		}
+//		
+//	}
 
 }
