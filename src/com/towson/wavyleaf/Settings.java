@@ -12,7 +12,7 @@ import com.actionbarsherlock.view.MenuItem;
 
 public class Settings extends SherlockPreferenceActivity implements OnSharedPreferenceChangeListener {
 	
-	public static final String KEY_DOB = "preference_dob";
+	public static final String KEY_BIRTHYEAR = "preference_birthyear";
 	public static final String KEY_CHECKBOX_VIBRATE = "preference_vibrate";
 	public static final String KEY_CHECKBOX_NOISE = "preference_noise";
 	public static final String KEY_NAME = "preference_name";
@@ -69,7 +69,7 @@ public class Settings extends SherlockPreferenceActivity implements OnSharedPref
 		SharedPreferences sp = getPreferenceScreen().getSharedPreferences();
 		
 		// Instantiation
-		Preference etp_age = (Preference) findPreference(KEY_DOB);
+		Preference etp_age = (Preference) findPreference(KEY_BIRTHYEAR);
 		Preference etp_name = (Preference) findPreference(KEY_NAME);
 		Preference p_username = findPreference(KEY_USERNAME);
 		Preference p_tally_single = findPreference(KEY_SINGLETALLY);
@@ -80,7 +80,7 @@ public class Settings extends SherlockPreferenceActivity implements OnSharedPref
 		// Read values
 		String string_name = sp.getString(KEY_NAME, "null");
 		String string_username = sp.getString(KEY_USERNAME, "null");
-		String string_age = sp.getString(KEY_DOB, "null");
+		String string_age = sp.getString(KEY_BIRTHYEAR, "null");
 		int int_tally_single = sp.getInt(KEY_SINGLETALLY, 0);
 		int int_tally_trip = sp.getInt(KEY_TRIPTALLY, 0);
 		boolean boolean_vibrate = sp.getBoolean(KEY_CHECKBOX_VIBRATE, true);

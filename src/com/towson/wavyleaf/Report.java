@@ -529,7 +529,7 @@ public class Report extends SherlockFragmentActivity {
 			report.put("notes", notes.getText());
 			report.put("datetime", now.monthDay + " - " + (now.month + 1) + " - " + now.year);
 			//bitmap
-			report.put("dob", spref.getString(Settings.KEY_DOB, "0"));
+			report.put("birthyear", spref.getString(Settings.KEY_BIRTHYEAR, "0"));
 			
 		} catch (JSONException e) {
 			Toast.makeText(getApplicationContext(), "Data not saved, try again", Toast.LENGTH_SHORT).show();

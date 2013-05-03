@@ -2,6 +2,12 @@ Change Log
 ===============================================================================
 
 
+Version 1.2.6 *(5-2-2013)*
+----------------------------
+* Added attributes to login
+* Changed "dob" to "birthyear"
+* Keyboard hidden in login
+
 Version 1.2.5 *(5-1-2013)*
 ----------------------------
 * Async could possibly be working!

@@ -38,4 +38,38 @@
         <item>Dec</item>
     </string-array>
     
+    <string-array name="education_array">
+        <item>High School</item>
+        <item>Some College</item>
+        <item>College - B.S.</item>
+        <item>College - Masters</item>
+    </string-array>
+    
+    <string-array name="experience_array">
+        <item>Once a month</item>
+        <item>Once a week</item>
+        <item>Multiple times a week</item>
+    </string-array>
+    
+    <string-array name="education_array">
+        <item>High School / GED</item>
+        <item>Some College</item>
+        <item>College - B.S.</item>
+        <item>College - Masters</item>
+    </string-array>
+    
+    <string-array name="confidence_plant_array">
+        <item>Not Confident</item>
+        <item>Fairly Confident</item>
+        <item>Expert</item>
+        <item>Wrote the Book</item>
+    </string-array>
+    
+    <string-array name="confidence_wavyleaf_array">
+        <item>I Lick Batteries</item>
+        <item>Confident-ish</item>
+        <item>Leaves of three?</item>
+        <item>I AM wavyleaf..</item>
+    </string-array>
+    
 </resources>

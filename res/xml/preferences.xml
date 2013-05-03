@@ -12,8 +12,8 @@
             android:title="Username" />
         
         <Preference
-            android:key="preference_dob"
-            android:title="DoB" />
+            android:key="preference_birthyear"
+            android:title="Birth Year" />
         
     </PreferenceCategory>
     
