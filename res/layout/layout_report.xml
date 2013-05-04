@@ -128,7 +128,7 @@
                         android:onClick="onToggle"
                         android:textOff="75-100%"
                         android:textOn="75-100%"
-                        android:textSize="20sp" />
+                        android:textSize="18sp" />
                     
                 </LinearLayout>
                 

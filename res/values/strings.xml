@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Wavy Leaf</string>
+    <string name="app_name">Wavyleaf</string>
     
-    <string name="layout_main_new">New Record</string>
+    <string name="layout_main_new">New Sighting</string>
     <string name="layout_main_trip">Start Trip</string>
     <string name="layout_main_endtrip">End Trip</string>
     <string name="layout_main_upload">Upload Records</string>

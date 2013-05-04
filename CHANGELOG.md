@@ -2,6 +2,13 @@ Change Log
 ===============================================================================
 
 
+Version 1.2.7 *(5-3-2013)*
+----------------------------
+* Split login into two activities
+* Pushed entry to login to Settings (permanent move)
+* Added animation to login in between activities to make them feel more like they're "together"
+* Changed name to wavyleaf
+
 Version 1.2.6 *(5-2-2013)*
 ----------------------------
 * Added attributes to login

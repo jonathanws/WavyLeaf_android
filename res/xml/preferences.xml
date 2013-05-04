@@ -43,4 +43,28 @@
         
     </PreferenceCategory>
     
+    <PreferenceCategory android:title="Other" >
+        
+        <Preference
+            android:title="Run Login" >
+            
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:targetPackage="com.towson.wavyleaf"
+                android:targetClass="com.towson.wavyleaf.Login" />
+            
+        </Preference>
+        
+        <Preference
+            android:title="Rate this application"
+            android:summary="Google Play Store" >
+            
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="market://details?id=jmd.rainymood" />
+            
+        </Preference>
+            
+    </PreferenceCategory>
+    
 </PreferenceScreen>

@@ -1,6 +1,5 @@
 package com.towson.wavyleaf;
 
-import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.NotificationManager;
@@ -41,9 +40,6 @@ public class Main extends SherlockActivity implements OnClickListener {
 //	public boolean tripEnabled = false;
 	protected Button bu_new, bu_trip;
 	protected TextView tripInterval, tripSelection, tally, tallyNumber;
-//	private AlarmManager intervalAlarm;
-//	private Intent alarmIntent;
-//	private PendingIntent pendingAlarm;
 	NotificationManager nm;
 	public CountDownTimer ctd;
 	
@@ -60,15 +56,6 @@ public class Main extends SherlockActivity implements OnClickListener {
         int int_single = sp.getInt(Settings.KEY_SINGLETALLY, 0);
         int int_trip = sp.getInt(Settings.KEY_TRIPTALLY, 0);
         this.tallyNumber.setText(int_single + " / " + int_trip);
-        
-//    	//setup alarm for trips
-//    	intervalAlarm = (AlarmManager)getApplicationContext().getSystemService(Context.ALARM_SERVICE);
-//		alarmIntent = new Intent(getApplicationContext(), Trip.class);
-//		pendingAlarm = PendingIntent.getBroadcast(getApplicationContext(), 117, alarmIntent, 0);
-        
-//    	if(intervalAlarm != null)
-//		intervalAlarm.cancel(pendingAlarm);
-		
     }
 	
 	protected void initLayout() {
@@ -126,10 +113,6 @@ public class Main extends SherlockActivity implements OnClickListener {
 			case R.id.deleteme:
 				Intent sessionIntent = new Intent(this, Trip.class);
 				this.startActivity(sessionIntent);
-				return true;
-			case R.id.deleteme2:
-				Intent loginIntent = new Intent(this, Login.class);
-				this.startActivity(loginIntent);
 				return true;
 		}
 		return super.onOptionsItemSelected(item);

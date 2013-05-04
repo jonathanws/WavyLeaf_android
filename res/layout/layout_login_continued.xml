@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp" >
+
+        <TextView
+            android:id="@+id/login_continued_tv_createaccount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Create Account"
+            android:textSize="40sp" />
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="16dp"
+            android:background="#669900" />
+        
+        <TextView
+            android:id="@+id/login_education_header"
+            style="?android:attr/listSeparatorTextViewStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Education" />
+        
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="How much education do you have?"
+            android:textStyle="italic" />
+
+        <Spinner
+            android:id="@+id/login_education"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_gravity="right"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:id="@+id/login_experience_header"
+            style="?android:attr/listSeparatorTextViewStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Outdoors Experience" />
+        
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="How often do you hike?"
+            android:textStyle="italic" />
+
+        <Spinner
+            android:id="@+id/login_experience"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_gravity="right"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:id="@+id/login_confidence_header"
+            style="?android:attr/listSeparatorTextViewStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Confidence" />
+        
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Confident in general plant ID?"
+            android:textStyle="italic" />
+
+        <Spinner
+            android:id="@+id/login_confidence_plant"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_gravity="right"
+            android:layout_marginBottom="8dp" />
+        
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Confident in wavyleaf ID?"
+            android:textStyle="italic" />
+
+        <Spinner
+            android:id="@+id/login_confidence_wavyleaf"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_gravity="right" />
+        
+    </LinearLayout>
+
+</ScrollView>

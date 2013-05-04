@@ -14,10 +14,5 @@
         android:id="@+id/deleteme"
         android:showAsAction="never"
         android:title="(dev) Trip" />
-    
-    <item
-        android:id="@+id/deleteme2"
-        android:showAsAction="never"
-        android:title="(dev) Login" />
 
 </menu>

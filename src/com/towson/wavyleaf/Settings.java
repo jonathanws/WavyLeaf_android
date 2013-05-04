@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
-import android.preference.EditTextPreference;
 import android.preference.Preference;
 import com.actionbarsherlock.app.SherlockPreferenceActivity;
 import com.actionbarsherlock.view.MenuItem;
@@ -56,6 +55,7 @@ public class Settings extends SherlockPreferenceActivity implements OnSharedPref
 	@Override
 	protected void onResume() {
 		super.onResume();
+		setSummaries();
 		getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
 	}
 
@@ -69,8 +69,8 @@ public class Settings extends SherlockPreferenceActivity implements OnSharedPref
 		SharedPreferences sp = getPreferenceScreen().getSharedPreferences();
 		
 		// Instantiation
-		Preference etp_age = (Preference) findPreference(KEY_BIRTHYEAR);
-		Preference etp_name = (Preference) findPreference(KEY_NAME);
+		Preference p_age = (Preference) findPreference(KEY_BIRTHYEAR);
+		Preference p_name = (Preference) findPreference(KEY_NAME);
 		Preference p_username = findPreference(KEY_USERNAME);
 		Preference p_tally_single = findPreference(KEY_SINGLETALLY);
 		Preference p_tally_trip = findPreference(KEY_TRIPTALLY);
@@ -87,9 +87,9 @@ public class Settings extends SherlockPreferenceActivity implements OnSharedPref
 		boolean boolean_noise = sp.getBoolean(KEY_CHECKBOX_NOISE, true);
 		
 		// Set Summaries
-		etp_name.setSummary(capitalizeFirstLetter(string_name));
+		p_name.setSummary(capitalizeFirstLetter(string_name));
 		p_username.setSummary(capitalizeFirstLetter(string_username));
-		etp_age.setSummary(capitalizeFirstLetter(string_age));
+		p_age.setSummary(capitalizeFirstLetter(string_age));
 		p_tally_single.setSummary(int_tally_single + "");
 		p_tally_trip.setSummary(int_tally_trip + "");
 		cbp_vibrate.setChecked(boolean_vibrate);
@@ -97,9 +97,13 @@ public class Settings extends SherlockPreferenceActivity implements OnSharedPref
 	}
 	
 	private String capitalizeFirstLetter(String paramString) {
-		StringBuilder sb = new StringBuilder(paramString);
-		sb.setCharAt(0, Character.toUpperCase(sb.charAt(0)));
-		return sb.toString();
+		if (paramString.equalsIgnoreCase(""))
+			return "- - -";
+		else {
+			StringBuilder sb = new StringBuilder(paramString);
+			sb.setCharAt(0, Character.toUpperCase(sb.charAt(0)));
+			return sb.toString();
+		}
 	}
 	
 }

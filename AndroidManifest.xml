@@ -23,10 +23,11 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:allowBackup="true"
+        android:configChanges="orientation"
         android:hardwareAccelerated="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
@@ -40,43 +41,65 @@
 
         <activity
             android:name="com.towson.wavyleaf.Main"
-            android:label="Wavy Leaf"
+            android:configChanges="orientation"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.Sherlock.Light" >
+            
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            
         </activity>
         
         <activity
             android:name="com.towson.wavyleaf.Login"
+            android:configChanges="orientation"
             android:label="Create Account"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.greeeeeen"
-            android:windowSoftInputMode="stateHidden"
-            android:uiOptions="splitActionBarWhenNarrow" />
+            android:uiOptions="splitActionBarWhenNarrow"
+            android:windowSoftInputMode="stateHidden" />
+        
+        <activity
+            android:name="com.towson.wavyleaf.LoginContinued"
+            android:configChanges="orientation"
+            android:label="Create Account"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.greeeeeen"
+            android:uiOptions="splitActionBarWhenNarrow"
+            android:windowSoftInputMode="stateHidden" />
         
         <activity
             android:name="com.towson.wavyleaf.Report"
-            android:label="New Record"
+            android:configChanges="orientation"
+            android:label="New Sighting"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.greeeeeen"
             android:windowSoftInputMode="stateHidden" />
         
         <activity
             android:name="com.towson.wavyleaf.Report_Mapview"
+            android:configChanges="orientation"
             android:label="Edit Coordinates"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.Sherlock" />
         
         <activity
             android:name="com.towson.wavyleaf.Settings"
-            android:label="Wavy Leaf"
+            android:configChanges="orientation"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.Sherlock" />
         
         <activity
             android:name="com.towson.wavyleaf.Trip"
+            android:configChanges="orientation"
             android:label="Trip"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.greeeeeen"
             android:windowSoftInputMode="stateHidden" />
-        <receiver android:name="TripIntervalAlert"></receiver>
         
     </application>
 
