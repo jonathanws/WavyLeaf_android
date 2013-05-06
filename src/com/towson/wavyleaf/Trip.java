@@ -1,14 +1,20 @@
 package com.towson.wavyleaf;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.format.Time;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -40,6 +46,8 @@ public class Trip extends SherlockActivity {
 	protected RadioGroup rg;
 	protected Spinner sp;
 	protected ImageButton ib;
+	protected Location gpsLocation;
+	protected LocationManager mLocationManager;
 	NotificationManager nm;
 	
 	@Override
@@ -220,6 +228,35 @@ public class Trip extends SherlockActivity {
 				tvper_summary.setText("");
 		}
 	}
+	
+	public String loopThroughToggles() {
+		String str = "";
+		for (int i = 0; i < rg.getChildCount(); i++) {
+			View child = rg.getChildAt(i);
+			if (child instanceof LinearLayout) {
+				for (int j = 0; j < ((ViewGroup)child).getChildCount(); j++) {
+					final ToggleButton tog = (ToggleButton) ((ViewGroup)child).getChildAt(j);
+					if (tog.isChecked())
+						str = tog.getText().toString();
+				}
+			}
+		}
+		return str;
+	}
+	
+	// Method won't be called unless Play APK in installed
+		public void wheresWaldo() {
+			gpsLocation = requestUpdatesFromProvider();
+			if (gpsLocation == null)
+				Toast.makeText(getApplicationContext(), "No GPS signal", Toast.LENGTH_SHORT).show();
+		}
+		
+		private Location requestUpdatesFromProvider() {
+			if (mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
+	            gpsLocation = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+			
+			return gpsLocation;
+		}
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -229,6 +266,31 @@ public class Trip extends SherlockActivity {
 			Bitmap bm = (Bitmap) data.getExtras().get("data");
 			ib.setImageBitmap(bm);
 		}
+	}
+	
+	private JSONObject createJSONObject() {
+		Time now = new Time();
+		now.setToNow();
+		SharedPreferences spref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+		
+		JSONObject report = new JSONObject();
+		try {
+			report.put("user_id", spref.getString(Settings.KEY_USERNAME, "null"));
+			report.put("name", spref.getString(Settings.KEY_USERNAME, "null"));
+			report.put("percent", loopThroughToggles());
+			report.put("areatype", sp.getSelectedItem().toString());
+			report.put("areavalue", etarea.getText());
+			report.put("latitude", gpsLocation.getLatitude());
+			report.put("longitude", gpsLocation.getLongitude());
+			report.put("notes", notes.getText());
+			report.put("datetime", now.monthDay + " - " + (now.month + 1) + " - " + now.year);
+			//bitmap
+			report.put("birthyear", spref.getString(Settings.KEY_BIRTHYEAR, "0"));
+			
+		} catch (JSONException e) {
+			Toast.makeText(getApplicationContext(), "Data not saved, try again", Toast.LENGTH_SHORT).show();
+		}
+		return report;
 	}
 	
 	protected void takePicture() {

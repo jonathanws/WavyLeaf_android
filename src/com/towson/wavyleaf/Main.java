@@ -1,24 +1,20 @@
 package com.towson.wavyleaf;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.Vibrator;
 import android.preference.PreferenceManager;
-import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -33,15 +29,15 @@ public class Main extends SherlockActivity implements OnClickListener {
 	
 	private static final int ONSTART = 6;
 	private static final int HELP = 0;
-	private static final String TRIP_ENABLED_KEY = "trip_enabled";
-	private static final String TRIP_INTERVAL = "trip_interval";
+	protected static final String TRIP_ENABLED_KEY = "trip_enabled";
+	protected static final String TRIP_INTERVAL = "trip_interval";
 	private static final String FIRST_RUN = "first_run"; 
 	protected static final int mUniqueId = 24885251; // Used for notifications
-//	public boolean tripEnabled = false;
 	protected Button bu_new, bu_trip;
 	protected TextView tripInterval, tripSelection, tally, tallyNumber;
 	NotificationManager nm;
 	public CountDownTimer ctd;
+	public AlarmManager am;
 	
 	@Override
 	public void onCreate(Bundle bundle) {
@@ -109,11 +105,6 @@ public class Main extends SherlockActivity implements OnClickListener {
 			case R.id.menu_help:
 				showDialog(HELP);
 				return true;
-			// TODO Delete this!
-			case R.id.deleteme:
-				Intent sessionIntent = new Intent(this, Trip.class);
-				this.startActivity(sessionIntent);
-				return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -126,15 +117,21 @@ public class Main extends SherlockActivity implements OnClickListener {
 			this.startActivity(newReportIntent);	
 			
 		} else if (view == this.bu_trip) {
-			
 			SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+			
 			if (sp.getBoolean(TRIP_ENABLED_KEY, false) == false) // if user wants to start a new trip
 				showDialog(ONSTART);
 			else if (sp.getBoolean(TRIP_ENABLED_KEY, false) == true) { // If trip already in session
-				Editor ed = sp.edit();
-				ed.putBoolean(TRIP_ENABLED_KEY, false).commit(); // Turn it off
+				sp.edit().putBoolean(TRIP_ENABLED_KEY, false).commit(); // Turn it off
 				tripSelection.setText("- - -");
 				determineButtonDrawable();
+				
+				Intent alarmIntent = new Intent(this, AlarmReceiver.class);
+				PendingIntent sender = PendingIntent.getBroadcast(this, 1, alarmIntent, 0);
+				
+				am = (AlarmManager) getSystemService(ALARM_SERVICE);
+				am.cancel(sender);
+				
 				if (ctd != null)
 					ctd.cancel();
 			}
@@ -189,16 +186,25 @@ public class Main extends SherlockActivity implements OnClickListener {
 	}
 	
 	protected void intervalSelected(String timeNum, String timeString, int milli) {
+		Log.i("wavy", "intervalselected");
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 		Editor ed = sp.edit();
-		
 		ed.putString(TRIP_INTERVAL, timeNum);
 		ed.putBoolean(TRIP_ENABLED_KEY, true);
 	    ed.commit();
+	    
 	    setEditText(this.tripSelection, timeNum);
 	    determineButtonDrawable();
 	    Toast.makeText(getApplicationContext(), timeString, Toast.LENGTH_SHORT).show();
 	    startTimer(milli);
+	    
+	    // Set alarm intent
+		Intent alarmIntent = new Intent(this, AlarmReceiver.class);
+		PendingIntent sender = PendingIntent.getBroadcast(this, 1, alarmIntent, 0);
+		
+		// Create repeating alarm
+		am = (AlarmManager) getSystemService(ALARM_SERVICE);
+		am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + milli, milli, sender);
 	}
 	
 	protected void setButtonDrawable(int button) {
@@ -223,49 +229,8 @@ public class Main extends SherlockActivity implements OnClickListener {
 			}
 			public void onFinish() {
 				tripSelection.setText("- - -");
-				createNotification();
-				playSounds();
 			}
 		}.start();
-	}
-	
-	protected void playSounds() {
-		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-        if (sp.getBoolean(Settings.KEY_CHECKBOX_NOISE, true))
-        	playNoise();
-        if (sp.getBoolean(Settings.KEY_CHECKBOX_VIBRATE, true))
-        	vibratePhone();
-	}
-	
-	protected void vibratePhone() {
-		int buzz = 150;
-		int gap = 100;
-		long[] pattern = {0, buzz, gap, buzz};
-		Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-		v.vibrate(pattern, -1);
-	}
-	
-	protected void playNoise() {
-		Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-		Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
-		r.play();
-	}
-	
-	protected void createNotification() {
-		Intent tripIntent = new Intent(this, Trip.class);
-		tripIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP); //Resume activity instead of creating a new one
-		PendingIntent pi = PendingIntent.getActivity(this, 0, tripIntent, 0);
-		
-		NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
-				.setAutoCancel(true)
-				.setContentIntent(pi)
-				.setContentTitle("Timing interval elapsed")
-				.setContentText("Record your next point.")
-				.setSmallIcon(R.drawable.ic_notification)
-				.setTicker("Hidden Text!")
-				.setWhen(System.currentTimeMillis());
-		
-		nm.notify(mUniqueId, builder.build());
 	}
 	
 	protected void checkForFirstRun() {

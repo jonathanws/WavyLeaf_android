@@ -2,6 +2,11 @@ Change Log
 ===============================================================================
 
 
+Version 1.2.8 *(5-5-2013)*
+----------------------------
+* Trip functionality now works
+* Added broadcast (I didn't know we already had one before i deleted the first one. whoops)
+
 Version 1.2.7 *(5-3-2013)*
 ----------------------------
 * Split login into two activities

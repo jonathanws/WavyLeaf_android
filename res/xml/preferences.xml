@@ -46,7 +46,7 @@
     <PreferenceCategory android:title="Other" >
         
         <Preference
-            android:title="Run Login" >
+            android:title="Create Account" >
             
             <intent
                 android:action="android.intent.action.VIEW"
