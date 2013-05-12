@@ -2,6 +2,16 @@ Change Log
 ===============================================================================
 
 
+Version 1.2.9 *(5-12-2013)*
+----------------------------
+* Application now successfully submits to server; albeit through NameValuePairs, not JSON
+* Added UploadData class to handle Async uploads
+* Added test button on main page to test PHP
+* Main checks for first run, and will run Login activities
+* Login submits to server to instantiate new user
+* Login checks edittexts for spaces
+* Login edittexts now only allow one line
+
 Version 1.2.8 *(5-5-2013)*
 ----------------------------
 * Trip functionality now works
