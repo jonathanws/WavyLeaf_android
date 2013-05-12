@@ -3,8 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#dddddd"
-    android:paddingBottom="8dp"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:paddingBottom="8dp" >
 
     <com.towson.wavyleaf.DashboardLayout
         android:layout_width="match_parent"
@@ -32,6 +32,15 @@
             android:textAppearance="?android:attr/textAppearanceLarge" />
         
     </com.towson.wavyleaf.DashboardLayout>
+
+    <Button
+        android:id="@+id/bu_test"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:text="Test"
+        android:onClick="testPHP" />
 
     <View
         android:layout_width="fill_parent"
@@ -65,6 +74,7 @@
             android:text="@string/layout_novalue"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="#669900" />
+        
     </LinearLayout>
 
     <LinearLayout
@@ -91,6 +101,7 @@
             android:text="@string/layout_novalue"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="#669900" />
+        
     </LinearLayout>
 
 </LinearLayout>

@@ -1,5 +1,22 @@
 package com.towson.wavyleaf;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -11,6 +28,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
@@ -236,11 +254,28 @@ public class Main extends SherlockActivity implements OnClickListener {
 	protected void checkForFirstRun() {
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 		if (sp.getBoolean(FIRST_RUN, true)) {
-			Editor ed = sp.edit();
-			ed.putBoolean(FIRST_RUN, false).commit();
+			sp.edit().putBoolean(FIRST_RUN, false).commit();
 			Intent newReportIntent = new Intent(this, Login.class);
 			this.startActivity(newReportIntent);
 		}
 	}
+	
+	// Dev use
+	public void testPHP(View view) {
+		
+		JSONObject json = new JSONObject();
+		try {
+			json.put("name", "my awesome name");
+			json.put("birthyear", "1234");
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		
+		new UploadData(this, UploadData.TASK_SUBMIT_USER).execute(json);
+	}
 
 }
+
+
+
+

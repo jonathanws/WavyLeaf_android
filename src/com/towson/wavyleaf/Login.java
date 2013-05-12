@@ -1,5 +1,8 @@
 package com.towson.wavyleaf;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -10,6 +13,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
@@ -47,14 +51,17 @@ public class Login extends SherlockActivity {
 				finish();
 				return true;
 			case R.id.menu_next:
-				submit();
-				Intent nextIntent = new Intent(this, LoginContinued.class);
-				nextIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-				startActivity(nextIntent);
-				overridePendingTransition(R.anim.right_slide_in, R.anim.right_slide_left);
-				finish();
-				return true;
-        }
+				if (hasText()) {
+					submit();
+					Intent nextIntent = new Intent(this, LoginContinued.class);
+					nextIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+					startActivity(nextIntent);
+					overridePendingTransition(R.anim.right_slide_in, R.anim.right_slide_left);
+					uploadData();
+					finish();
+					return true;
+				}
+		}
 		return super.onOptionsItemSelected(item);
 	}
 	
@@ -83,13 +90,35 @@ public class Login extends SherlockActivity {
 		
 	}
 	
+	// Verify existing text, and verify not only spaces
+	protected boolean hasText() {
+		if (!name.getText().toString().trim().equals(""))
+			return true;
+		else {
+			Toast.makeText(getApplicationContext(), "Please complete both fields", Toast.LENGTH_SHORT).show();
+			return false;
+		}
+	}
+	
 	protected void submit() {
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 		Editor ed = sp.edit();
 		
-		ed.putString(Settings.KEY_NAME, name.getText() + "");
+		ed.putString(Settings.KEY_NAME, name.getText().toString().trim());
 		ed.putString(Settings.KEY_BIRTHYEAR, year.getText() + "");
 		ed.commit();
+	}
+	
+	protected void uploadData() {
+		JSONObject json = new JSONObject();
+		try {
+			json.put(UploadData.ARG_NAME, name.getText().toString().trim());
+			json.put(UploadData.ARG_BIRTHYEAR, year.getText().toString());
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		
+		new UploadData(this, UploadData.TASK_SUBMIT_USER).execute(json);
 	}
 	
 }

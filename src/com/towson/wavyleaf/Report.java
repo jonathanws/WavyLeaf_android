@@ -2,16 +2,24 @@ package com.towson.wavyleaf;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -82,7 +90,9 @@ public class Report extends SherlockFragmentActivity {
 	private static final int LEGAL = 1, CAMERA = 3, NO_GPS = 4; // Used for calling dialogs. arbitrary numbers
 	private static final int CAMERA_REQUEST = 1337, EDIT_REQUEST = 1338;
 	//, GALLERY_REQUEST = 1339;
-	private static final String SERVER_URL = "http://skappsrv.towson.edu/";
+	protected static final String SERVER_URL = "http://skappsrv.towson.edu/";
+	protected static final String SUBMIT_USER = "wavyleaf/submit_user.php";
+	protected static final String SUBMIT_POINT = "wavyleaf/submit_point.php";
 	private boolean gpsEnabled = false;
 	private boolean playAPKEnabled = false;
 	private boolean editedCoordinatesInOtherActivitySoDontGetGPSLocation = false;
@@ -242,9 +252,14 @@ public class Report extends SherlockFragmentActivity {
             finish();
             return true;
         case R.id.menu_submit:
-        	JSONObject jobj = createJSONObject();
-        	new Server().execute(jobj);
-//        	peekAtJson(jobj);
+        	Location gpsLocation = requestUpdatesFromProvider();
+    		if (gpsLocation == null)
+    			Toast.makeText(getApplicationContext(), "Cannot submit without GPS signal", Toast.LENGTH_SHORT).show();
+    		else {
+    			JSONObject jobj = createJSONObject();
+    			new Server().execute(jobj);
+    		}
+    		//        	peekAtJson(jobj);
 //        	try {
 //				submitToServer(jobj);
 //			} catch (ClientProtocolException e) {
@@ -599,42 +614,66 @@ public class Report extends SherlockFragmentActivity {
 	
 	protected class Server extends AsyncTask<JSONObject, Void, String> {
 		
-		public ProgressDialog progressDialog = new ProgressDialog(Report.this);
-		
 		protected void onPreExecute() {
-	        progressDialog.setMessage("Submitting Data to Server...");
-	        progressDialog.show();
 	    }
 
 		@Override
 		protected String doInBackground(JSONObject... jobj) {
 			
+			// Create a new HttpClient and Post Header
+			HttpClient httpclient = new DefaultHttpClient();
+			HttpPost httppost = new HttpPost(SERVER_URL + SUBMIT_POINT);
+			String result = "";
+
 			try {
-//				ArrayList<String> stringData = new ArrayList<String>();
-//				DefaultHttpClient httpClient = new DefaultHttpClient();
-//				ResponseHandler <String> resonseHandler = new BasicResponseHandler();
-//				HttpPost postMethod = new HttpPost("http://skappsrv.towson.edu/");
-//				
-//				postMethod.setHeader("Content-type", "application/json");
-//				postMethod.setEntity(new ByteArrayEntity(jobj.toString().getBytes("UTF8")));
-//				String response = httpClient.execute(postMethod,resonseHandler);
-//				Toast.makeText(getApplicationContext(), response + "", Toast.LENGTH_SHORT).show();
+				// Data to send
+				List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
+				nameValuePairs.add(new BasicNameValuePair("name", "YO MOHSIN"));
+				nameValuePairs.add(new BasicNameValuePair("birthyear", "1337"));
+				httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 				
-				HttpPost httpPost = new HttpPost(SERVER_URL);
-	            HttpClient httpClient = new DefaultHttpClient();
-	            
-	            httpPost.setEntity(new StringEntity(jobj.toString(), "UTF8"));
-	            httpPost.setHeader("Accept", "application/json");
-	            httpPost.setHeader("Content-type", "application/json");
+				// Execute post
+				HttpResponse response = httpclient.execute(httppost);
+				
+				// For response
+				if (response != null) {
+					InputStream is = response.getEntity().getContent();
+					
+					BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+					StringBuilder sb = new StringBuilder();
+					
+					String line = null;
+					try {
+						while ((line = reader.readLine()) != null) {
+							sb.append(line + "\n");
+						}
+					} catch (IOException e) {
+						e.printStackTrace();
+					} finally {
+						try {
+							is.close();
+						} catch(IOException e) {
+							e.printStackTrace();
+						}
+					}
+					
+					result = sb.toString();
+				}
+				
+			} catch (IllegalStateException e1) {
+				Toast.makeText(Report.this, "IllegalStateException", Toast.LENGTH_SHORT).show();
+			} catch (IOException e1) {
+				Toast.makeText(Report.this, "IOException", Toast.LENGTH_SHORT).show();
 			}
-			catch (IOException e) {}
 			
-			return "cool";
+			return result;
 		}
 		
 		protected void onPostExecute(String s) {
-			this.progressDialog.dismiss();
-			Toast.makeText(Report.this, s, Toast.LENGTH_SHORT).show();
+			if (s != null)
+				Toast.makeText(Report.this, s, Toast.LENGTH_LONG).show();
+			else
+				Toast.makeText(Report.this, "empty string", Toast.LENGTH_LONG).show();
 		}
 		
 	}
