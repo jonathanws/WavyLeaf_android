@@ -39,6 +39,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bugsense.trace.BugSenseHandler;
+
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
@@ -60,6 +62,9 @@ public class Main extends SherlockActivity implements OnClickListener {
 	@Override
 	public void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
+		
+		//Bugsense integration
+		BugSenseHandler.initAndStartSession(getApplicationContext(), "beb5fcad");
 		
 		setContentView(R.layout.layout_main);
 		initLayout();
@@ -103,6 +108,7 @@ public class Main extends SherlockActivity implements OnClickListener {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
+		//BugSenseHandler.closeSession(Main.this);
 		nm.cancel(mUniqueId);
 	}
 
