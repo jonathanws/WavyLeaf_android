@@ -2,6 +2,10 @@ Change Log
 ===============================================================================
 
 
+Version 1.3.0 *(5-14-2013)*
+----------------------------
+* Added some constants for submitting points
+
 Version 1.2.9 *(5-12-2013)*
 ----------------------------
 * Application now successfully submits to server; albeit through NameValuePairs, not JSON

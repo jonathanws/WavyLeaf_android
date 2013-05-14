@@ -31,12 +31,16 @@ public class UploadData extends AsyncTask<JSONObject, Void, String> {
 	protected static final String ARG_AREAVALUE = "areavalue";
 	protected static final String ARG_BIRTHYEAR = "birthyear";
 	protected static final String ARG_DATE = "date";
+	protected static final String ARG_EDUCATION = "education";
+	protected static final String ARG_GENERALPLANTID = "generalplantid";
 	protected static final String ARG_LATITUDE = "latitude";
 	protected static final String ARG_LONGITUDE = "longitude";
 	protected static final String ARG_NAME = "name";
 	protected static final String ARE_NOTES = "notes";
+	protected static final String ARG_OUTDOOREXPERIENCE = "outdoorexperience";
 	protected static final String ARG_PERCENT = "percent";
 	protected static final String ARG_USER_ID = "user_id";
+	protected static final String ARG_WAVYLEAFID = "wavyleafid";
 
 	protected static final int TASK_SUBMIT_USER = 1;
 	protected static final int TASK_SUBMIT_POINT = 2;
@@ -107,6 +111,8 @@ public class UploadData extends AsyncTask<JSONObject, Void, String> {
 				}
 			}
 		}
+		else
+			result = "ERROR: bad script destination";
 
 		return result;
 	}

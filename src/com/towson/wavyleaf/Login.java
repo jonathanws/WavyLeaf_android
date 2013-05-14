@@ -114,6 +114,10 @@ public class Login extends SherlockActivity {
 		try {
 			json.put(UploadData.ARG_NAME, name.getText().toString().trim());
 			json.put(UploadData.ARG_BIRTHYEAR, year.getText().toString());
+			json.put(UploadData.ARG_EDUCATION, "lol");
+			json.put(UploadData.ARG_OUTDOOREXPERIENCE, "lol");
+			json.put(UploadData.ARG_GENERALPLANTID, "lol");
+			json.put(UploadData.ARG_WAVYLEAFID, "lol");
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
