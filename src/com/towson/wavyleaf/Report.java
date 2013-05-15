@@ -14,10 +14,8 @@ import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
@@ -26,11 +24,9 @@ import org.json.JSONObject;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.location.Location;
@@ -38,7 +34,6 @@ import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.Time;
@@ -266,6 +261,7 @@ public class Report extends SherlockFragmentActivity {
     		else {
     			//JSONObject jobj =  createJSONObject();
     			createJSONObject();
+    			finish();
     			//new Server().execute(jobj);
     		}
     		//        	peekAtJson(jobj);
@@ -506,6 +502,13 @@ public class Report extends SherlockFragmentActivity {
 		startActivityForResult(new Intent("android.media.action.IMAGE_CAPTURE"), CAMERA_REQUEST);
 	}
 	
+	protected double getAreaText() {
+		if (etarea.getText().toString().trim().equals("") || (etarea.getText().toString().trim().equals(null)))
+			return -1;
+		else
+			return Double.parseDouble(etarea.getText().toString());
+	}
+	
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {  
 		
 		if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {  
@@ -563,7 +566,7 @@ public class Report extends SherlockFragmentActivity {
 		try {
 			report.put("user_id", "1"); 	//spref.getString(Settings.KEY_USERNAME, "null"));
 			report.put("percent", loopThroughToggles());
-			report.put("areavalue", etarea.getText());
+			report.put("areavalue", getAreaText());
 			report.put("areatype", shortenAreaType());
 			report.put("latitude", currentEditableLocation.getLatitude());
 			report.put("longitude", currentEditableLocation.getLongitude());
@@ -615,119 +618,6 @@ public class Report extends SherlockFragmentActivity {
 		} catch (JSONException e) {
 			Toast.makeText(getApplicationContext(), "nope", Toast.LENGTH_SHORT).show();
 		}
-	}
-	
-	@SuppressLint("NewApi")
-	protected void submitToServer(JSONObject jobj) throws JSONException, ClientProtocolException, IOException {
-		
-		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-		StrictMode.setThreadPolicy(policy);
-		
-		EditText tv = (EditText) findViewById(R.id.serverresponse);
-		
-		HttpURLConnection connection;
-		OutputStreamWriter request = null;
-		
-		URL url = null;
-		String response = null;
-		String parameters = "test";
-		
-		try {
-			Toast.makeText(getApplicationContext(), "try", Toast.LENGTH_SHORT).show();
-			url = new URL(SERVER_URL);
-			connection = (HttpURLConnection) url.openConnection();
-			connection.setDoOutput(true);
-			connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-			connection.setRequestMethod("POST");
-			
-			request = new OutputStreamWriter(connection.getOutputStream());
-			request.write(parameters);
-			request.flush();
-			request.close();
-			String line = "";
-			InputStreamReader isr = new InputStreamReader(connection.getInputStream());
-			BufferedReader reader = new BufferedReader(isr);
-			StringBuilder sb = new StringBuilder();
-			while ((line = reader.readLine()) != null) {
-				sb.append(line + "\n");
-			}
-			
-			// Response from server after login process will be stored in response variable.
-			response = sb.toString();
-			// You can perform UI operations here
-			tv.setText(response);
-			isr.close();
-			reader.close();
-		}
-		catch(IOException e) {
-			Toast.makeText(getApplicationContext(), "io exception", Toast.LENGTH_SHORT).show();
-		}
-	}
-	
-	protected class Server extends AsyncTask<JSONObject, Void, String> {
-		
-		protected void onPreExecute() {
-	    }
-
-		@Override
-		protected String doInBackground(JSONObject... jobj) {
-			
-			// Create a new HttpClient and Post Header
-			HttpClient httpclient = new DefaultHttpClient();
-			HttpPost httppost = new HttpPost(SERVER_URL + SUBMIT_POINT);
-			String result = "";
-
-			try {
-				// Data to send
-				List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
-				nameValuePairs.add(new BasicNameValuePair("name", "YO MOHSIN"));
-				nameValuePairs.add(new BasicNameValuePair("birthyear", "1337"));
-				httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-				
-				// Execute post
-				HttpResponse response = httpclient.execute(httppost);
-				
-				// For response
-				if (response != null) {
-					InputStream is = response.getEntity().getContent();
-					
-					BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-					StringBuilder sb = new StringBuilder();
-					
-					String line = null;
-					try {
-						while ((line = reader.readLine()) != null) {
-							sb.append(line + "\n");
-						}
-					} catch (IOException e) {
-						e.printStackTrace();
-					} finally {
-						try {
-							is.close();
-						} catch(IOException e) {
-							e.printStackTrace();
-						}
-					}
-					
-					result = sb.toString();
-				}
-				
-			} catch (IllegalStateException e1) {
-				Toast.makeText(Report.this, "IllegalStateException", Toast.LENGTH_SHORT).show();
-			} catch (IOException e1) {
-				Toast.makeText(Report.this, "IOException", Toast.LENGTH_SHORT).show();
-			}
-			
-			return result;
-		}
-		
-		protected void onPostExecute(String s) {
-			if (s != null)
-				Toast.makeText(Report.this, s, Toast.LENGTH_LONG).show();
-			else
-				Toast.makeText(Report.this, "empty string", Toast.LENGTH_LONG).show();
-		}
-		
 	}
 
 }

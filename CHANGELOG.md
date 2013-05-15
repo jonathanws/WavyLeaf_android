@@ -1,6 +1,10 @@
 Change Log
 ===============================================================================
 
+Version 1.3.3 *(5-15-2013)*
+----------------------------
+* Report now sends actual user data for point and kills activity when "done" is selected
+
 Version 1.3.2 *(5-15-2013)*
 ----------------------------
 * 6 hour reminder timer service
