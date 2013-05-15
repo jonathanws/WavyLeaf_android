@@ -57,7 +57,7 @@ public class Login extends SherlockActivity {
 					nextIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 					startActivity(nextIntent);
 					overridePendingTransition(R.anim.right_slide_in, R.anim.right_slide_left);
-					uploadData();
+					//uploadData();
 					finish();
 					return true;
 				}
@@ -109,20 +109,21 @@ public class Login extends SherlockActivity {
 		ed.commit();
 	}
 	
-	protected void uploadData() {
-		JSONObject json = new JSONObject();
-		try {
-			json.put(UploadData.ARG_NAME, name.getText().toString().trim());
-			json.put(UploadData.ARG_BIRTHYEAR, year.getText().toString());
-			json.put(UploadData.ARG_EDUCATION, "lol");
-			json.put(UploadData.ARG_OUTDOOREXPERIENCE, "lol");
-			json.put(UploadData.ARG_GENERALPLANTID, "lol");
-			json.put(UploadData.ARG_WAVYLEAFID, "lol");
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-		
-		new UploadData(this, UploadData.TASK_SUBMIT_USER).execute(json);
-	}
+	//moved this to LoginContinued.java
+//	protected void uploadData() {
+//		JSONObject json = new JSONObject();
+//		try {
+//			json.put(UploadData.ARG_NAME, name.getText().toString().trim());
+//			json.put(UploadData.ARG_BIRTHYEAR, year.getText().toString());
+//			json.put(UploadData.ARG_EDUCATION, "lol");
+//			json.put(UploadData.ARG_OUTDOOREXPERIENCE, "lol");
+//			json.put(UploadData.ARG_GENERALPLANTID, "lol");
+//			json.put(UploadData.ARG_WAVYLEAFID, "lol");
+//		} catch (JSONException e) {
+//			e.printStackTrace();
+//		}
+//		
+//		new UploadData(this, UploadData.TASK_SUBMIT_USER).execute(json);
+//	}
 	
 }

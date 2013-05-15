@@ -1,6 +1,12 @@
 Change Log
 ===============================================================================
 
+Version 1.3.2 *(5-15-2013)*
+----------------------------
+* 6 hour reminder timer service
+* fixed user data submission in Login
+* fixed point data submission in Report
+
 Version 1.3.1 *(5-14-2013)*
 ----------------------------
 * Integration with BugSense

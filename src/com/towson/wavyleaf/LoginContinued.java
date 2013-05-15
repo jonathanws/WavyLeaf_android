@@ -1,5 +1,8 @@
 package com.towson.wavyleaf;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -46,6 +49,7 @@ public class LoginContinued extends SherlockActivity {
 				return true;
 			case R.id.menu_createaccount:
 	        	submit();
+	        	uploadData();
 	        	finish();
 	        	Toast.makeText(getApplicationContext(), "Account Details Recorded", Toast.LENGTH_SHORT).show();
 	        	return true;
@@ -94,6 +98,26 @@ public class LoginContinued extends SherlockActivity {
 		ed.putString("KEY_CONFIDENCE_PLANT", confidence_plant.getSelectedItem() + "");
 		ed.putString("KEY_CONFIDENCE_WAVYLEAF", confidence_wavyleaf.getSelectedItem() + "");
 		ed.commit();
+	}
+	
+	//moved this here from Login.java
+	protected void uploadData() {
+		JSONObject json = new JSONObject();
+		try {
+			SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+			
+			json.put(UploadData.ARG_NAME, sp.getString(Settings.KEY_NAME, "null"));
+			json.put(UploadData.ARG_BIRTHYEAR, sp.getString(Settings.KEY_BIRTHYEAR, "null"));
+			json.put(UploadData.ARG_EDUCATION, education.getSelectedItem());
+			json.put(UploadData.ARG_OUTDOOREXPERIENCE, experience.getSelectedItem());
+			json.put(UploadData.ARG_GENERALPLANTID, confidence_plant.getSelectedItem());
+			json.put(UploadData.ARG_WAVYLEAFID, confidence_wavyleaf.getSelectedItem());
+			
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		
+		new UploadData(this, UploadData.TASK_SUBMIT_USER).execute(json);
 	}
 
 }

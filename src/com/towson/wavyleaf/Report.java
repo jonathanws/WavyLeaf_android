@@ -90,9 +90,11 @@ public class Report extends SherlockFragmentActivity {
 	private static final int LEGAL = 1, CAMERA = 3, NO_GPS = 4; // Used for calling dialogs. arbitrary numbers
 	private static final int CAMERA_REQUEST = 1337, EDIT_REQUEST = 1338;
 	//, GALLERY_REQUEST = 1339;
-	protected static final String SERVER_URL = "http://skappsrv.towson.edu/";
-	protected static final String SUBMIT_USER = "wavyleaf/submit_user.php";
+	protected static final String SERVER_URL = "http://skappsrv.towson.edu/wavyleaf/submit_point.php";
+	/////////////////////
+	//protected static final String SUBMIT_USER = "wavyleaf/submit_user.php";
 	protected static final String SUBMIT_POINT = "wavyleaf/submit_point.php";
+	/////////////////////
 	private boolean gpsEnabled = false;
 	private boolean playAPKEnabled = false;
 	private boolean editedCoordinatesInOtherActivitySoDontGetGPSLocation = false;
@@ -115,6 +117,12 @@ public class Report extends SherlockFragmentActivity {
 		setContentView(R.layout.layout_report);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		init();
+		
+		////TESTING////
+		testPointsPHP();
+		///////////////
+		
+		
 		// Most setup methods are in onResume()
 	}
 	
@@ -256,8 +264,9 @@ public class Report extends SherlockFragmentActivity {
     		if (gpsLocation == null)
     			Toast.makeText(getApplicationContext(), "Cannot submit without GPS signal", Toast.LENGTH_SHORT).show();
     		else {
-    			JSONObject jobj = createJSONObject();
-    			new Server().execute(jobj);
+    			//JSONObject jobj =  createJSONObject();
+    			createJSONObject();
+    			//new Server().execute(jobj);
     		}
     		//        	peekAtJson(jobj);
 //        	try {
@@ -331,7 +340,7 @@ public class Report extends SherlockFragmentActivity {
 						str = tog.getText().toString();
 				}
 			}
-		}
+		}		
 		return str;
 	}
 	
@@ -493,6 +502,10 @@ public class Report extends SherlockFragmentActivity {
 		//http://stackoverflow.com/questions/3326366/what-context-should-i-use-alertdialog-builder-in
 	}
 	
+	protected void takePicture() {
+		startActivityForResult(new Intent("android.media.action.IMAGE_CAPTURE"), CAMERA_REQUEST);
+	}
+	
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {  
 		
 		if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {  
@@ -527,30 +540,73 @@ public class Report extends SherlockFragmentActivity {
 //			ib.setImageBitmap(img);
     }
 	
-	private JSONObject createJSONObject() {
+	private String shortenAreaType() {
+		String str = sp.getSelectedItem().toString();
+		if (str.equals("Square Miles")) {
+			str = "SM";
+		}
+		else if (str.equals("Square Acres")) {
+			str = "SA";
+		}
+		else {
+			str = "SF";
+		}
+		return str;
+	}
+	//private JSONObject createJSONObject() {
+	private void createJSONObject() {
 		Time now = new Time();
 		now.setToNow();
-		SharedPreferences spref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+		//SharedPreferences spref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 		
 		JSONObject report = new JSONObject();
 		try {
-			report.put("user_id", spref.getString(Settings.KEY_USERNAME, "null"));
-			report.put("name", spref.getString(Settings.KEY_USERNAME, "null"));
+			report.put("user_id", "1"); 	//spref.getString(Settings.KEY_USERNAME, "null"));
 			report.put("percent", loopThroughToggles());
-			report.put("areatype", sp.getSelectedItem().toString());
 			report.put("areavalue", etarea.getText());
+			report.put("areatype", shortenAreaType());
 			report.put("latitude", currentEditableLocation.getLatitude());
 			report.put("longitude", currentEditableLocation.getLongitude());
 			report.put("notes", notes.getText());
-			report.put("datetime", now.monthDay + " - " + (now.month + 1) + " - " + now.year);
-			//bitmap
-			report.put("birthyear", spref.getString(Settings.KEY_BIRTHYEAR, "0"));
+			report.put("date", now.year + "-" + (now.month + 1) + "-" + now.monthDay + " " + now.hour + ":" + now.minute + ":" + now.second);
+			//bitmap would go here
 			
 		} catch (JSONException e) {
 			Toast.makeText(getApplicationContext(), "Data not saved, try again", Toast.LENGTH_SHORT).show();
 		}
-		return report;
+		new UploadData(this, UploadData.TASK_SUBMIT_POINT).execute(report);
+		//return report;
 	}
+	
+	
+	// Dev use
+	public void testPointsPHP() {
+		Time now = new Time();
+		now.setToNow();
+		JSONObject report = new JSONObject();
+		try {
+			report.put("user_id", "1");
+			report.put("percent", "50-75%");
+			report.put("areavalue", "1");
+			report.put("areatype", "SF");
+			report.put("latitude", "17.000076");
+			report.put("longitude", "17.000076");
+			report.put("notes", "null");
+			report.put("date", now.year + "-" + (now.month + 1) + "-" + now.monthDay + " " + now.hour + ":" + now.minute + ":" + now.second);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		
+		new UploadData(this, UploadData.TASK_SUBMIT_POINT).execute(report);
+	}
+	
+	
+	
+	
+	//////////////////////////////////
+	/////// Unused stuff below ///////
+	//////////////////////////////////
+	
 	
 	// Used for testing
 	private void peekAtJson(JSONObject json) {
@@ -606,10 +662,6 @@ public class Report extends SherlockFragmentActivity {
 		catch(IOException e) {
 			Toast.makeText(getApplicationContext(), "io exception", Toast.LENGTH_SHORT).show();
 		}
-	}
-	
-	protected void takePicture() {
-		startActivityForResult(new Intent("android.media.action.IMAGE_CAPTURE"), CAMERA_REQUEST);
 	}
 	
 	protected class Server extends AsyncTask<JSONObject, Void, String> {

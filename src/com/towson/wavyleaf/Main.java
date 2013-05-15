@@ -28,7 +28,6 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
@@ -143,12 +142,16 @@ public class Main extends SherlockActivity implements OnClickListener {
 		} else if (view == this.bu_trip) {
 			SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 			
-			if (sp.getBoolean(TRIP_ENABLED_KEY, false) == false) // if user wants to start a new trip
+			if (sp.getBoolean(TRIP_ENABLED_KEY, false) == false) { // if user wants to start a new trip
 				showDialog(ONSTART);
+				startService(new Intent(Main.this, ReminderService.class));
+			}
 			else if (sp.getBoolean(TRIP_ENABLED_KEY, false) == true) { // If trip already in session
 				sp.edit().putBoolean(TRIP_ENABLED_KEY, false).commit(); // Turn it off
 				tripSelection.setText("- - -");
 				determineButtonDrawable();
+				
+				stopService(new Intent(Main.this, ReminderService.class));
 				
 				Intent alarmIntent = new Intent(this, AlarmReceiver.class);
 				PendingIntent sender = PendingIntent.getBroadcast(this, 1, alarmIntent, 0);
@@ -273,6 +276,10 @@ public class Main extends SherlockActivity implements OnClickListener {
 		try {
 			json.put("name", "my awesome name");
 			json.put("birthyear", "1234");
+			json.put("education", "college");
+			json.put("outdoorexperience", "none");
+			json.put("generalplantid", "clueless");
+			json.put("wavyleafid", "clueless");
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}

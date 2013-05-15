@@ -102,6 +102,7 @@
             android:windowSoftInputMode="stateHidden" />
 
         <receiver android:name=".AlarmReceiver" />
+        <service android:name="ReminderService"></service>
         
     </application>
 
