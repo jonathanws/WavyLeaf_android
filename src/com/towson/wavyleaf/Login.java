@@ -1,8 +1,5 @@
 package com.towson.wavyleaf;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -10,7 +7,6 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,13 +14,13 @@ import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
-import com.towson.wavyleaf.R.id;
 
 public class Login extends SherlockActivity {
 	
-	TextView createAccount, anon;
-	EditText name, year;
-	CheckBox cb;
+	TextView createAccount;
+	TextView anon;
+	EditText name, year, email;
+	//CheckBox cb;
 	
 	@Override
 	protected void onCreate(Bundle bundle) {
@@ -57,7 +53,6 @@ public class Login extends SherlockActivity {
 					nextIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 					startActivity(nextIntent);
 					overridePendingTransition(R.anim.right_slide_in, R.anim.right_slide_left);
-					//uploadData();
 					finish();
 					return true;
 				}
@@ -69,24 +64,25 @@ public class Login extends SherlockActivity {
 		Typeface tf_light = Typeface.createFromAsset(getAssets(), "fonts/roboto_thin.ttf");
 		
 		createAccount = (TextView) findViewById(R.id.login_tv_createaccount);
-		anon = (TextView) findViewById(id.tv_anon);
+		//anon = (TextView) findViewById(id.tv_anon);
 		name = (EditText) findViewById(R.id.login_name);
 		year = (EditText) findViewById(R.id.login_birthyear);
-		cb = (CheckBox) findViewById(R.id.login_cb);
+		email = (EditText) findViewById(R.id.login_email);
+		//cb = (CheckBox) findViewById(R.id.login_cb);
 		
 		createAccount.setTypeface(tf_light);
-		anon.setTypeface(tf_light);
+		//anon.setTypeface(tf_light);
 		
 		// Listener for Checkbox
-		cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-			@Override
-			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				if (isChecked == true)
-					name.setText("Anonymous");
-				else
-					name.setText("");
-			}
-		});
+//		cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//			@Override
+//			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//				if (isChecked == true)
+//					name.setText("Anonymous");
+//				else
+//					name.setText("");
+//			}
+//		});
 		
 	}
 	
@@ -106,24 +102,8 @@ public class Login extends SherlockActivity {
 		
 		ed.putString(Settings.KEY_NAME, name.getText().toString().trim());
 		ed.putString(Settings.KEY_BIRTHYEAR, year.getText() + "");
+		ed.putString("KEY_EMAIL", email.getText() + "");
 		ed.commit();
 	}
-	
-	//moved this to LoginContinued.java
-//	protected void uploadData() {
-//		JSONObject json = new JSONObject();
-//		try {
-//			json.put(UploadData.ARG_NAME, name.getText().toString().trim());
-//			json.put(UploadData.ARG_BIRTHYEAR, year.getText().toString());
-//			json.put(UploadData.ARG_EDUCATION, "lol");
-//			json.put(UploadData.ARG_OUTDOOREXPERIENCE, "lol");
-//			json.put(UploadData.ARG_GENERALPLANTID, "lol");
-//			json.put(UploadData.ARG_WAVYLEAFID, "lol");
-//		} catch (JSONException e) {
-//			e.printStackTrace();
-//		}
-//		
-//		new UploadData(this, UploadData.TASK_SUBMIT_USER).execute(json);
-//	}
 	
 }

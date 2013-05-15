@@ -41,6 +41,7 @@ public class UploadData extends AsyncTask<JSONObject, Void, String> {
 	protected static final String ARG_PERCENT = "percent";
 	protected static final String ARG_USER_ID = "user_id";
 	protected static final String ARG_WAVYLEAFID = "wavyleafid";
+	protected static final String ARG_EMAIL = "email";
 
 	protected static final int TASK_SUBMIT_USER = 1;
 	protected static final int TASK_SUBMIT_POINT = 2;

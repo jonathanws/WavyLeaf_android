@@ -75,7 +75,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="Confident in general plant ID?"
+            android:text="Confidence in general plant ID?"
             android:textStyle="italic" />
 
         <Spinner
@@ -89,7 +89,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="Confident in wavyleaf ID?"
+            android:text="Confidence in wavyleaf ID?"
             android:textStyle="italic" />
 
         <Spinner

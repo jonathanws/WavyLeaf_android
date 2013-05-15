@@ -1,6 +1,14 @@
 Change Log
 ===============================================================================
 
+Version 1.3.4 *(5-15-2013)*
+----------------------------
+* Edited options for Login attributes
+* Changed Username to User ID
+* Added Email to Login and JSON
+* Removed Anonymous user
+* Removed Create Account in Settings
+
 Version 1.3.3 *(5-15-2013)*
 ----------------------------
 * Report now sends actual user data for point and kills activity when "done" is selected

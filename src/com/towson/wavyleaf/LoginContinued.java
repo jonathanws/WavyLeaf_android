@@ -112,7 +112,7 @@ public class LoginContinued extends SherlockActivity {
 			json.put(UploadData.ARG_OUTDOOREXPERIENCE, experience.getSelectedItem());
 			json.put(UploadData.ARG_GENERALPLANTID, confidence_plant.getSelectedItem());
 			json.put(UploadData.ARG_WAVYLEAFID, confidence_wavyleaf.getSelectedItem());
-			
+			json.put(UploadData.ARG_EMAIL, sp.getString("KEY_EMAIL", "null"));
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}

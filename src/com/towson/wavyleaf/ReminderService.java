@@ -69,7 +69,7 @@ public class ReminderService extends Service {
         	isTimerRunning = false;
         	nm = ((NotificationManager) getSystemService(NOTIFICATION_SERVICE));
         	nm.cancel(Main.mUniqueId);
-        	showReminderNotification(getApplicationContext());
+        	showReminderNotification(getBaseContext());
 			//Need to stop service -- calling stopService which is same as stopService(Intent)
 			stopSelf();
         }
@@ -93,7 +93,7 @@ public class ReminderService extends Service {
             if (sp.getBoolean(Settings.KEY_CHECKBOX_VIBRATE, true))
             	mBuilder.setVibrate(vibrationPattern());
     	    
-    	    nm.notify(21600000, mBuilder.build());
+    	    nm.notify(216612, mBuilder.build());
     	}
     	
     	protected long[] vibrationPattern() {
