@@ -50,16 +50,16 @@
     </string-array>
     
     <string-array name="confidence_plant_array">
-        <item>Not Confident</item>
-        <item>Fairly Confident</item>
-        <item>Quite confident</item>
+        <item>Not confident</item>
+        <item>Somewhat Confident</item>
+        <item>Fairly confident</item>
         <item>Expert</item>
     </string-array>
     
     <string-array name="confidence_wavyleaf_array">
         <item>Not confident</item>
         <item>Somewhat confident</item>
-        <item>Quite confident</item>
+        <item>Fairly confident</item>
         <item>Expert</item>
     </string-array>
     
