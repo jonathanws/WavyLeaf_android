@@ -1,6 +1,12 @@
 Change Log
 ===============================================================================
 
+Version 1.3.5 *(5-15-2013)*
+----------------------------
+* Added textview in Login - superflous, but maybe looks nice? maybe?
+* Added checks on textviews in Login
+* Organized imports
+
 Version 1.3.4 *(5-15-2013)*
 ----------------------------
 * Edited options for Login attributes

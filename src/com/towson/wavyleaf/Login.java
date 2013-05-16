@@ -6,7 +6,6 @@ import android.content.SharedPreferences.Editor;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,10 +16,8 @@ import com.actionbarsherlock.view.MenuItem;
 
 public class Login extends SherlockActivity {
 	
-	TextView createAccount;
-	TextView anon;
+	TextView createAccount, description;
 	EditText name, year, email;
-	//CheckBox cb;
 	
 	@Override
 	protected void onCreate(Bundle bundle) {
@@ -64,36 +61,43 @@ public class Login extends SherlockActivity {
 		Typeface tf_light = Typeface.createFromAsset(getAssets(), "fonts/roboto_thin.ttf");
 		
 		createAccount = (TextView) findViewById(R.id.login_tv_createaccount);
-		//anon = (TextView) findViewById(id.tv_anon);
+		description = (TextView) findViewById(R.id.login_description);
 		name = (EditText) findViewById(R.id.login_name);
 		year = (EditText) findViewById(R.id.login_birthyear);
 		email = (EditText) findViewById(R.id.login_email);
-		//cb = (CheckBox) findViewById(R.id.login_cb);
 		
 		createAccount.setTypeface(tf_light);
-		//anon.setTypeface(tf_light);
-		
-		// Listener for Checkbox
-//		cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//			@Override
-//			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//				if (isChecked == true)
-//					name.setText("Anonymous");
-//				else
-//					name.setText("");
-//			}
-//		});
-		
+		description.setTypeface(tf_light);
 	}
 	
-	// Verify existing text, and verify not only spaces
+	/** Verify existing text, and verify not only spaces **/
 	protected boolean hasText() {
-		if (!name.getText().toString().trim().equals(""))
+		if (!name.getText().toString().trim().equals("")
+				&& (validYear(year.getText().toString()) == true)
+				&& (validEmail(email.getText().toString()) == true))
 			return true;
 		else {
-			Toast.makeText(getApplicationContext(), "Please complete both fields", Toast.LENGTH_SHORT).show();
+			Toast.makeText(getApplicationContext(), "Please complete all fields", Toast.LENGTH_SHORT).show();
 			return false;
 		}
+	}
+	
+	protected boolean validEmail(String s) {
+		if (s.trim().equals(""))				// If blank string
+			return false;
+		else if (!s.contains("@"))				// or doesn't contain "@"
+			return false;
+		else
+			return true;
+	}
+	
+	protected boolean validYear(String s) {
+		if (s.trim().equals(""))				// If blank string
+			return false;
+		else if (s.length() < 4)				// or not an actual year
+			return false;
+		else
+			return true;
 	}
 	
 	protected void submit() {
@@ -102,7 +106,7 @@ public class Login extends SherlockActivity {
 		
 		ed.putString(Settings.KEY_NAME, name.getText().toString().trim());
 		ed.putString(Settings.KEY_BIRTHYEAR, year.getText() + "");
-		ed.putString("KEY_EMAIL", email.getText() + "");
+		ed.putString(Settings.KEY_EMAIL, email.getText() + "");
 		ed.commit();
 	}
 	

@@ -14,6 +14,7 @@ public class Settings extends SherlockPreferenceActivity implements OnSharedPref
 	public static final String KEY_BIRTHYEAR = "preference_birthyear";
 	public static final String KEY_CHECKBOX_VIBRATE = "preference_vibrate";
 	public static final String KEY_CHECKBOX_NOISE = "preference_noise";
+	public static final String KEY_EMAIL = "preference_email";
 	public static final String KEY_NAME = "preference_name";
 	public static final String KEY_USERNAME = "preference_username";
 	public static final String KEY_SINGLETALLY = "preference_singletally";
