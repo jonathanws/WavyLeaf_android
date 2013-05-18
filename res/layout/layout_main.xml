@@ -33,15 +33,6 @@
         
     </com.towson.wavyleaf.DashboardLayout>
 
-    <Button
-        android:id="@+id/bu_test"
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:text="Test"
-        android:onClick="testPHP" />
-
     <View
         android:layout_width="fill_parent"
         android:layout_height="1dp"

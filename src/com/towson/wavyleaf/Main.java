@@ -1,8 +1,5 @@
 package com.towson.wavyleaf;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -253,27 +250,4 @@ public class Main extends SherlockActivity implements OnClickListener {
 			this.startActivity(newReportIntent);
 		}
 	}
-	
-	// Dev use
-	public void testPHP(View view) {
-		
-		JSONObject json = new JSONObject();
-		try {
-			json.put("name", "my awesome name");
-			json.put("birthyear", "1234");
-			json.put("education", "college");
-			json.put("outdoorexperience", "none");
-			json.put("generalplantid", "clueless");
-			json.put("wavyleafid", "clueless");
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-		
-		new UploadData(this, UploadData.TASK_SUBMIT_USER).execute(json);
-	}
-
 }
-
-
-
-

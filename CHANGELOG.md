@@ -1,6 +1,14 @@
 Change Log
 ===============================================================================
 
+
+Version 1.3.6 *(5-18-2013)*
+----------------------------
+* Deleted Main's test button
+* Deleted edittext in Report.java
+* Deleted unused test methd in Main
+* Updated README
+
 Version 1.3.5 *(5-15-2013)*
 ----------------------------
 * Added textview in Login - superflous, but maybe looks nice? maybe?

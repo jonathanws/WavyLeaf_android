@@ -347,12 +347,6 @@
             android:layout_marginBottom="16dp"
             android:background="@drawable/drop_shadow" />
         
-        <EditText
-            android:id="@+id/serverresponse"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
-        
     </LinearLayout>
 
 </ScrollView>
