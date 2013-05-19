@@ -12,8 +12,11 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.protocol.HTTP;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -36,7 +39,7 @@ public class UploadData extends AsyncTask<JSONObject, Void, String> {
 	protected static final String ARG_LATITUDE = "latitude";
 	protected static final String ARG_LONGITUDE = "longitude";
 	protected static final String ARG_NAME = "name";
-	protected static final String ARE_NOTES = "notes";
+	protected static final String ARG_NOTES = "notes";
 	protected static final String ARG_OUTDOOREXPERIENCE = "outdoorexperience";
 	protected static final String ARG_PERCENT = "percent";
 	protected static final String ARG_USER_ID = "user_id";
@@ -77,8 +80,22 @@ public class UploadData extends AsyncTask<JSONObject, Void, String> {
 				try {
 
 					// Data to store
+					
+					// USE THIS ONLY FOR NAMEVALUEPAIRS //////////////////////////////////////
+					//
 					hp.setEntity(new UrlEncodedFormEntity(getNameValuePairFromJSON(json)));
-
+					//
+					//////////////////////////////////////////////////////////////////////////
+					
+					// USE THESE ONLY FOR JSON ///////////////////////////////////////////////
+					//
+//					StringEntity se = new StringEntity( json.toString());
+//					se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
+//					hp.setEntity(se);
+					//
+					//////////////////////////////////////////////////////////////////////////
+					
+					
 					// Execute the post
 					HttpResponse response = hc.execute(hp);
 

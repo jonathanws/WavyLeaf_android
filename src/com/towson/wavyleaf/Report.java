@@ -234,25 +234,12 @@ public class Report extends SherlockFragmentActivity {
             finish();
             return true;
         case R.id.menu_submit:
-        	Location gpsLocation = requestUpdatesFromProvider();
-    		if (gpsLocation == null)
+    		if (requestUpdatesFromProvider() == null) // If no GPS
     			Toast.makeText(getApplicationContext(), "Cannot submit without GPS signal", Toast.LENGTH_SHORT).show();
     		else {
-    			//JSONObject jobj =  createJSONObject();
     			createJSONObject();
     			finish();
-    			//new Server().execute(jobj);
     		}
-    		//        	peekAtJson(jobj);
-//        	try {
-//				submitToServer(jobj);
-//			} catch (ClientProtocolException e) {
-//				Toast.makeText(getApplicationContext(), "client exception", Toast.LENGTH_SHORT).show();
-//			} catch (JSONException e) {
-//				Toast.makeText(getApplicationContext(), "json exception", Toast.LENGTH_SHORT).show();
-//			} catch (IOException e) {
-//				Toast.makeText(getApplicationContext(), "io exception", Toast.LENGTH_SHORT).show();
-//			}
         	return true;
         case R.id.menu_legal:
         	showDialog(LEGAL);
@@ -543,14 +530,14 @@ public class Report extends SherlockFragmentActivity {
 		
 		JSONObject report = new JSONObject();
 		try {
-			report.put("user_id", "1"); 	//spref.getString(Settings.KEY_USERNAME, "null"));
-			report.put("percent", loopThroughToggles());
-			report.put("areavalue", getAreaText());
-			report.put("areatype", shortenAreaType());
-			report.put("latitude", currentEditableLocation.getLatitude());
-			report.put("longitude", currentEditableLocation.getLongitude());
-			report.put("notes", notes.getText());
-			report.put("date", now.year + "-" + (now.month + 1) + "-" + now.monthDay + " " + now.hour + ":" + now.minute + ":" + now.second);
+			report.put(UploadData.ARG_USER_ID, "1"); 	//spref.getString(Settings.KEY_USERNAME, "null"));
+			report.put(UploadData.ARG_PERCENT, loopThroughToggles());
+			report.put(UploadData.ARG_AREAVALUE, getAreaText());
+			report.put(UploadData.ARG_AREATYPE, shortenAreaType());
+			report.put(UploadData.ARG_LATITUDE, currentEditableLocation.getLatitude());
+			report.put(UploadData.ARG_LONGITUDE, currentEditableLocation.getLongitude());
+			report.put(UploadData.ARG_NOTES, notes.getText());
+			report.put(UploadData.ARG_DATE, now.year + "-" + (now.month + 1) + "-" + now.monthDay + " " + now.hour + ":" + now.minute + ":" + now.second);
 			//bitmap would go here
 			
 		} catch (JSONException e) {
@@ -567,14 +554,14 @@ public class Report extends SherlockFragmentActivity {
 		now.setToNow();
 		JSONObject report = new JSONObject();
 		try {
-			report.put("user_id", "1");
-			report.put("percent", "50-75%");
-			report.put("areavalue", "1");
-			report.put("areatype", "SF");
-			report.put("latitude", "17.000076");
-			report.put("longitude", "17.000076");
-			report.put("notes", "null");
-			report.put("date", now.year + "-" + (now.month + 1) + "-" + now.monthDay + " " + now.hour + ":" + now.minute + ":" + now.second);
+			report.put(UploadData.ARG_USER_ID, "1");
+			report.put(UploadData.ARG_PERCENT, "50-75%");
+			report.put(UploadData.ARG_AREAVALUE, "1");
+			report.put(UploadData.ARG_AREATYPE, "SF");
+			report.put(UploadData.ARG_LATITUDE, "17.000076");
+			report.put(UploadData.ARG_LONGITUDE, "17.000076");
+			report.put(UploadData.ARG_NOTES, "json still no work :(");
+			report.put(UploadData.ARG_DATE, now.year + "-" + (now.month + 1) + "-" + now.monthDay + " " + now.hour + ":" + now.minute + ":" + now.second);
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
