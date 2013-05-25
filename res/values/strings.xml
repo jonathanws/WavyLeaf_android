@@ -2,6 +2,8 @@
 <resources>
 
     <string name="app_name">Wavyleaf</string>
+    <string name="version">Version - BETA</string>
+    <string name="towson_university">Towson University</string>
     
     <string name="layout_main_new">New Sighting</string>
     <string name="layout_main_trip">Start Trip</string>
@@ -12,6 +14,20 @@
     <string name="layout_tripinterval">Next Reminder In</string>
     <string name="layout_novalue">- - - </string>
     
+    <string name="layout_login_createaccount">Create Account</string>
+    <string name="layout_login_details">Enter acount details</string>
+    <string name="layout_login_name">Name</string>
+    <string name="layout_login_birthyear">Birth Year</string>
+    <string name="layout_login_email">Email</string>
+    
+    <string name="layout_login_education">Education</string>
+    <string name="layout_login_education_question">How much education do you have?</string>
+    <string name="layout_login_outdoorexperience">Outdoors Experience</string>
+    <string name="layout_login_outdoorexperience_question">How often do you hike?</string>
+    <string name="layout_login_confidence">Confidence</string>
+    <string name="layout_login_confidence_question_general">Confidence in general plant ID?</string>
+    <string name="layout_login_confidence_question_wavyleaf">Confidence in wavyleaf ID?</string>
+    
     <string name="layout_report_picturenotes">PICTURE/NOTES</string>
     <string name="layout_report_percentage">PERCENTAGE</string>
     <string name="layout_report_area">AREA INFESTED</string>
@@ -19,6 +35,9 @@
     <string name="layout_report_camera">Choose a picture</string>
     <string name="latitude">Latitude</string>
     <string name="longitude">Longitude</string>
+    
+    <string name="layout_reportmapview_reset">Reset</string>
+    <string name="layout_reportmapview_done">Done</string>
     
     <string name="layout_trip_save">Save</string>
     <string name="finish_trip">Finish Trip</string>

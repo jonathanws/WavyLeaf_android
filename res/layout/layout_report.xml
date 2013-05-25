@@ -307,7 +307,7 @@
                 android:background="#FFFFFF"
                 android:gravity="center_vertical"
                 android:paddingLeft="8dp"
-                android:text="@string/layout_report_picturenotes" />
+                android:text="NOTES" />
             
             <View
                 android:layout_width="match_parent"
@@ -320,6 +320,7 @@
                 android:orientation="horizontal"
                 android:padding="4dp" >
 
+                <!-- 
                 <ImageButton
                     android:id="@+id/report_imagebutton"
                     android:layout_width="120dp"
@@ -327,15 +328,18 @@
                     android:layout_marginRight="4dp"
                     android:contentDescription="@string/layout_report_camera"
                     android:src="@drawable/ib_camera" />
+                -->
 
                 <EditText
                     android:id="@+id/notes"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:hint="Enter description here"
                     android:ems="10"
                     android:inputType="textMultiLine"
-                    android:maxHeight="120dp" />
+                    android:maxHeight="120dp"
+                    android:minHeight="120dp" />
                 
             </LinearLayout>
             

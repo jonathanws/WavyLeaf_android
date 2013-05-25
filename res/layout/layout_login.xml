@@ -13,7 +13,7 @@
             android:id="@+id/login_tv_createaccount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Create Account"
+            android:hint="@string/layout_login_createaccount"
             android:textSize="40sp" />
 
         <View
@@ -33,7 +33,7 @@
                 android:id="@+id/login_description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Enter account details"
+                android:hint="@string/layout_login_details"
                 android:textColor="@android:color/black"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -46,7 +46,7 @@
             android:layout_height="48dp"
             android:layout_marginBottom="8dp"
             android:ellipsize="end"
-            android:hint="Name"
+            android:hint="@string/layout_login_name"
             android:singleLine="true" />
 
         <EditText
@@ -54,7 +54,7 @@
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_marginBottom="8dp"
-            android:hint="Birth Year"
+            android:hint="@string/layout_login_birthyear"
             android:inputType="number"
             android:maxLength="4" />
 
@@ -64,7 +64,7 @@
             android:layout_height="48dp"
             android:layout_marginBottom="8dp"
             android:ems="10"
-            android:hint="Email"
+            android:hint="@string/layout_login_email"
             android:inputType="textEmailAddress" />
         
     </LinearLayout>

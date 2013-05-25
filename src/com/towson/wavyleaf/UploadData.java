@@ -4,24 +4,19 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicHeader;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.protocol.HTTP;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.widget.Toast;
 
 public class UploadData extends AsyncTask<JSONObject, Void, String> {
@@ -51,6 +46,7 @@ public class UploadData extends AsyncTask<JSONObject, Void, String> {
 
 	protected int task = 0;
 	private Context context;
+	private boolean success = false;
 
 	public UploadData(Context context, int which) {
 		this.context = context;
@@ -78,23 +74,19 @@ public class UploadData extends AsyncTask<JSONObject, Void, String> {
 				HttpPost hp = new HttpPost(SERVER_URL + getHttpPost());
 
 				try {
-
-					// Data to store
 					
-					// USE THIS ONLY FOR NAMEVALUEPAIRS //////////////////////////////////////
-					//
-					hp.setEntity(new UrlEncodedFormEntity(getNameValuePairFromJSON(json)));
-					//
-					//////////////////////////////////////////////////////////////////////////
+					// Use this section when wanting to send NameValue Pairs
+//					hp.setEntity(new UrlEncodedFormEntity(getNameValuePairFromJSON(json)));
 					
-					// USE THESE ONLY FOR JSON ///////////////////////////////////////////////
-					//
-//					StringEntity se = new StringEntity( json.toString());
+					// Use this section to send JSON
+					StringEntity se = new StringEntity(json.toString(), "UTF-8");
+					
+					// It seems that these aren't required, but similar lines are used for iphone
 //					se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
-//					hp.setEntity(se);
-					//
-					//////////////////////////////////////////////////////////////////////////
+//					hp.setHeader("Content-Type", "application/json");
 					
+					// Data to store
+					hp.setEntity(se);
 					
 					// Execute the post
 					HttpResponse response = hc.execute(hp);
@@ -119,8 +111,11 @@ public class UploadData extends AsyncTask<JSONObject, Void, String> {
 								e.printStackTrace();
 							}
 						}
-
-						result = sb.toString();
+						
+						if (sb.toString().contains("1"))
+							success = true;
+						else
+							success = false;
 					}
 				} catch (IllegalStateException e) {
 					e.printStackTrace();
@@ -136,6 +131,26 @@ public class UploadData extends AsyncTask<JSONObject, Void, String> {
 	}
 
 	protected void onPostExecute(String s) {
+		
+		// If data was submitted successfully
+		if (success == true) {
+			
+			SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this.context);
+			Editor ed = sp.edit();
+			
+			// Increment tally for Trip points
+			if ((context.getClass() + "").contains("Trip"))
+				ed.putInt(Settings.KEY_SINGLETALLY, sp.getInt(Settings.KEY_SINGLETALLY, 0) + 1);
+			
+			// Increment tally for Single points
+			else if ((context.getClass() + "").contains("Report"))
+				ed.putInt(Settings.KEY_TRIPTALLY, sp.getInt(Settings.KEY_TRIPTALLY, 0) + 1);
+			
+			ed.commit();
+			
+		} else
+			Toast.makeText(this.context, "Error submitting point. Saved for later.", Toast.LENGTH_LONG).show();
+			
 		if (s != null)
 			Toast.makeText(this.context, s, Toast.LENGTH_LONG).show();
 	}
@@ -150,22 +165,22 @@ public class UploadData extends AsyncTask<JSONObject, Void, String> {
 	
 	// Since we've only figured out how to send a list, this method 
 	// will sort through the given JSONObject and create one
-	protected List<NameValuePair> getNameValuePairFromJSON(JSONObject jo) {
-		
-		List<NameValuePair> nvp = new ArrayList<NameValuePair>();
-		
-		// Go through JSONObject and make a List
-		for (int i = 0; i < jo.names().length(); i++) {
-			try {
-				nvp.add(new BasicNameValuePair(
-						jo.names().getString(i), // Get the key for each parameter
-						jo.getString(jo.names().getString(i)))); // Get the value for each key
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-		}
-		return nvp;
-		
-	}
+//	protected List<NameValuePair> getNameValuePairFromJSON(JSONObject jo) {
+//		
+//		List<NameValuePair> nvp = new ArrayList<NameValuePair>();
+//		
+//		// Go through JSONObject and make a List
+//		for (int i = 0; i < jo.names().length(); i++) {
+//			try {
+//				nvp.add(new BasicNameValuePair(
+//						jo.names().getString(i), // Get the key for each parameter
+//						jo.getString(jo.names().getString(i)))); // Get the value for each key
+//			} catch (JSONException e) {
+//				e.printStackTrace();
+//			}
+//		}
+//		return nvp;
+//		
+//	}
 
 }

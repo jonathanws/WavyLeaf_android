@@ -13,7 +13,7 @@
             android:id="@+id/login_continued_tv_createaccount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Create Account"
+            android:hint="@string/layout_login_createaccount"
             android:textSize="40sp" />
 
         <View
@@ -27,13 +27,13 @@
             style="?android:attr/listSeparatorTextViewStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Education" />
+            android:text="@string/layout_login_education" />
         
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="How much education do you have?"
+            android:text="@string/layout_login_education_question"
             android:textStyle="italic" />
 
         <Spinner
@@ -48,13 +48,13 @@
             style="?android:attr/listSeparatorTextViewStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Outdoors Experience" />
+            android:text="@string/layout_login_outdoorexperience" />
         
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="How often do you hike?"
+            android:text="@string/layout_login_outdoorexperience_question"
             android:textStyle="italic" />
 
         <Spinner
@@ -69,13 +69,13 @@
             style="?android:attr/listSeparatorTextViewStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Confidence" />
+            android:text="@string/layout_login_confidence" />
         
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="Confidence in general plant ID?"
+            android:text="@string/layout_login_confidence_question_general"
             android:textStyle="italic" />
 
         <Spinner
@@ -89,7 +89,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="Confidence in wavyleaf ID?"
+            android:text="@string/layout_login_confidence_question_wavyleaf"
             android:textStyle="italic" />
 
         <Spinner

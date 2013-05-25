@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:padding="16dp" >
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:src="@drawable/ic_launcher_about" />
+
+    <TextView
+        android:id="@+id/tv_about_wavyleaf"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:gravity="center"
+        android:text="Wavyleaf"
+        android:textSize="36sp" />
+
+    <TextView
+        android:id="@+id/tv_about_version"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:gravity="center"
+        android:text="@string/version"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/tv_about_developed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:gravity="center"
+        android:text="Developed &amp; Designed By"
+        android:textSize="16sp" />
+
+    <View
+        android:layout_width="180dp"
+        android:layout_height="1dp"
+        android:layout_marginBottom="4dp"
+        android:background="#669900" />
+
+    <TextView
+        android:id="@+id/tv_about_towson"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:gravity="center"
+        android:text="@string/towson_university"
+        android:textSize="16sp" />
+
+</LinearLayout>

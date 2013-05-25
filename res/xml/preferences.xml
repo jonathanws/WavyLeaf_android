@@ -45,15 +45,27 @@
     
     <PreferenceCategory android:title="Other" >
         
-<!--         <Preference -->
-<!--             android:title="Create Account" > -->
+        <!-- 
+        <Preference
+            android:title="Create Account" >
             
-<!--             <intent -->
-<!--                 android:action="android.intent.action.VIEW" -->
-<!--                 android:targetPackage="com.towson.wavyleaf" -->
-<!--                 android:targetClass="com.towson.wavyleaf.Login" /> -->
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:targetPackage="com.towson.wavyleaf"
+                android:targetClass="com.towson.wavyleaf.Login" />
             
-<!--         </Preference> -->
+        </Preference>
+        -->
+        
+        <Preference 
+            android:title="About" >
+            
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:targetPackage="com.towson.wavyleaf"
+                android:targetClass="com.towson.wavyleaf.About" />
+            
+        </Preference>
         
         <Preference
             android:title="Rate this application"

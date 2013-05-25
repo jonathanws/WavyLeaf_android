@@ -54,6 +54,11 @@
         </activity>
         
         <activity
+            android:name="com.towson.wavyleaf.About"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Sherlock.Light.Dialog" />
+        
+        <activity
             android:name="com.towson.wavyleaf.Login"
             android:configChanges="orientation"
             android:label="Create Account"

@@ -9,11 +9,16 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -50,12 +55,8 @@ public class Main extends SherlockActivity implements OnClickListener {
 		setContentView(R.layout.layout_main);
 		initLayout();
 		determineButtonDrawable();
+		determineTallys();
 		checkForFirstRun();
-		
-		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-        int int_single = sp.getInt(Settings.KEY_SINGLETALLY, 0);
-        int int_trip = sp.getInt(Settings.KEY_TRIPTALLY, 0);
-        this.tallyNumber.setText(int_single + " / " + int_trip);
     }
 	
 	protected void initLayout() {
@@ -250,4 +251,38 @@ public class Main extends SherlockActivity implements OnClickListener {
 			this.startActivity(newReportIntent);
 		}
 	}
+	
+	protected void determineTallys() {
+		
+		// Read values from local storage
+		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        int int_single = sp.getInt(Settings.KEY_SINGLETALLY, 0);
+        int int_trip = sp.getInt(Settings.KEY_TRIPTALLY, 0);
+        
+        // Cast ints to strings. This is a funny hack
+        String string_single = int_single + "";
+        String string_trip = int_trip + "";
+        
+        // Span to set text color to our green / blue colors
+        final ForegroundColorSpan fcsGreen = new ForegroundColorSpan(Color.parseColor("#669900"));
+        final ForegroundColorSpan fcsBlue = new ForegroundColorSpan(Color.parseColor("#0099CC"));
+        final ForegroundColorSpan fcsBlack = new ForegroundColorSpan(Color.parseColor("#000000"));
+        
+        // Span to make text bold
+        final StyleSpan bss = new StyleSpan(android.graphics.Typeface.BOLD);
+        
+        final SpannableStringBuilder sb = new SpannableStringBuilder(string_single + " / " + string_trip);
+        
+        // Set the text color for each part
+        sb.setSpan(fcsGreen, 0, sb.toString().indexOf("/") - 1, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        sb.setSpan(fcsBlack, sb.toString().indexOf("/"), sb.toString().indexOf("/") + 1, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        sb.setSpan(fcsBlue, sb.toString().indexOf("/") + 1, sb.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        
+        // make them also bold
+        sb.setSpan(bss, 0, sb.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        
+        this.tallyNumber.setText(sb);
+	}
 }
+
+

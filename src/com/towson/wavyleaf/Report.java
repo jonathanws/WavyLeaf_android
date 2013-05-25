@@ -64,18 +64,13 @@ public class Report extends SherlockFragmentActivity {
 	private static final int LEGAL = 1, CAMERA = 3, NO_GPS = 4; // Used for calling dialogs. arbitrary numbers
 	private static final int CAMERA_REQUEST = 1337, EDIT_REQUEST = 1338;
 	//, GALLERY_REQUEST = 1339;
-	protected static final String SERVER_URL = "http://skappsrv.towson.edu/wavyleaf/submit_point.php";
-	/////////////////////
-	//protected static final String SUBMIT_USER = "wavyleaf/submit_user.php";
-	protected static final String SUBMIT_POINT = "wavyleaf/submit_point.php";
-	/////////////////////
 	private boolean gpsEnabled = false;
 	private boolean playAPKEnabled = false;
 	private boolean editedCoordinatesInOtherActivitySoDontGetGPSLocation = false;
 	private boolean mapHasMarker = false; // onResume keeps adding markers to map, this should stop it
 	protected GoogleMap mMap;
 	private UiSettings mUiSettings;
-	protected ImageButton ib;
+//	protected ImageButton ib;
 	protected RadioGroup rg;
 	protected TextView tvlat, tvlong, tvpicnotes, tvper, tvper_summary, tvcoor, tvarea, tvarea_summary;
 	protected EditText notes, etarea;
@@ -91,11 +86,6 @@ public class Report extends SherlockFragmentActivity {
 		setContentView(R.layout.layout_report);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		init();
-		
-		////TESTING////
-		testPointsPHP();
-		///////////////
-		
 		
 		// Most setup methods are in onResume()
 	}
@@ -123,15 +113,15 @@ public class Report extends SherlockFragmentActivity {
 		b6 = (ToggleButton) findViewById(R.id.bu_6);
 		rg = (RadioGroup) findViewById(R.id.toggleGroup);
 		sp = (Spinner) findViewById(R.id.sp_areainfested);
-		ib = (ImageButton) findViewById(R.id.report_imagebutton);
+//		ib = (ImageButton) findViewById(R.id.report_imagebutton);
 		mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		
 		// Listener for camera button
-		ib.setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
-                takePicture();
-            }
-        });
+//		ib.setOnClickListener(new OnClickListener() {
+//            public void onClick(View v) {
+//                takePicture();
+//            }
+//        });
 		
 		// Listener for EditText in Area Infested
 		etarea.addTextChangedListener(new TextWatcher() {
@@ -477,11 +467,12 @@ public class Report extends SherlockFragmentActivity {
 	
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {  
 		
-		if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {  
-            Bitmap bm = (Bitmap) data.getExtras().get("data"); 
-            ib.setImageBitmap(bm);
-            
-		} else if (requestCode == EDIT_REQUEST && resultCode == RESULT_OK) {
+//		if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {  
+//            Bitmap bm = (Bitmap) data.getExtras().get("data"); 
+//            ib.setImageBitmap(bm);
+//            
+//		} else 
+			if (requestCode == EDIT_REQUEST && resultCode == RESULT_OK) {
         	editedCoordinatesInOtherActivitySoDontGetGPSLocation = true;
         	Location fixedLocation = data.getExtras().getParcelable("location");
         	
@@ -545,45 +536,6 @@ public class Report extends SherlockFragmentActivity {
 		}
 		new UploadData(this, UploadData.TASK_SUBMIT_POINT).execute(report);
 		//return report;
-	}
-	
-	
-	// Dev use
-	public void testPointsPHP() {
-		Time now = new Time();
-		now.setToNow();
-		JSONObject report = new JSONObject();
-		try {
-			report.put(UploadData.ARG_USER_ID, "1");
-			report.put(UploadData.ARG_PERCENT, "50-75%");
-			report.put(UploadData.ARG_AREAVALUE, "1");
-			report.put(UploadData.ARG_AREATYPE, "SF");
-			report.put(UploadData.ARG_LATITUDE, "17.000076");
-			report.put(UploadData.ARG_LONGITUDE, "17.000076");
-			report.put(UploadData.ARG_NOTES, "json still no work :(");
-			report.put(UploadData.ARG_DATE, now.year + "-" + (now.month + 1) + "-" + now.monthDay + " " + now.hour + ":" + now.minute + ":" + now.second);
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-		
-		new UploadData(this, UploadData.TASK_SUBMIT_POINT).execute(report);
-	}
-	
-	
-	
-	
-	//////////////////////////////////
-	/////// Unused stuff below ///////
-	//////////////////////////////////
-	
-	
-	// Used for testing
-	private void peekAtJson(JSONObject json) {
-		try {
-			Toast.makeText(getApplicationContext(), json.getString("datetime") + " ", Toast.LENGTH_SHORT).show();
-		} catch (JSONException e) {
-			Toast.makeText(getApplicationContext(), "nope", Toast.LENGTH_SHORT).show();
-		}
 	}
 
 }

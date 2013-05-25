@@ -2,6 +2,15 @@ Change Log
 ===============================================================================
 
 
+Version 1.3.8 *(5-24-2013)*
+----------------------------
+* Added About activity in settings - just for fun
+* Main now displays totals for points submitted
+* UploadData now increments when points are correctly received
+* Added several hardcoded strings to strings.xml
+* Changed Report_Mapview's buttons to be straight black
+* Removed code for Report's camera
+
 Version 1.3.7 *(5-19-2013)*
 ----------------------------
 * Cleaned up code a little bit
