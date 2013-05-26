@@ -2,7 +2,7 @@ Wavyleaf
 =========
 
 <p align="center">
-  <img src="http://i.imgur.com/Xxvjq1y.png" alt="Wavyleaf"/>
+  <img src="http://i.imgur.com/5Ypwq2e.png" alt="Wavyleaf"/>
 </p>
 
 Wavyleaf is an Android application made for Scouting/reporting Wavy Leaf sightings
