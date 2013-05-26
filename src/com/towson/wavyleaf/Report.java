@@ -61,16 +61,14 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 public class Report extends SherlockFragmentActivity {
 	
-	private static final int LEGAL = 1, CAMERA = 3, NO_GPS = 4; // Used for calling dialogs. arbitrary numbers
+	private static final int LEGAL = 1, NO_GPS = 4; // Used for calling dialogs. arbitrary numbers
 	private static final int CAMERA_REQUEST = 1337, EDIT_REQUEST = 1338;
-	//, GALLERY_REQUEST = 1339;
 	private boolean gpsEnabled = false;
 	private boolean playAPKEnabled = false;
 	private boolean editedCoordinatesInOtherActivitySoDontGetGPSLocation = false;
 	private boolean mapHasMarker = false; // onResume keeps adding markers to map, this should stop it
 	protected GoogleMap mMap;
 	private UiSettings mUiSettings;
-//	protected ImageButton ib;
 	protected RadioGroup rg;
 	protected TextView tvlat, tvlong, tvpicnotes, tvper, tvper_summary, tvcoor, tvarea, tvarea_summary;
 	protected EditText notes, etarea;
@@ -78,7 +76,10 @@ public class Report extends SherlockFragmentActivity {
 	protected LocationManager mLocationManager;
 	protected CameraPosition userCurrentPosition;
 	protected Spinner sp;
-	protected Location currentEditableLocation; // Used by edit feature 
+	protected Location currentEditableLocation; // Used by edit feature
+	// private static final int CAMERA = 3;
+	// private static final int GALLERY_REQUEST = 1339;
+	// protected ImageButton ib;
 	
 	@Override
 	protected void onCreate(Bundle bundle) {
@@ -218,19 +219,23 @@ public class Report extends SherlockFragmentActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
         case android.R.id.home:
-        	Intent mainIntent = new Intent(this, Main.class);
-            mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(mainIntent);
-            finish();
-            return true;
+        		Intent mainIntent = new Intent(this, Main.class);
+        		mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        		startActivity(mainIntent);
+        		finish();
+        		return true;
         case R.id.menu_submit:
     		if (requestUpdatesFromProvider() == null) // If no GPS
     			Toast.makeText(getApplicationContext(), "Cannot submit without GPS signal", Toast.LENGTH_SHORT).show();
     		else {
-    			createJSONObject();
-    			finish();
+            	// If all fields are filled out, minus Notes
+    			if (verifyFields() == true) {
+            		Toast.makeText(getApplicationContext(), "options = true", Toast.LENGTH_SHORT).show();
+            		createJSONObject();
+            		finish();
+            	}
     		}
-        	return true;
+    		return true;
         case R.id.menu_legal:
         	showDialog(LEGAL);
         	return true;
@@ -241,14 +246,18 @@ public class Report extends SherlockFragmentActivity {
 	// Method only allows one ToggleButton to be set to true at a time
 	// Call to this method is defined in xml for each togglebutton
 	public void onToggle(View view) {
+		
 		//loop through all children in radiogroup.  In this case, two lin layouts
 		for (int i = 0; i < rg.getChildCount(); i++) {
 			View child = rg.getChildAt(i);
+			
 			//if child is lin layout (we already know all children are lin layouts)
 			if (child instanceof LinearLayout) {
+				
 				//then loop through three toggles
 				for (int j = 0; j < ((ViewGroup)child).getChildCount(); j++) {
 					final ToggleButton tog = (ToggleButton) ((ViewGroup)child).getChildAt(j);
+					
 					//have only one togglebutton selected at one time
 					if (tog != view)
 						tog.setChecked(false);
@@ -281,7 +290,9 @@ public class Report extends SherlockFragmentActivity {
 		}
 	}
 	
-	public String loopThroughToggles() {
+	
+	// Get value of toggle selected
+	public String getSelectedToggleButton() {
 		String str = "";
 		for (int i = 0; i < rg.getChildCount(); i++) {
 			View child = rg.getChildAt(i);
@@ -297,9 +308,12 @@ public class Report extends SherlockFragmentActivity {
 	}
 	
 	public void onEdit(View view) {
-		Intent editIntent = new Intent(this, Report_Mapview.class);
-		editIntent.putExtra("location", currentEditableLocation);
-		startActivityForResult(editIntent, EDIT_REQUEST);
+		if (hasCoordinates()) {
+			Intent editIntent = new Intent(this, Report_Mapview.class);
+			editIntent.putExtra("location", currentEditableLocation);
+			startActivityForResult(editIntent, EDIT_REQUEST);
+		} else
+			Toast.makeText(getApplicationContext(), "Editing coordinates requires GPS signal", Toast.LENGTH_SHORT).show();
 	}
 	
 	private void setUpMapIfNeeded() {
@@ -500,6 +514,67 @@ public class Report extends SherlockFragmentActivity {
 //			ib.setImageBitmap(img);
     }
 	
+	/** Verify that required fields are filled
+	 * @return boolean stating if all fields are filled out **/
+	private boolean verifyFields() {
+		boolean result = false;
+		
+		if (isToggleSelected()) {
+			if (isAreaSelected()) {
+				if (hasCoordinates())
+					result = true;
+			}
+		}
+		
+		return result;
+	}
+	
+	// See if any toggle buttons are selected
+	// Not sure if this method is required when there are two others like it... but it's 3am. So yes it is.
+	public boolean isToggleSelected() {
+		boolean result = false;
+		
+		for (int i = 0; i < rg.getChildCount(); i++) {
+			View child = rg.getChildAt(i);
+			if (child instanceof LinearLayout) {
+				for (int j = 0; j < ((ViewGroup)child).getChildCount(); j++) {
+					final ToggleButton tog = (ToggleButton) ((ViewGroup)child).getChildAt(j);
+					if (tog.isChecked())
+						result = true;
+				}
+			}
+		}
+		
+		if (result == false)
+			Toast.makeText(getApplicationContext(), "Select a percentage", Toast.LENGTH_SHORT).show();
+		
+		return result;
+	}
+	
+	// See is user selected an area
+	public boolean isAreaSelected() {
+		boolean result = false;
+		
+		if (etarea.getText().toString().trim().length() > 0)
+			result = true;
+		else
+			Toast.makeText(getApplicationContext(), "Select an area", Toast.LENGTH_SHORT).show();
+
+		return result;
+	}
+	
+	// See if user has coordinates
+	public boolean hasCoordinates() {
+		boolean result = false;
+		
+		if (!(currentEditableLocation == null))
+			result = true;
+		else
+			Toast.makeText(getApplicationContext(), "Error determining position", Toast.LENGTH_SHORT).show();
+		
+		return result;
+	}
+	
 	private String shortenAreaType() {
 		String str = sp.getSelectedItem().toString();
 		if (str.equals("Square Miles")) {
@@ -513,16 +588,15 @@ public class Report extends SherlockFragmentActivity {
 		}
 		return str;
 	}
-	//private JSONObject createJSONObject() {
+	
 	private void createJSONObject() {
 		Time now = new Time();
 		now.setToNow();
-		//SharedPreferences spref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-		
 		JSONObject report = new JSONObject();
+		
 		try {
 			report.put(UploadData.ARG_USER_ID, "1"); 	//spref.getString(Settings.KEY_USERNAME, "null"));
-			report.put(UploadData.ARG_PERCENT, loopThroughToggles());
+			report.put(UploadData.ARG_PERCENT, getSelectedToggleButton());
 			report.put(UploadData.ARG_AREAVALUE, getAreaText());
 			report.put(UploadData.ARG_AREATYPE, shortenAreaType());
 			report.put(UploadData.ARG_LATITUDE, currentEditableLocation.getLatitude());
@@ -534,8 +608,8 @@ public class Report extends SherlockFragmentActivity {
 		} catch (JSONException e) {
 			Toast.makeText(getApplicationContext(), "Data not saved, try again", Toast.LENGTH_SHORT).show();
 		}
+		
 		new UploadData(this, UploadData.TASK_SUBMIT_POINT).execute(report);
-		//return report;
 	}
 
 }

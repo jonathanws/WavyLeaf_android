@@ -55,7 +55,6 @@ public class Main extends SherlockActivity implements OnClickListener {
 		setContentView(R.layout.layout_main);
 		initLayout();
 		determineButtonDrawable();
-		determineTallys();
 		checkForFirstRun();
     }
 	
@@ -85,6 +84,7 @@ public class Main extends SherlockActivity implements OnClickListener {
 		super.onResume();
 		nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 		nm.cancel(mUniqueId);
+		determineTallys();
 	}
 
 	@Override

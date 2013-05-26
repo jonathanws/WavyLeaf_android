@@ -2,6 +2,14 @@ Change Log
 ===============================================================================
 
 
+Version 1.3.9 *(5-26-2013)*
+----------------------------
+* Saves JSON files as single string to local storage -- THIS MIGHT NOT WORK, I'm not sure yet
+* Added database java files
+* Report will not let user submit points without completing necessary fields
+* Updated README
+* Deleted unused drawables and fixed 9-patches
+
 Version 1.3.8 *(5-24-2013)*
 ----------------------------
 * Added About activity in settings - just for fun

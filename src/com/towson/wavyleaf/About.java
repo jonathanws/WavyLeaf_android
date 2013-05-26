@@ -3,8 +3,10 @@ package com.towson.wavyleaf;
 import android.app.Activity;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.view.View;
 import android.view.Window;
 import android.widget.TextView;
+import android.widget.LinearLayout;
 
 public class About extends Activity {
 
@@ -19,14 +21,15 @@ public class About extends Activity {
 	private void init() {
 		Typeface tf_light = Typeface.createFromAsset(getAssets(), "fonts/roboto_light.ttf");
 		
-		TextView wavyleaf = (TextView) findViewById(R.id.tv_about_wavyleaf);
-		wavyleaf.setTypeface(tf_light);
-		TextView version = (TextView) findViewById(R.id.tv_about_version);
-		version.setTypeface(tf_light);
-		TextView developed = (TextView) findViewById(R.id.tv_about_developed);
-		developed.setTypeface(tf_light);
-		TextView towson = (TextView) findViewById(R.id.tv_about_towson);
-		towson.setTypeface(tf_light);
+		LinearLayout ll = (LinearLayout) findViewById(R.id.ll_about);
+		
+		// Set typeface to every TextView
+		for (int i = 0; i <ll.getChildCount(); i++) {
+			View child = ll.getChildAt(i);
+			
+			if (child instanceof TextView)
+				((TextView) child).setTypeface(tf_light);
+		}
 	}
 	
 }

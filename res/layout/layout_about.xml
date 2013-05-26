@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_about"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
@@ -18,7 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
         android:gravity="center"
-        android:text="Wavyleaf"
+        android:text="@string/app_name"
         android:textSize="36sp" />
 
     <TextView
@@ -36,7 +37,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
         android:gravity="center"
-        android:text="Developed &amp; Designed By"
+        android:text="@string/layout_about_developed"
         android:textSize="16sp" />
 
     <View
@@ -52,6 +53,30 @@
         android:layout_marginBottom="12dp"
         android:gravity="center"
         android:text="@string/towson_university"
+        android:textSize="12sp" />
+    
+    <TextView
+        android:id="@+id/tv_about_developers"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:gravity="center"
+        android:text="@string/layout_about_developers"
         android:textSize="16sp" />
+
+    <View
+        android:layout_width="180dp"
+        android:layout_height="1dp"
+        android:layout_marginBottom="4dp"
+        android:background="#669900" />
+
+    <TextView
+        android:id="@+id/tv_about_authors"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:gravity="center"
+        android:text="@string/layout_about_authors"
+        android:textSize="12sp" />
 
 </LinearLayout>

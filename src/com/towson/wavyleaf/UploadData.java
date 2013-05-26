@@ -12,9 +12,11 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONObject;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.widget.Toast;
@@ -44,8 +46,9 @@ public class UploadData extends AsyncTask<JSONObject, Void, String> {
 	protected static final int TASK_SUBMIT_USER = 1;
 	protected static final int TASK_SUBMIT_POINT = 2;
 
-	protected int task = 0;
+	private DatabaseListJSONData m_dbListData;
 	private Context context;
+	protected int task = 0;
 	private boolean success = false;
 
 	public UploadData(Context context, int which) {
@@ -68,6 +71,9 @@ public class UploadData extends AsyncTask<JSONObject, Void, String> {
 			// Read in the JSONObject from the JSONObject array
 			if (jobj.length > 0) {
 				final JSONObject json = jobj[0];
+				
+				// Before we try to send the JSON, save it to local storage
+				submitToLocalStorage(json.toString());
 
 				// Create a new HttpClient and Post Header
 				HttpClient hc = new DefaultHttpClient();
@@ -138,20 +144,21 @@ public class UploadData extends AsyncTask<JSONObject, Void, String> {
 			SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this.context);
 			Editor ed = sp.edit();
 			
-			// Increment tally for Trip points
+			// Increment tally if this was a point for Trip
 			if ((context.getClass() + "").contains("Trip"))
-				ed.putInt(Settings.KEY_SINGLETALLY, sp.getInt(Settings.KEY_SINGLETALLY, 0) + 1);
-			
-			// Increment tally for Single points
-			else if ((context.getClass() + "").contains("Report"))
 				ed.putInt(Settings.KEY_TRIPTALLY, sp.getInt(Settings.KEY_TRIPTALLY, 0) + 1);
+			
+			// Increment tally if this was a single point
+			else if ((context.getClass() + "").contains("Report"))
+				ed.putInt(Settings.KEY_SINGLETALLY, sp.getInt(Settings.KEY_SINGLETALLY, 0) + 1);
 			
 			ed.commit();
 			
 		} else
 			Toast.makeText(this.context, "Error submitting point. Saved for later.", Toast.LENGTH_LONG).show();
 			
-		if (s != null)
+		//TODO: remove this? or make use of it?
+		if (s != null || s.equalsIgnoreCase(""))
 			Toast.makeText(this.context, s, Toast.LENGTH_LONG).show();
 	}
 
@@ -162,6 +169,21 @@ public class UploadData extends AsyncTask<JSONObject, Void, String> {
 			return SUBMIT_POINT;
 		return null;
 	}
+	
+	/** Inserts a single string (read: JSON) into a database */
+	protected void submitToLocalStorage(String JSONString) {
+		
+		//Initiate database
+		m_dbListData = new DatabaseListJSONData(this.context);
+		SQLiteDatabase db = m_dbListData.getWritableDatabase();
+		
+        ContentValues values = new ContentValues();
+        values.put(DatabaseConstants.ITEM_NAME, JSONString);
+        db.insertOrThrow(DatabaseConstants.TABLE_NAME, null, values);
+	}
+	
+	
+	
 	
 	// Since we've only figured out how to send a list, this method 
 	// will sort through the given JSONObject and create one
