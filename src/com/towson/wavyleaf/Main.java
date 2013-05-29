@@ -35,9 +35,6 @@ public class Main extends SherlockActivity implements OnClickListener {
 	
 	private static final int ONSTART = 6;
 	private static final int HELP = 0;
-	protected static final String TRIP_ENABLED_KEY = "trip_enabled";
-	protected static final String TRIP_INTERVAL = "trip_interval";
-	private static final String FIRST_RUN = "first_run"; 
 	protected static final int mUniqueId = 24885251; // Used for notifications
 	protected Button bu_new, bu_trip;
 	protected TextView tripInterval, tripSelection, tally, tallyNumber;
@@ -125,12 +122,12 @@ public class Main extends SherlockActivity implements OnClickListener {
 		} else if (view == this.bu_trip) {
 			SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 			
-			if (sp.getBoolean(TRIP_ENABLED_KEY, false) == false) { // if user wants to start a new trip
+			if (sp.getBoolean(Settings.TRIP_ENABLED_KEY, false) == false) { // if user wants to start a new trip
 				showDialog(ONSTART);
 				startService(new Intent(Main.this, ReminderService.class));
 			}
-			else if (sp.getBoolean(TRIP_ENABLED_KEY, false) == true) { // If trip already in session
-				sp.edit().putBoolean(TRIP_ENABLED_KEY, false).commit(); // Turn it off
+			else if (sp.getBoolean(Settings.TRIP_ENABLED_KEY, false) == true) { // If trip already in session
+				sp.edit().putBoolean(Settings.TRIP_ENABLED_KEY, false).commit(); // Turn it off
 				tripSelection.setText("- - -");
 				determineButtonDrawable();
 				
@@ -185,7 +182,7 @@ public class Main extends SherlockActivity implements OnClickListener {
 	protected void determineButtonDrawable() {
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 		
-		if (sp.getBoolean(TRIP_ENABLED_KEY, false) == true) { // There is a trip in progress
+		if (sp.getBoolean(Settings.TRIP_ENABLED_KEY, false) == true) { // There is a trip in progress
         	setButtonDrawable(R.drawable.ic_main_end); // Set to red button
         	bu_trip.setText(R.string.layout_main_endtrip);	// Set text to "End Trip"
         } 
@@ -199,8 +196,8 @@ public class Main extends SherlockActivity implements OnClickListener {
 		Log.i("wavy", "intervalselected");
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 		Editor ed = sp.edit();
-		ed.putString(TRIP_INTERVAL, timeNum);
-		ed.putBoolean(TRIP_ENABLED_KEY, true);
+		ed.putString(Settings.TRIP_INTERVAL, timeNum);
+		ed.putBoolean(Settings.TRIP_ENABLED_KEY, true);
 	    ed.commit();
 	    
 	    setEditText(this.tripSelection, timeNum);
@@ -245,8 +242,8 @@ public class Main extends SherlockActivity implements OnClickListener {
 	
 	protected void checkForFirstRun() {
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-		if (sp.getBoolean(FIRST_RUN, true)) {
-			sp.edit().putBoolean(FIRST_RUN, false).commit();
+		if (sp.getBoolean(Settings.FIRST_RUN, true)) {
+			sp.edit().putBoolean(Settings.FIRST_RUN, false).commit();
 			Intent newReportIntent = new Intent(this, Login.class);
 			this.startActivity(newReportIntent);
 		}

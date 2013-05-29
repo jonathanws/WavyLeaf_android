@@ -11,7 +11,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:src="@drawable/ic_launcher_about" />
+        android:src="@drawable/ic_launcher_about"
+        android:contentDescription="@string/app_name" />
 
     <TextView
         android:id="@+id/tv_about_wavyleaf"

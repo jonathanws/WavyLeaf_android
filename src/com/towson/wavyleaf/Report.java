@@ -8,7 +8,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.location.Location;
 import android.location.LocationManager;
@@ -17,13 +16,11 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.Time;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -62,7 +59,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class Report extends SherlockFragmentActivity {
 	
 	private static final int LEGAL = 1, NO_GPS = 4; // Used for calling dialogs. arbitrary numbers
-	private static final int CAMERA_REQUEST = 1337, EDIT_REQUEST = 1338;
+	private static final int EDIT_REQUEST = 1338;
 	private boolean gpsEnabled = false;
 	private boolean playAPKEnabled = false;
 	private boolean editedCoordinatesInOtherActivitySoDontGetGPSLocation = false;
@@ -79,6 +76,7 @@ public class Report extends SherlockFragmentActivity {
 	protected Location currentEditableLocation; // Used by edit feature
 	// private static final int CAMERA = 3;
 	// private static final int GALLERY_REQUEST = 1339;
+	// private static final int CAMERA_REQUEST = 1337;
 	// protected ImageButton ib;
 	
 	@Override
@@ -230,7 +228,6 @@ public class Report extends SherlockFragmentActivity {
     		else {
             	// If all fields are filled out, minus Notes
     			if (verifyFields() == true) {
-            		Toast.makeText(getApplicationContext(), "options = true", Toast.LENGTH_SHORT).show();
             		createJSONObject();
             		finish();
             	}
@@ -468,9 +465,9 @@ public class Report extends SherlockFragmentActivity {
 		//http://stackoverflow.com/questions/3326366/what-context-should-i-use-alertdialog-builder-in
 	}
 	
-	protected void takePicture() {
-		startActivityForResult(new Intent("android.media.action.IMAGE_CAPTURE"), CAMERA_REQUEST);
-	}
+//	protected void takePicture() {
+//		startActivityForResult(new Intent("android.media.action.IMAGE_CAPTURE"), CAMERA_REQUEST);
+//	}
 	
 	protected double getAreaText() {
 		if (etarea.getText().toString().trim().equals("") || (etarea.getText().toString().trim().equals(null)))
@@ -551,7 +548,7 @@ public class Report extends SherlockFragmentActivity {
 		return result;
 	}
 	
-	// See is user selected an area
+	// See if user selected an area
 	public boolean isAreaSelected() {
 		boolean result = false;
 		

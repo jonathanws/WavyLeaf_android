@@ -6,24 +6,26 @@ import org.json.JSONObject;
 import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.Editable;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
 import android.text.format.Time;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -37,18 +39,19 @@ import com.actionbarsherlock.view.MenuItem;
 
 public class Trip extends SherlockActivity {
 	
-	private static final int CAMERA_REQUEST = 1337;
-//	private static final int CAMERA = 3;
-	protected TextView tripInterval, tripSelection, tally, tallyNumber, tvlat, tvlong, tvpicnotes, 
+	protected TextView tripInterval, tripSelection, tally, tallyNumber, tvlat, tvlong, tvpicnotes,
 		tvper, tvper_summary, tvcoor, tvarea, tvarea_summary;
 	protected EditText notes, etarea;
 	protected Button doneTrip, b1, b2, b3, b4, b5, b6;
 	protected RadioGroup rg;
 	protected Spinner sp;
-	protected ImageButton ib;
 	protected Location gpsLocation;
 	protected LocationManager mLocationManager;
 	NotificationManager nm;
+	// private static final int CAMERA = 3;
+	// private static final int GALLERY_REQUEST = 1339;
+	// private static final int CAMERA_REQUEST = 1337;
+	// protected ImageButton ib;
 	
 	@Override
 	protected void onCreate(Bundle bundle) {
@@ -92,14 +95,14 @@ public class Trip extends SherlockActivity {
 		b6 = (ToggleButton) findViewById(R.id.bu_6);
 		rg = (RadioGroup) findViewById(R.id.toggleGroup);
 		sp = (Spinner) findViewById(R.id.sp_areainfested);
-		ib = (ImageButton) findViewById(R.id.report_imagebutton);
+//		ib = (ImageButton) findViewById(R.id.report_imagebutton);
 		
 		// Listener for camera button
-		ib.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				takePicture();
-			}
-		});
+//		ib.setOnClickListener(new OnClickListener() {
+//			public void onClick(View v) {
+//				takePicture();
+//			}
+//		});
 		
 		// Listener for EditText in Area Infested
 		etarea.addTextChangedListener(new TextWatcher() {
@@ -152,15 +155,14 @@ public class Trip extends SherlockActivity {
 		b4.setTypeface(tf_light);
 		b5.setTypeface(tf_light);
 		b6.setTypeface(tf_light);
-		
-		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-		tripInterval.setText(sp.getString("TRIP_INTERVAL", "(Not Set)"));	
 	}
 	
 	@Override
 	protected void onResume() {
 		super.onResume();
 		nm.cancel(Main.mUniqueId);
+		determineTally();
+		determineTimeIntervalTextViews();
 	}
 	
 	@Override
@@ -180,8 +182,16 @@ public class Trip extends SherlockActivity {
 				finish();
 				return true;
 			case R.id.menu_submit:
-				finish();
-				return true;
+				if (requestUpdatesFromProvider() == null) // If no GPS
+					Toast.makeText(getApplicationContext(), "Cannot submit without GPS signal", Toast.LENGTH_SHORT).show();
+				else {
+					// If all fields are filled out, minus Notes
+					if (verifyFields() == true) {
+						createJSONObject();
+						finish();
+					}
+				}
+			return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -229,7 +239,8 @@ public class Trip extends SherlockActivity {
 		}
 	}
 	
-	public String loopThroughToggles() {
+	// Get value of toggle selected
+	public String getSelectedToggleButton() {
 		String str = "";
 		for (int i = 0; i < rg.getChildCount(); i++) {
 			View child = rg.getChildAt(i);
@@ -245,56 +256,166 @@ public class Trip extends SherlockActivity {
 	}
 	
 	// Method won't be called unless Play APK in installed
-		public void wheresWaldo() {
-			gpsLocation = requestUpdatesFromProvider();
-			if (gpsLocation == null)
-				Toast.makeText(getApplicationContext(), "No GPS signal", Toast.LENGTH_SHORT).show();
-		}
+	public void wheresWaldo() {
+		gpsLocation = requestUpdatesFromProvider();
+		if (gpsLocation == null)
+			Toast.makeText(getApplicationContext(), "No GPS signal", Toast.LENGTH_SHORT).show();
+	}
+	
+	private Location requestUpdatesFromProvider() {
+		if (mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
+			gpsLocation = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 		
-		private Location requestUpdatesFromProvider() {
-			if (mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
-	            gpsLocation = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-			
-			return gpsLocation;
-		}
+		return gpsLocation;
+	}
 
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
+//	@Override
+//	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//		super.onActivityResult(requestCode, resultCode, data);
+//		
+//		if ((requestCode == CAMERA_REQUEST) && (resultCode == RESULT_OK)) {
+//			Bitmap bm = (Bitmap) data.getExtras().get("data");
+//			ib.setImageBitmap(bm);
+//		}
+//	}
+	
+	/** Verify that required fields are filled
+	 *  @return boolean stating if all fields are filled out **/
+	private boolean verifyFields() {
+		boolean result = false;
 		
-		if ((requestCode == CAMERA_REQUEST) && (resultCode == RESULT_OK)) {
-			Bitmap bm = (Bitmap) data.getExtras().get("data");
-			ib.setImageBitmap(bm);
+		if (isToggleSelected()) {
+			if (isAreaSelected()) {
+				if (hasCoordinates())
+					result = true;
+			}
 		}
+		
+		return result;
+	}
+	
+	// See if any toggle buttons are selected
+	// Not sure if this method is required when there are two others like it... but it's 3am. So yes it is.
+	public boolean isToggleSelected() {
+		boolean result = false;
+		
+		for (int i = 0; i < rg.getChildCount(); i++) {
+			View child = rg.getChildAt(i);
+			if (child instanceof LinearLayout) {
+				for (int j = 0; j < ((ViewGroup)child).getChildCount(); j++) {
+					final ToggleButton tog = (ToggleButton) ((ViewGroup)child).getChildAt(j);
+					if (tog.isChecked())
+						result = true;
+				}
+			}
+		}
+		
+		if (result == false)
+			Toast.makeText(getApplicationContext(), "Select a percentage", Toast.LENGTH_SHORT).show();
+			
+		return result;
+	}
+	
+	// See if user selected an area
+	public boolean isAreaSelected() {
+		boolean result = false;
+		
+		if (etarea.getText().toString().trim().length() > 0)
+			result = true;
+		else
+			Toast.makeText(getApplicationContext(), "Select an area", Toast.LENGTH_SHORT).show();
+		
+		return result;
+	}
+	
+	// See if user has coordinates
+	public boolean hasCoordinates() {
+		boolean result = false;
+		
+		if (!(gpsLocation == null))
+			result = true;
+		else
+			Toast.makeText(getApplicationContext(), "Error determining position", Toast.LENGTH_SHORT).show();
+		
+		return result;
+	}
+	
+	private String shortenAreaType() {
+		String str = sp.getSelectedItem().toString();
+		if (str.equals("Square Miles")) {
+			str = "SM";
+		} else if (str.equals("Square Acres")) {
+			str = "SA";
+		} else {
+			str = "SF";
+		}
+		
+		return str;
+	}
+	
+	protected double getAreaText() {
+		if (etarea.getText().toString().trim().equals("") || (etarea.getText().toString().trim().equals(null)))
+			return -1;
+		else
+			return Double.parseDouble(etarea.getText().toString());
 	}
 	
 	private JSONObject createJSONObject() {
 		Time now = new Time();
 		now.setToNow();
-		SharedPreferences spref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 		
-		JSONObject report = new JSONObject();
+		JSONObject trip = new JSONObject();
 		try {
-			report.put("user_id", spref.getString(Settings.KEY_USERNAME, "null"));
-			report.put("name", spref.getString(Settings.KEY_USERNAME, "null"));
-			report.put("percent", loopThroughToggles());
-			report.put("areatype", sp.getSelectedItem().toString());
-			report.put("areavalue", etarea.getText());
-			report.put("latitude", gpsLocation.getLatitude());
-			report.put("longitude", gpsLocation.getLongitude());
-			report.put("notes", notes.getText());
-			report.put("datetime", now.monthDay + " - " + (now.month + 1) + " - " + now.year);
-			//bitmap
-			report.put("birthyear", spref.getString(Settings.KEY_BIRTHYEAR, "0"));
+			trip.put(UploadData.ARG_USER_ID, "1"); 	//spref.getString(Settings.KEY_USERNAME, "null"));
+			trip.put(UploadData.ARG_PERCENT, getSelectedToggleButton());
+			trip.put(UploadData.ARG_AREAVALUE, getAreaText());
+			trip.put(UploadData.ARG_AREATYPE, shortenAreaType());
+			trip.put(UploadData.ARG_LATITUDE, gpsLocation.getLatitude());
+			trip.put(UploadData.ARG_LONGITUDE, gpsLocation.getLongitude());
+			trip.put(UploadData.ARG_NOTES, notes.getText());
+			trip.put(UploadData.ARG_DATE, now.year + "-" + (now.month + 1) + "-" + now.monthDay + " " + now.hour + ":" + now.minute + ":" + now.second);
+			//bitmap would go here
 			
 		} catch (JSONException e) {
 			Toast.makeText(getApplicationContext(), "Data not saved, try again", Toast.LENGTH_SHORT).show();
 		}
-		return report;
+		return trip;
 	}
 	
-	protected void takePicture() {
-		startActivityForResult(new Intent("android.media.action.IMAGE_CAPTURE"), CAMERA_REQUEST);
+//	protected void takePicture() {
+//		startActivityForResult(new Intent("android.media.action.IMAGE_CAPTURE"), CAMERA_REQUEST);
+//	}
+	
+	protected void determineTally() {
+		
+		// Read values from local storage
+		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+		String string_tripcurrent = sp.getInt(Settings.KEY_TRIPTALLY_CURRENT, 0) + "";
+		
+		// Span to set text color to green
+		final ForegroundColorSpan fcsGreen = new ForegroundColorSpan(Color.parseColor("#669900"));
+		
+		// Span to make text bold
+		final StyleSpan bss = new StyleSpan(android.graphics.Typeface.BOLD);
+		
+		final SpannableStringBuilder sb = new SpannableStringBuilder(string_tripcurrent);
+		sb.setSpan(fcsGreen, 0, sb.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+		sb.setSpan(bss, 0, sb.length(), Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+		
+		this.tallyNumber.setText(sb);
+	}
+	
+	protected void determineTimeIntervalTextViews() {
+		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+		String string_tripInterval = sp.getString(Settings.TRIP_INTERVAL, "(Not Set)");
+		
+		final StyleSpan bss = new StyleSpan(android.graphics.Typeface.BOLD);
+		final SpannableStringBuilder sb = new SpannableStringBuilder(string_tripInterval);
+		
+		sb.setSpan(bss, 0, sb.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+		tripSelection.setText(sb);
 	}
 
 }
+
+

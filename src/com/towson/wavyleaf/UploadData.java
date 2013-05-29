@@ -158,7 +158,7 @@ public class UploadData extends AsyncTask<JSONObject, Void, String> {
 			Toast.makeText(this.context, "Error submitting point. Saved for later.", Toast.LENGTH_LONG).show();
 			
 		//TODO: remove this? or make use of it?
-		if (s != null || s.equalsIgnoreCase(""))
+		if (s.equalsIgnoreCase(""))
 			Toast.makeText(this.context, s, Toast.LENGTH_LONG).show();
 	}
 

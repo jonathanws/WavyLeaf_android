@@ -2,6 +2,10 @@ Change Log
 ===============================================================================
 
 
+Version 1.4.0 *(5-28-2013)*
+----------------------------
+* Cleaned up code, added a lot of code from Report to Trip
+
 Version 1.3.9 *(5-26-2013)*
 ----------------------------
 * Saves JSON files as single string to local storage -- THIS MIGHT NOT WORK, I'm not sure yet

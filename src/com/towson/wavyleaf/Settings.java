@@ -20,6 +20,10 @@ public class Settings extends SherlockPreferenceActivity implements OnSharedPref
 	public static final String KEY_SINGLETALLY = "preference_singletally";
 	public static final String KEY_TRIPTALLY = "preference_triptally";
 	public static final String KEY_TRIPTALLY_CURRENT = "preference_triptally_current"; // Key for tally for only current trip
+	
+	public static final String TRIP_ENABLED_KEY = "trip_enabled";
+	public static final String TRIP_INTERVAL = "trip_interval";
+	public static final String FIRST_RUN = "first_run"; 
 
 	@Deprecated
 	@Override

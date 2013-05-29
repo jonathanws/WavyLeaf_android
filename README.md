@@ -2,7 +2,7 @@ Wavyleaf
 =========
 
 <p align="center">
-  <img src="http://i.imgur.com/5Ypwq2e.png" alt="Wavyleaf"/>
+  <img src="http://i.imgur.com/OtqzV7d.png" alt="Wavyleaf"/>
 </p>
 
 Wavyleaf is an Android application made for Scouting/reporting Wavy Leaf sightings
@@ -40,3 +40,5 @@ This application was developed with the intent to be used by a closed audience.
  [1]: http://developer.android.com/google/play-services/setup.html
  [2]: http://developer.android.com/google/play-services/index.html
  [3]: https://github.com/JakeWharton/ActionBarSherlock
+ 
+ [4]: http://i.imgur.com/5Ypwq2e.png
