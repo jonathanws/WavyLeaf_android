@@ -2,6 +2,11 @@ Change Log
 ===============================================================================
 
 
+Version 1.4.1 *(5-28-2013)*
+----------------------------
+* Changed Help dialog to kick user to browser
+* Fixed drawables on xhdpi devices
+
 Version 1.4.0 *(5-28-2013)*
 ----------------------------
 * Cleaned up code, added a lot of code from Report to Trip

@@ -12,6 +12,7 @@ import android.content.SharedPreferences.Editor;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
@@ -149,11 +150,16 @@ public class Main extends SherlockActivity implements OnClickListener {
 	@Override
 	protected Dialog onCreateDialog(int id) {
 		switch(id) {
+		
 			case HELP:
 				return new AlertDialog.Builder(this)
-				.setTitle("HALP")
-				.setMessage("I'm here to help!")
-				.setPositiveButton("Phew!", null)
+				.setTitle("External Link")
+				.setMessage("Help documents can be found online.\n\nContinue?")
+				.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+						startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.google.com")));
+					}
+				})
 				.setNegativeButton("cancel", null)
 				.create();
 				
