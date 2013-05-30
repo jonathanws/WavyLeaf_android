@@ -9,5 +9,10 @@
         android:id="@+id/menu_settings"
         android:showAsAction="never"
         android:title="Settings"/>
+    
+    <item
+        android:id="@+id/menu_feedback"
+        android:showAsAction="never"
+        android:title="Feedback" />
 
 </menu>

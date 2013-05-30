@@ -112,15 +112,7 @@ public class Report extends SherlockFragmentActivity {
 		b6 = (ToggleButton) findViewById(R.id.bu_6);
 		rg = (RadioGroup) findViewById(R.id.toggleGroup);
 		sp = (Spinner) findViewById(R.id.sp_areainfested);
-//		ib = (ImageButton) findViewById(R.id.report_imagebutton);
 		mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-		
-		// Listener for camera button
-//		ib.setOnClickListener(new OnClickListener() {
-//            public void onClick(View v) {
-//                takePicture();
-//            }
-//        });
 		
 		// Listener for EditText in Area Infested
 		etarea.addTextChangedListener(new TextWatcher() {
@@ -170,6 +162,14 @@ public class Report extends SherlockFragmentActivity {
 		b4.setTypeface(tf_light);
 		b5.setTypeface(tf_light);
 		b6.setTypeface(tf_light);
+		
+//		ib = (ImageButton) findViewById(R.id.report_imagebutton);
+		// Listener for camera button
+//		ib.setOnClickListener(new OnClickListener() {
+//            public void onClick(View v) {
+//                takePicture();
+//            }
+//        });
 	}
 	
 	@Override
@@ -465,10 +465,6 @@ public class Report extends SherlockFragmentActivity {
 		//http://stackoverflow.com/questions/3326366/what-context-should-i-use-alertdialog-builder-in
 	}
 	
-//	protected void takePicture() {
-//		startActivityForResult(new Intent("android.media.action.IMAGE_CAPTURE"), CAMERA_REQUEST);
-//	}
-	
 	protected double getAreaText() {
 		if (etarea.getText().toString().trim().equals("") || (etarea.getText().toString().trim().equals(null)))
 			return -1;
@@ -476,15 +472,10 @@ public class Report extends SherlockFragmentActivity {
 			return Double.parseDouble(etarea.getText().toString());
 	}
 	
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {  
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		
-//		if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {  
-//            Bitmap bm = (Bitmap) data.getExtras().get("data"); 
-//            ib.setImageBitmap(bm);
-//            
-//		} else 
-			if (requestCode == EDIT_REQUEST && resultCode == RESULT_OK) {
-        	editedCoordinatesInOtherActivitySoDontGetGPSLocation = true;
+		if (requestCode == EDIT_REQUEST && resultCode == RESULT_OK) {
+			editedCoordinatesInOtherActivitySoDontGetGPSLocation = true;
         	Location fixedLocation = data.getExtras().getParcelable("location");
         	
         	// Current marker is expired, remove that crap
@@ -498,8 +489,12 @@ public class Report extends SherlockFragmentActivity {
         	currentEditableLocation.setLongitude(fixedLocation.getLongitude());
         	
         	Toast.makeText(getApplicationContext(), "New position set", Toast.LENGTH_SHORT).show();
-        }
-            
+		}
+		
+//		else if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {  
+//            Bitmap bm = (Bitmap) data.getExtras().get("data"); 
+//            ib.setImageBitmap(bm);
+//            
 //		} else if (requestCode == GALLERY_REQUEST && resultCode == RESULT_OK) {
 //			Uri selectedImage = data.getData();
 //            InputStream imageStream = null;
@@ -608,5 +603,9 @@ public class Report extends SherlockFragmentActivity {
 		
 		new UploadData(this, UploadData.TASK_SUBMIT_POINT).execute(report);
 	}
+	
+//	protected void takePicture() {
+//		startActivityForResult(new Intent("android.media.action.IMAGE_CAPTURE"), CAMERA_REQUEST);
+//	}
 
 }

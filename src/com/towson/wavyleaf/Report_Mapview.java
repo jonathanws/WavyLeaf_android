@@ -255,7 +255,7 @@ public class Report_Mapview extends SherlockFragmentActivity implements OnClickL
 					}
 				})
 				.create();
-			}
+		}
 		return super.onCreateDialog(id);
 		//http://stackoverflow.com/questions/3326366/what-context-should-i-use-alertdialog-builder-in
 	}

@@ -1,5 +1,14 @@
 package com.towson.wavyleaf;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+
+import android.accounts.Account;
+import android.accounts.AccountManager;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -18,6 +27,8 @@ public class Login extends SherlockActivity {
 	
 	TextView createAccount, description;
 	EditText name, year, email;
+	public static final int EMAIL = 1;
+	protected String[] globalArray;
 	
 	@Override
 	protected void onCreate(Bundle bundle) {
@@ -25,6 +36,7 @@ public class Login extends SherlockActivity {
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		setContentView(R.layout.layout_login);
 		init();
+		showDialog(EMAIL);
 	}
 	
 	@Override
@@ -55,6 +67,24 @@ public class Login extends SherlockActivity {
 				}
 		}
 		return super.onOptionsItemSelected(item);
+	}
+	
+	@Override
+	protected Dialog onCreateDialog(int id) {
+		switch (id) {
+			case EMAIL:
+				return new AlertDialog.Builder(this)
+				.setItems(seeAccounts(), new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+						email.setText(globalArray[which]);
+					}
+				})
+				.setTitle("Select email to use")
+				.setNegativeButton("None of these", null)
+				.create();
+		}
+		return super.onCreateDialog(id);
+		//http://stackoverflow.com/questions/3326366/what-context-should-i-use-alertdialog-builder-in
 	}
 	
 	protected void init() {
@@ -110,4 +140,35 @@ public class Login extends SherlockActivity {
 		ed.commit();
 	}
 	
+	// I can't get the freakin' loop to work with an array... so fine. We'll do it the hard way
+	protected String[] seeAccounts() {
+		Account[] accounts = AccountManager.get(this).getAccounts();
+		String all = null;
+		
+		// Can't get loop to return array, so pull everything as a gigantic, unreasonable string
+		for (Account account : accounts) {
+			if (account.toString().contains("@")) {
+				all = all + "," + account.name;
+			}
+		}
+		
+		// Sometimes this gives us a null, so let's take that out
+		if (all.startsWith("null"))
+			all = all.substring(5, all.length());
+		
+		// We have a huge-ass string, make it an array, then a list, then HashSet,
+		// ALL to remove duplicates
+		ArrayList<String> al = new ArrayList<String>(Arrays.asList(all.split(",")));
+		HashSet<String> h = new HashSet<String>(al);
+		al.clear();
+		al.addAll(h);
+		
+		globalArray = new String[al.size()];
+		globalArray = al.toArray(globalArray);
+		
+		return globalArray;
+	}
+	
 }
+
+

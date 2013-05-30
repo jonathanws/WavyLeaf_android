@@ -2,6 +2,12 @@ Change Log
 ===============================================================================
 
 
+Version 1.4.2 *(5-29-2013)*
+----------------------------
+* Added Feeback
+* Main will get email addresses from phone and prompt user to select one on first use
+* Changed Trip interval "Five Minutes" to ten seconds, instead of three
+
 Version 1.4.1 *(5-28-2013)*
 ----------------------------
 * Changed Help dialog to kick user to browser

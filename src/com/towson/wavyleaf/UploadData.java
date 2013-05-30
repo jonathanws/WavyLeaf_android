@@ -118,6 +118,8 @@ public class UploadData extends AsyncTask<JSONObject, Void, String> {
 							}
 						}
 						
+						result = sb.toString();
+						
 						if (sb.toString().contains("1"))
 							success = true;
 						else
@@ -158,7 +160,7 @@ public class UploadData extends AsyncTask<JSONObject, Void, String> {
 			Toast.makeText(this.context, "Error submitting point. Saved for later.", Toast.LENGTH_LONG).show();
 			
 		//TODO: remove this? or make use of it?
-		if (s.equalsIgnoreCase(""))
+		if (!(s.equalsIgnoreCase("")))
 			Toast.makeText(this.context, s, Toast.LENGTH_LONG).show();
 	}
 

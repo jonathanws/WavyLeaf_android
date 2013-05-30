@@ -3,6 +3,8 @@
 
     <string name="app_name">Wavyleaf</string>
     <string name="version">Version - BETA</string>
+    <string name="email">wavyleaf@towson.edu</string>
+    <string-array name="email_array"><item>wavyleaf@towson.edu</item></string-array>
     <string name="towson_university">Towson University</string>
     
     <string name="layout_about_authors">Eric Forbes\n Mohsin Majid\n Jon Smoley</string>

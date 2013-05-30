@@ -9,10 +9,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
@@ -88,7 +90,7 @@ public class Main extends SherlockActivity implements OnClickListener {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		//BugSenseHandler.closeSession(Main.this);
+		BugSenseHandler.closeSession(Main.this);
 		nm.cancel(mUniqueId);
 	}
 
@@ -102,12 +104,20 @@ public class Main extends SherlockActivity implements OnClickListener {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
+			
+			case R.id.menu_help:
+				showDialog(HELP);
+				return true;
+				
 			case R.id.menu_settings:
 				Intent settingsIntent = new Intent(this, Settings.class);
 				this.startActivity(settingsIntent);
 				return true;
-			case R.id.menu_help:
-				showDialog(HELP);
+				
+			case R.id.menu_feedback:
+				Intent intent = new Intent();
+				intent = assembleEmail();
+				startActivity(Intent.createChooser(intent, "Send mail"));
 				return true;
 		}
 		return super.onOptionsItemSelected(item);
@@ -170,7 +180,7 @@ public class Main extends SherlockActivity implements OnClickListener {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {						
 						if (which == 0) {
-							intervalSelected("5:00", "Five Minutes", 3000); // TODO change back to 300000
+							intervalSelected("5:00", "Five Minutes", 10000); // TODO change back to 300000
 						}
 						else if(which == 1) {
 							intervalSelected("10:00", "Ten Minutes", 600000);
@@ -286,6 +296,49 @@ public class Main extends SherlockActivity implements OnClickListener {
         
         this.tallyNumber.setText(sb);
 	}
+	
+	protected Intent assembleEmail() {
+		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+		Resources res = this.getResources();
+		final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+		
+		String[] destination_email = res.getStringArray(R.array.email_array);
+		String name = sp.getString(Settings.KEY_NAME, "null");
+		String source_email = sp.getString(Settings.KEY_EMAIL, "null");
+		String version = res.getString(R.string.version);
+		
+		emailIntent.setType("plain/text");
+		emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, destination_email);
+		emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Wavyleaf " + version);
+		emailIntent.putExtra(android.content.Intent.EXTRA_TEXT,
+				"Name:\t\t\t\t" + name + "\n" +
+				"Email:\t\t\t\t\t" + source_email + "\n" +
+				"Version:\t\t\t" + version + "\n" +
+				"Device:\t\t\t\t" + getDeviceName() + "\n\n" +
+				"- - - - - - - - - - -" + "\n\n");
+		
+		return emailIntent;
+	}
+	
+	protected String getDeviceName() {
+		String manufacturer = Build.MANUFACTURER;
+		String model = Build.MODEL;
+		if (model.startsWith(manufacturer))
+			return capitalize(model);
+		else
+			return capitalize(manufacturer) + " " + model;
+	}
+	
+	protected String capitalize(String s) {
+		if (s == null || s.length() == 0)
+			return "";
+		else {
+			StringBuilder sb = new StringBuilder(s);
+			sb.setCharAt(0, Character.toUpperCase(sb.charAt(0)));
+			return sb.toString();
+		}
+	}
+		
 }
 
 
