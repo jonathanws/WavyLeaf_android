@@ -3,6 +3,7 @@
 
     <string name="app_name">Wavyleaf</string>
     <string name="version">Version - BETA</string>
+    <string name="website">http://skappsrv.towson.edu/wavyleaf/website/</string>
     <string name="email">wavyleaf@towson.edu</string>
     <string-array name="email_array"><item>wavyleaf@towson.edu</item></string-array>
     <string name="towson_university">Towson University</string>
@@ -16,7 +17,7 @@
     <string name="layout_main_endtrip">End Trip</string>
     <string name="layout_main_upload">Upload Records</string>
     
-    <string name="layout_numrecorded"># Recorded</string>
+    <string name="layout_numrecorded">Your Sightings/Trips</string>
     <string name="layout_tripinterval">Reminder Interval</string>
     <string name="layout_novalue">- - - </string>
     

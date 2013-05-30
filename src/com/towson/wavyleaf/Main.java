@@ -13,7 +13,6 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -167,7 +166,8 @@ public class Main extends SherlockActivity implements OnClickListener {
 				.setMessage("Help documents can be found online.\n\nContinue?")
 				.setPositiveButton("ok", new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int which) {
-						startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.google.com")));
+						// My name is Android. I don't allow pasted code that works somewhere else. Derp.
+						goToHelp();
 					}
 				})
 				.setNegativeButton("cancel", null)
@@ -337,6 +337,13 @@ public class Main extends SherlockActivity implements OnClickListener {
 			sb.setCharAt(0, Character.toUpperCase(sb.charAt(0)));
 			return sb.toString();
 		}
+	}
+	
+	// Since i'm stupid, I make developers call extaneous methods to run code instead of implementing it right there
+	protected void goToHelp() {
+		Intent helpIntent = new Intent(this, Help.class);
+		helpIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+		startActivity(helpIntent);
 	}
 		
 }

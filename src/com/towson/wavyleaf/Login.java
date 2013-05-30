@@ -157,7 +157,7 @@ public class Login extends SherlockActivity {
 			all = all.substring(5, all.length());
 		
 		// We have a huge-ass string, make it an array, then a list, then HashSet,
-		// ALL to remove duplicates
+		// ALL so we can remove duplicates
 		ArrayList<String> al = new ArrayList<String>(Arrays.asList(all.split(",")));
 		HashSet<String> h = new HashSet<String>(al);
 		al.clear();

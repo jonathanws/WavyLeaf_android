@@ -63,6 +63,12 @@
             android:theme="@style/Theme.Sherlock.Light.Dialog" />
         
         <activity
+            android:name="com.towson.wavyleaf.Help"
+            android:screenOrientation="portrait"
+            android:label="Help"
+            android:theme="@style/Theme.greeeeeen" />
+        
+        <activity
             android:name="com.towson.wavyleaf.Login"
             android:configChanges="orientation"
             android:label="Create Account"
