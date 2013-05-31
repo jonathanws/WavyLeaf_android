@@ -4,6 +4,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -39,14 +40,15 @@ import com.actionbarsherlock.view.MenuItem;
 
 public class Trip extends SherlockActivity {
 	
-	protected TextView tripInterval, tripSelection, tally, tallyNumber, tvlat, tvlong, tvpicnotes,
-		tvper, tvper_summary, tvcoor, tvarea, tvarea_summary;
-	protected EditText notes, etarea;
+	private boolean gpsEnabled = false;
 	protected Button doneTrip, b1, b2, b3, b4, b5, b6;
-	protected RadioGroup rg;
-	protected Spinner sp;
+	protected EditText notes, etarea;
 	protected Location gpsLocation;
 	protected LocationManager mLocationManager;
+	protected RadioGroup rg;
+	protected Spinner sp;
+	protected TextView tripInterval, tripSelection, tally, tallyNumber, tvlat, tvlong, tvpicnotes,
+		tvper, tvper_summary, tvcoor, tvarea, tvarea_summary;
 	NotificationManager nm;
 	// private static final int CAMERA = 3;
 	// private static final int GALLERY_REQUEST = 1339;
@@ -95,14 +97,7 @@ public class Trip extends SherlockActivity {
 		b6 = (ToggleButton) findViewById(R.id.bu_6);
 		rg = (RadioGroup) findViewById(R.id.toggleGroup);
 		sp = (Spinner) findViewById(R.id.sp_areainfested);
-//		ib = (ImageButton) findViewById(R.id.report_imagebutton);
-		
-		// Listener for camera button
-//		ib.setOnClickListener(new OnClickListener() {
-//			public void onClick(View v) {
-//				takePicture();
-//			}
-//		});
+		mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		
 		// Listener for EditText in Area Infested
 		etarea.addTextChangedListener(new TextWatcher() {
@@ -155,6 +150,14 @@ public class Trip extends SherlockActivity {
 		b4.setTypeface(tf_light);
 		b5.setTypeface(tf_light);
 		b6.setTypeface(tf_light);
+		
+//		ib = (ImageButton) findViewById(R.id.report_imagebutton);
+		// Listener for camera button
+//		ib.setOnClickListener(new OnClickListener() {
+//            public void onClick(View v) {
+//                takePicture();
+//            }
+//        });
 	}
 	
 	@Override
@@ -163,6 +166,12 @@ public class Trip extends SherlockActivity {
 		nm.cancel(Main.mUniqueId);
 		determineTally();
 		determineTimeIntervalTextViews();
+		
+		// Check for GPS
+		LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+		gpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+		
+		wheresWaldo();
 	}
 	
 	@Override
@@ -258,7 +267,11 @@ public class Trip extends SherlockActivity {
 	// Method won't be called unless Play APK in installed
 	public void wheresWaldo() {
 		gpsLocation = requestUpdatesFromProvider();
-		if (gpsLocation == null)
+		
+		if (!(gpsLocation == null))
+			setEditTexts(gpsLocation.getLatitude(), gpsLocation.getLongitude());
+		
+		else if (gpsLocation == null)
 			Toast.makeText(getApplicationContext(), "No GPS signal", Toast.LENGTH_SHORT).show();
 	}
 	
@@ -278,6 +291,11 @@ public class Trip extends SherlockActivity {
 //			ib.setImageBitmap(bm);
 //		}
 //	}
+	
+	protected void setEditTexts(double latitude, double longitude) {
+		tvlat.setText("Latitude:\t\t\t" + latitude);
+		tvlong.setText("Longitude:\t\t" + longitude);
+	}
 	
 	/** Verify that required fields are filled
 	 *  @return boolean stating if all fields are filled out **/
@@ -342,13 +360,12 @@ public class Trip extends SherlockActivity {
 	
 	private String shortenAreaType() {
 		String str = sp.getSelectedItem().toString();
-		if (str.equals("Square Miles")) {
+		if (str.equals("Square Miles"))
 			str = "SM";
-		} else if (str.equals("Square Acres")) {
+		else if (str.equals("Square Acres"))
 			str = "SA";
-		} else {
+		else
 			str = "SF";
-		}
 		
 		return str;
 	}
@@ -360,11 +377,11 @@ public class Trip extends SherlockActivity {
 			return Double.parseDouble(etarea.getText().toString());
 	}
 	
-	private JSONObject createJSONObject() {
+	private void createJSONObject() {
 		Time now = new Time();
 		now.setToNow();
-		
 		JSONObject trip = new JSONObject();
+		
 		try {
 			trip.put(UploadData.ARG_USER_ID, "1"); 	//spref.getString(Settings.KEY_USERNAME, "null"));
 			trip.put(UploadData.ARG_PERCENT, getSelectedToggleButton());
@@ -379,12 +396,9 @@ public class Trip extends SherlockActivity {
 		} catch (JSONException e) {
 			Toast.makeText(getApplicationContext(), "Data not saved, try again", Toast.LENGTH_SHORT).show();
 		}
-		return trip;
+		
+		new UploadData(this, UploadData.TASK_SUBMIT_POINT).execute(trip);
 	}
-	
-//	protected void takePicture() {
-//		startActivityForResult(new Intent("android.media.action.IMAGE_CAPTURE"), CAMERA_REQUEST);
-//	}
 	
 	protected void determineTally() {
 		
@@ -415,6 +429,10 @@ public class Trip extends SherlockActivity {
 		sb.setSpan(bss, 0, sb.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
 		tripSelection.setText(sb);
 	}
+	
+//	protected void takePicture() {
+//		startActivityforResult(new Intent("android.media.action.IMAGE_CAPTURE"), CAMERA_REQUEST);
+//	}
 
 }
 

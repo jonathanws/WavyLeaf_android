@@ -44,7 +44,7 @@ public class ReminderService extends Service {
 			catch(Exception e) { }
 		}
 		timer = new Timer(true);	//run as daemon thread
-		timer.schedule(new mainTask(), 8000);	//6 hours = 21600000
+		timer.schedule(new mainTask(), 300000);	//6 hours = 21600000
 		isTimerRunning = true;
 	}
 	
@@ -64,7 +64,8 @@ public class ReminderService extends Service {
 		return START_NOT_STICKY;
 	}
 	
-	private class mainTask extends TimerTask { 
+	private class mainTask extends TimerTask {
+		
         public void run() {
         	isTimerRunning = false;
         	nm = ((NotificationManager) getSystemService(NOTIFICATION_SERVICE));
@@ -82,7 +83,7 @@ public class ReminderService extends Service {
     	    NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context)
     	    		.setAutoCancel(true)
     	    		.setContentIntent(contentIntent)
-    	    		.setContentText("Remember to upload your data")
+    	    		.setContentText("Trip sightings unsubmitted")
     	    		.setContentTitle("Completed your trip?")
     	            .setSmallIcon(R.drawable.ic_notification)
     	            .setWhen(System.currentTimeMillis());

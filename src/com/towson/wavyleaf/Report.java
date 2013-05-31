@@ -64,16 +64,17 @@ public class Report extends SherlockFragmentActivity {
 	private boolean playAPKEnabled = false;
 	private boolean editedCoordinatesInOtherActivitySoDontGetGPSLocation = false;
 	private boolean mapHasMarker = false; // onResume keeps adding markers to map, this should stop it
-	protected GoogleMap mMap;
-	private UiSettings mUiSettings;
-	protected RadioGroup rg;
-	protected TextView tvlat, tvlong, tvpicnotes, tvper, tvper_summary, tvcoor, tvarea, tvarea_summary;
-	protected EditText notes, etarea;
-	protected ToggleButton b1, b2, b3, b4, b5, b6;
-	protected LocationManager mLocationManager;
 	protected CameraPosition userCurrentPosition;
-	protected Spinner sp;
+	protected EditText notes, etarea;
+	protected GoogleMap mMap;
 	protected Location currentEditableLocation; // Used by edit feature
+	protected LocationManager mLocationManager;
+	protected RadioGroup rg;
+	protected Spinner sp;
+	protected TextView tvlat, tvlong, tvpicnotes, tvper, tvper_summary, tvcoor, tvarea, tvarea_summary;
+	protected ToggleButton b1, b2, b3, b4, b5, b6;
+	private UiSettings mUiSettings;
+	
 	// private static final int CAMERA = 3;
 	// private static final int GALLERY_REQUEST = 1339;
 	// private static final int CAMERA_REQUEST = 1337;
@@ -367,7 +368,7 @@ public class Report extends SherlockFragmentActivity {
 		showDialog(NO_GPS);
 	}
 	
-	private void setEditTexts(double latitude, double longitude) {
+	protected void setEditTexts(double latitude, double longitude) {
 		tvlat.setText("Latitude:\t\t\t" + latitude);
 		tvlong.setText("Longitude:\t\t" + longitude);
 	}
@@ -463,13 +464,6 @@ public class Report extends SherlockFragmentActivity {
 		}
 		return super.onCreateDialog(id);
 		//http://stackoverflow.com/questions/3326366/what-context-should-i-use-alertdialog-builder-in
-	}
-	
-	protected double getAreaText() {
-		if (etarea.getText().toString().trim().equals("") || (etarea.getText().toString().trim().equals(null)))
-			return -1;
-		else
-			return Double.parseDouble(etarea.getText().toString());
 	}
 	
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -569,16 +563,21 @@ public class Report extends SherlockFragmentActivity {
 	
 	private String shortenAreaType() {
 		String str = sp.getSelectedItem().toString();
-		if (str.equals("Square Miles")) {
+		if (str.equals("Square Miles"))
 			str = "SM";
-		}
-		else if (str.equals("Square Acres")) {
+		else if (str.equals("Square Acres"))
 			str = "SA";
-		}
-		else {
+		else
 			str = "SF";
-		}
+		
 		return str;
+	}
+
+	protected double getAreaText() {
+		if (etarea.getText().toString().trim().equals("") || (etarea.getText().toString().trim().equals(null)))
+			return -1;
+		else
+			return Double.parseDouble(etarea.getText().toString());
 	}
 	
 	private void createJSONObject() {
@@ -609,3 +608,5 @@ public class Report extends SherlockFragmentActivity {
 //	}
 
 }
+
+

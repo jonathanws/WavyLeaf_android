@@ -2,6 +2,12 @@ Change Log
 ===============================================================================
 
 
+Version 1.4.4 *(5-30-2013)*
+----------------------------
+* Fixed top of Trip layout - strings don't wrap now
+* Changed Dev Trip testing interval (five minutes) to ten seconds
+* Trip now grabs location and doesn't crash
+
 Version 1.4.3 *(5-29-2013)*
 ----------------------------
 * Added Help webview

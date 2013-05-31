@@ -48,7 +48,7 @@ public class Main extends SherlockActivity implements OnClickListener {
 	public void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
 		
-		//Bugsense integration
+		// Bugsense integration
 		BugSenseHandler.initAndStartSession(getApplicationContext(), "beb5fcad");
 		
 		setContentView(R.layout.layout_main);
@@ -180,7 +180,7 @@ public class Main extends SherlockActivity implements OnClickListener {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {						
 						if (which == 0) {
-							intervalSelected("5:00", "Five Minutes", 10000); // TODO change back to 300000
+							intervalSelected("5:00", "Five Minutes", 60000); // TODO change back to 300000
 						}
 						else if(which == 1) {
 							intervalSelected("10:00", "Ten Minutes", 600000);

@@ -56,9 +56,7 @@ public class UploadData extends AsyncTask<JSONObject, Void, String> {
 		this.task = which;
 	}
 
-	protected void onPreExecute() {
-
-	}
+	protected void onPreExecute() {}
 
 	@Override
 	protected String doInBackground(JSONObject... jobj) {
@@ -80,11 +78,6 @@ public class UploadData extends AsyncTask<JSONObject, Void, String> {
 				HttpPost hp = new HttpPost(SERVER_URL + getHttpPost());
 
 				try {
-					
-					// Use this section when wanting to send NameValue Pairs
-//					hp.setEntity(new UrlEncodedFormEntity(getNameValuePairFromJSON(json)));
-					
-					// Use this section to send JSON
 					StringEntity se = new StringEntity(json.toString(), "UTF-8");
 					
 					// It seems that these aren't required, but similar lines are used for iphone
@@ -140,7 +133,6 @@ public class UploadData extends AsyncTask<JSONObject, Void, String> {
 
 	protected void onPostExecute(String s) {
 		
-		// If data was submitted successfully
 		if (success == true) {
 			
 			SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this.context);
@@ -158,7 +150,7 @@ public class UploadData extends AsyncTask<JSONObject, Void, String> {
 			
 		} else
 			Toast.makeText(this.context, "Error submitting point. Saved for later.", Toast.LENGTH_LONG).show();
-			
+		
 		//TODO: remove this? or make use of it?
 		if (!(s.equalsIgnoreCase("")))
 			Toast.makeText(this.context, s, Toast.LENGTH_LONG).show();
@@ -183,28 +175,5 @@ public class UploadData extends AsyncTask<JSONObject, Void, String> {
         values.put(DatabaseConstants.ITEM_NAME, JSONString);
         db.insertOrThrow(DatabaseConstants.TABLE_NAME, null, values);
 	}
-	
-	
-	
-	
-	// Since we've only figured out how to send a list, this method 
-	// will sort through the given JSONObject and create one
-//	protected List<NameValuePair> getNameValuePairFromJSON(JSONObject jo) {
-//		
-//		List<NameValuePair> nvp = new ArrayList<NameValuePair>();
-//		
-//		// Go through JSONObject and make a List
-//		for (int i = 0; i < jo.names().length(); i++) {
-//			try {
-//				nvp.add(new BasicNameValuePair(
-//						jo.names().getString(i), // Get the key for each parameter
-//						jo.getString(jo.names().getString(i)))); // Get the value for each key
-//			} catch (JSONException e) {
-//				e.printStackTrace();
-//			}
-//		}
-//		return nvp;
-//		
-//	}
 
 }
