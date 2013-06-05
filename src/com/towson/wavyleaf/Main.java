@@ -21,7 +21,6 @@ import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -209,7 +208,6 @@ public class Main extends SherlockActivity implements OnClickListener {
 	}
 	
 	protected void intervalSelected(String timeNum, String timeString, int milli) {
-		Log.i("wavy", "intervalselected");
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 		Editor ed = sp.edit();
 		ed.putString(Settings.TRIP_INTERVAL, timeNum);

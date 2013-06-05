@@ -102,16 +102,13 @@ public class Trip extends SherlockActivity {
 		// Listener for EditText in Area Infested
 		etarea.addTextChangedListener(new TextWatcher() {
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				if (etarea.getText().length() == 0) {
+				if (etarea.getText().length() == 0)
 					tvarea_summary.setText("");
-				}
-				else if (etarea.getText().toString().contains("-")) {	//negative number sign
+				else if (etarea.getText().toString().contains("-")) {	// negative number sign
 					etarea.getEditableText().clear();
-					Toast.makeText(getApplicationContext(), "Negative values not allowed", Toast.LENGTH_SHORT).show();
-				}
-				else {
+					Toast.makeText(getApplicationContext(), "Use a positive value", Toast.LENGTH_SHORT).show();
+				} else
 					tvarea_summary.setText(etarea.getText() + " " + sp.getSelectedItem().toString());
-				}
 			}
 			public void afterTextChanged(Editable s) {}
 			public void beforeTextChanged(CharSequence s, int start, int count, int after) {}

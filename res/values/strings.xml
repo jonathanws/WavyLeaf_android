@@ -2,20 +2,19 @@
 <resources>
 
     <string name="app_name">Wavyleaf</string>
-    <string name="version">Version - BETA</string>
+    <string name="version">BETA</string>
     <string name="website">http://skappsrv.towson.edu/wavyleaf/website/</string>
     <string name="email">wavyleaf@towson.edu</string>
     <string-array name="email_array"><item>wavyleaf@towson.edu</item></string-array>
     <string name="towson_university">Towson University</string>
     
-    <string name="layout_about_authors">Eric Forbes\n Mohsin Majid\n Jon Smoley</string>
+    <string name="layout_about_authors">Eric Forbes\n Mohsin Majid\n Jon Smoley\nJesse Day</string>
     <string name="layout_about_developed">Developed &amp; Designed By</string>
     <string name="layout_about_developers">Developers</string>
     
     <string name="layout_main_new">New Sighting</string>
     <string name="layout_main_trip">Start Trip</string>
     <string name="layout_main_endtrip">End Trip</string>
-    <string name="layout_main_upload">Upload Records</string>
     
     <string name="layout_numrecorded">Your Sightings/Trips</string>
     <string name="layout_tripinterval">Reminder Interval</string>

@@ -45,18 +45,6 @@
     
     <PreferenceCategory android:title="Other" >
         
-        <!-- 
-        <Preference
-            android:title="Create Account" >
-            
-            <intent
-                android:action="android.intent.action.VIEW"
-                android:targetPackage="com.towson.wavyleaf"
-                android:targetClass="com.towson.wavyleaf.Login" />
-            
-        </Preference>
-        -->
-        
         <Preference 
             android:title="About" >
             
@@ -68,6 +56,12 @@
         </Preference>
         
         <Preference
+            android:title="Version"
+            android:summary="@string/version" />
+        
+        <!-- 
+        
+        <Preference
             android:title="Rate this application"
             android:summary="Google Play Store" >
             
@@ -76,6 +70,8 @@
                 android:data="market://details?id=jmd.rainymood" />
             
         </Preference>
+        
+         -->
             
     </PreferenceCategory>
     

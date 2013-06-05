@@ -49,12 +49,14 @@ public class Login extends SherlockActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
+		
 			case android.R.id.home:
 				Intent mainIntent = new Intent(this, Main.class);
 				mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 				startActivity(mainIntent);
 				finish();
 				return true;
+				
 			case R.id.menu_next:
 				if (hasText()) {
 					submit();
@@ -74,7 +76,7 @@ public class Login extends SherlockActivity {
 		switch (id) {
 			case EMAIL:
 				return new AlertDialog.Builder(this)
-				.setItems(seeAccounts(), new DialogInterface.OnClickListener() {
+						.setItems(seeAccounts(), new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int which) {
 						email.setText(globalArray[which]);
 					}
@@ -156,8 +158,8 @@ public class Login extends SherlockActivity {
 		if (all.startsWith("null"))
 			all = all.substring(5, all.length());
 		
-		// We have a huge-ass string, make it an array, then a list, then HashSet,
-		// ALL so we can remove duplicates
+		// We have a huge-ass string, make it an array, then a list, then HashSet.
+		// We do ALL of this just so we can remove duplicates
 		ArrayList<String> al = new ArrayList<String>(Arrays.asList(all.split(",")));
 		HashSet<String> h = new HashSet<String>(al);
 		al.clear();

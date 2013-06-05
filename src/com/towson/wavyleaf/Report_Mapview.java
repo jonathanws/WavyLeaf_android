@@ -177,34 +177,27 @@ public class Report_Mapview extends SherlockFragmentActivity implements OnClickL
 		// Create new LatLng object
 		LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
 		
-//		// Creating a marker
-//		mMap.addMarker(new MarkerOptions()
-//			.position(latLng)
-//			.draggable(true)
-//			.title("Long-Press and drag to edit"))
-//			.showInfoWindow();
-		
+		// Creating a marker		
 		marker = mMap.addMarker(new MarkerOptions()
-        .position(latLng)
-        .draggable(true)
-        .title("Long-Press and drag to edit"));
+				.position(latLng)
+				.draggable(true)
+				.title("Long-Press and drag to edit"));
 		marker.showInfoWindow();
 		
 		mapHasMarker = true;
 	}
 	
 	public void goToCurrentPosition(Location location) {
-		if (!checkReady()) {
+		if (!checkReady())
 			return;
-		}
+		
 		// Taken from google sample code
-		userCurrentPosition =
-				new CameraPosition.Builder()
-						.target(new LatLng(location.getLatitude(), location.getLongitude()))
-						.zoom(18f) //arbitrary
-						.bearing(0)
-						.tilt(35) //arbitrary
-						.build();
+		userCurrentPosition = new CameraPosition.Builder()
+				.target(new LatLng(location.getLatitude(), location.getLongitude()))
+				.zoom(18f) //arbitrary
+				.bearing(0)
+				.tilt(35) //arbitrary
+				.build();
 		changeCamera(CameraUpdateFactory.newCameraPosition(userCurrentPosition));
 	}
 	

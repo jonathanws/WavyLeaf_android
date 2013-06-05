@@ -70,8 +70,9 @@ public class UploadData extends AsyncTask<JSONObject, Void, String> {
 			if (jobj.length > 0) {
 				final JSONObject json = jobj[0];
 				
-				// Before we try to send the JSON, save it to local storage
-				submitToLocalStorage(json.toString());
+				// Before we try to send the JSON, save it to local storage, but only if it is a point
+				if (this.task == TASK_SUBMIT_POINT)
+					submitToLocalStorage(json.toString());
 
 				// Create a new HttpClient and Post Header
 				HttpClient hc = new DefaultHttpClient();
@@ -111,11 +112,10 @@ public class UploadData extends AsyncTask<JSONObject, Void, String> {
 							}
 						}
 						
-						result = sb.toString();
-						
-						if (sb.toString().contains("1"))
+						if (sb.toString().contains("1")) {
 							success = true;
-						else
+							deleteFirstEntry();
+						} else
 							success = false;
 					}
 				} catch (IllegalStateException e) {
@@ -151,9 +151,6 @@ public class UploadData extends AsyncTask<JSONObject, Void, String> {
 		} else
 			Toast.makeText(this.context, "Error submitting point. Saved for later.", Toast.LENGTH_LONG).show();
 		
-		//TODO: remove this? or make use of it?
-		if (!(s.equalsIgnoreCase("")))
-			Toast.makeText(this.context, s, Toast.LENGTH_LONG).show();
 	}
 
 	protected String getHttpPost() {
@@ -174,6 +171,18 @@ public class UploadData extends AsyncTask<JSONObject, Void, String> {
         ContentValues values = new ContentValues();
         values.put(DatabaseConstants.ITEM_NAME, JSONString);
         db.insertOrThrow(DatabaseConstants.TABLE_NAME, null, values);
+	}
+	
+	protected void deleteFirstEntry() {
+		DatabaseListJSONData m_dbListData = new DatabaseListJSONData(this.context);
+		SQLiteDatabase db = m_dbListData.getWritableDatabase();
+		
+		String ALTER_TBL ="delete from " + DatabaseConstants.TABLE_NAME +
+			     " where " + DatabaseConstants._ID + 
+			     " in (select "+ DatabaseConstants._ID + 
+			     " from " + DatabaseConstants.TABLE_NAME + " order by _id LIMIT 1);";
+
+		db.execSQL(ALTER_TBL);
 	}
 
 }

@@ -9,16 +9,13 @@ import android.content.SharedPreferences;
 import android.media.RingtoneManager;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 
 public class AlarmReceiver extends BroadcastReceiver {
 	
-	public String TAG = "wavy";
 	Context ctx;
 	
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		Log.i(TAG, "onReceive");
 		ctx = context;
 		showNotification(context);
 	}

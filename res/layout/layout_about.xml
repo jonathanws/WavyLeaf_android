@@ -11,8 +11,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:src="@drawable/ic_launcher_about"
-        android:contentDescription="@string/app_name" />
+        android:contentDescription="@string/app_name"
+        android:src="@drawable/ic_launcher_about" />
 
     <TextView
         android:id="@+id/tv_about_wavyleaf"
@@ -23,14 +23,28 @@
         android:text="@string/app_name"
         android:textSize="36sp" />
 
-    <TextView
-        android:id="@+id/tv_about_version"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
         android:gravity="center"
-        android:text="@string/version"
-        android:textSize="14sp" />
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/tv_about_version"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Version - "
+            android:textSize="14sp" />
+        
+        <TextView
+            android:id="@+id/tv_about_versionNum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/version"
+            android:textSize="14sp" />
+        
+    </LinearLayout>
 
     <TextView
         android:id="@+id/tv_about_developed"
@@ -55,7 +69,7 @@
         android:gravity="center"
         android:text="@string/towson_university"
         android:textSize="12sp" />
-    
+
     <TextView
         android:id="@+id/tv_about_developers"
         android:layout_width="match_parent"
