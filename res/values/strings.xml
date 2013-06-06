@@ -8,9 +8,11 @@
     <string-array name="email_array"><item>wavyleaf@towson.edu</item></string-array>
     <string name="towson_university">Towson University</string>
     
-    <string name="layout_about_authors">Eric Forbes\n Mohsin Majid\n Jon Smoley\nJesse Day</string>
-    <string name="layout_about_developed">Developed &amp; Designed By</string>
+    <string name="layout_about_authors">Eric Forbes / Mohsin Majid\n Jon Smoley / Jesse Day</string>
+    <string name="layout_about_supportedby">This project is partially supported by NSF DUE#1140781 and the School of Emerging Technologies at Towson University</string>
     <string name="layout_about_developers">Developers</string>
+    <string name="layout_about_specialthanks">Special Thanks</string>
+    <string name="layout_about_thanksto">Dr. Kaza, Dr. Dehlinger, &amp; Dr. Beauchamp</string>
     
     <string name="layout_main_new">New Sighting</string>
     <string name="layout_main_trip">Start Trip</string>
@@ -31,8 +33,8 @@
     <string name="layout_login_outdoorexperience">Outdoors Experience</string>
     <string name="layout_login_outdoorexperience_question">How often do you hike?</string>
     <string name="layout_login_confidence">Confidence</string>
-    <string name="layout_login_confidence_question_general">Confidence in general plant ID?</string>
-    <string name="layout_login_confidence_question_wavyleaf">Confidence in wavyleaf ID?</string>
+    <string name="layout_login_confidence_question_general">Confidence in general plant Identification?</string>
+    <string name="layout_login_confidence_question_wavyleaf">Confidence in wavyleaf Identification?</string>
     
     <string name="layout_report_picturenotes">PICTURE/NOTES</string>
     <string name="layout_report_percentage">PERCENTAGE</string>
@@ -46,6 +48,7 @@
     <string name="layout_reportmapview_done">Done</string>
     
     <string name="layout_trip_save">Save</string>
+    <string name="layout_trip_yoursightings">Your Sightings</string>
     <string name="finish_trip">Finish Trip</string>
     
     <string name="gps_is_disabled">GPS is disabled</string>

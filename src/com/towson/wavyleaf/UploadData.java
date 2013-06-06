@@ -10,6 +10,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.ContentValues;
@@ -42,6 +43,9 @@ public class UploadData extends AsyncTask<JSONObject, Void, String> {
 	protected static final String ARG_USER_ID = "user_id";
 	protected static final String ARG_WAVYLEAFID = "wavyleafid";
 	protected static final String ARG_EMAIL = "email";
+	
+	protected static final String FLAG_SUCCESS = "success";
+	protected static final String FLAG_MESSAGE = "message";
 
 	protected static final int TASK_SUBMIT_USER = 1;
 	protected static final int TASK_SUBMIT_POINT = 2;
@@ -111,12 +115,7 @@ public class UploadData extends AsyncTask<JSONObject, Void, String> {
 								e.printStackTrace();
 							}
 						}
-						
-						if (sb.toString().contains("1")) {
-							success = true;
-							deleteFirstEntry();
-						} else
-							success = false;
+						result = sb.toString();
 					}
 				} catch (IllegalStateException e) {
 					e.printStackTrace();
@@ -132,12 +131,37 @@ public class UploadData extends AsyncTask<JSONObject, Void, String> {
 	}
 
 	protected void onPostExecute(String s) {
+		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this.context);
+		Editor ed = sp.edit();
+		
+		JSONObject jo;
+		String suc = "", mes = "";
+		
+		try {
+			jo = new JSONObject(s);
+			suc = jo.getString(FLAG_SUCCESS);
+			mes = jo.getString(FLAG_MESSAGE);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+		if (suc.equalsIgnoreCase("1") || suc.contains("1")) { // Data was successfully sent
+			success = true;
+			
+			if (this.task == TASK_SUBMIT_POINT)
+				deleteFirstEntry(); // delete entry because it was successfully submitted
+			
+			else if (this.task == TASK_SUBMIT_USER) {
+				// Set user id
+				ed.putString(Settings.KEY_USER_ID, mes).commit();
+			}
+				
+				
+		} else // Data was not successfully sent
+			success = false;
 		
 		if (success == true) {
-			
-			SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this.context);
-			Editor ed = sp.edit();
-			
+
 			// Increment tally if this was a point for Trip
 			if ((context.getClass() + "").contains("Trip"))
 				ed.putInt(Settings.KEY_TRIPTALLY, sp.getInt(Settings.KEY_TRIPTALLY, 0) + 1);
@@ -149,7 +173,7 @@ public class UploadData extends AsyncTask<JSONObject, Void, String> {
 			ed.commit();
 			
 		} else
-			Toast.makeText(this.context, "Error submitting point. Saved for later.", Toast.LENGTH_LONG).show();
+			Toast.makeText(this.context, "Error submitting. Saved for later.", Toast.LENGTH_LONG).show();
 		
 	}
 

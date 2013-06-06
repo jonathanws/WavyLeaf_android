@@ -104,7 +104,7 @@ public class Main extends SherlockActivity implements OnClickListener {
 		switch (item.getItemId()) {
 			
 			case R.id.menu_help:
-				showDialog(HELP);
+				goToHelp();
 				return true;
 				
 			case R.id.menu_settings:
@@ -159,18 +159,18 @@ public class Main extends SherlockActivity implements OnClickListener {
 	protected Dialog onCreateDialog(int id) {
 		switch(id) {
 		
-			case HELP:
-				return new AlertDialog.Builder(this)
-				.setTitle("External Link")
-				.setMessage("Help documents can be found online.\n\nContinue?")
-				.setPositiveButton("ok", new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int which) {
-						// My name is Android. I don't allow pasted code that works somewhere else. Derp.
-						goToHelp();
-					}
-				})
-				.setNegativeButton("cancel", null)
-				.create();
+//			case HELP:
+//				return new AlertDialog.Builder(this)
+//				.setTitle("External Link")
+//				.setMessage("Help documents can be found online.\n\nContinue?")
+//				.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+//					public void onClick(DialogInterface dialog, int which) {
+//						// My name is Android. I don't allow pasted code that works somewhere else. Derp.
+//						goToHelp();
+//					}
+//				})
+//				.setNegativeButton("cancel", null)
+//				.create();
 				
 			case ONSTART:
 				return new AlertDialog.Builder(this)
@@ -179,7 +179,7 @@ public class Main extends SherlockActivity implements OnClickListener {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {						
 						if (which == 0) {
-							intervalSelected("5:00", "Five Minutes", 60000); // TODO change back to 300000
+							intervalSelected("5:00", "Five Minutes", 300000);
 						}
 						else if(which == 1) {
 							intervalSelected("10:00", "Ten Minutes", 600000);
@@ -309,10 +309,11 @@ public class Main extends SherlockActivity implements OnClickListener {
 		emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, destination_email);
 		emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Wavyleaf " + version);
 		emailIntent.putExtra(android.content.Intent.EXTRA_TEXT,
-				"Name:\t\t\t\t" + name + "\n" +
-				"Email:\t\t\t\t\t" + source_email + "\n" +
-				"Version:\t\t\t" + version + "\n" +
-				"Device:\t\t\t\t" + getDeviceName() + "\n\n" +
+				"Name:\t\t\t\t\t\t" + name + "\n" +
+				"Email:\t\t\t\t\t\t\t" + source_email + "\n" +
+				"Version:\t\t\t\t\t" + version + "\n" +
+				"Device:\t\t\t\t\t\t" + getDeviceName() + "\n" +
+				"User Cool:\t\t\tenh, not sure" + "\n\n" +
 				"- - - - - - - - - - -" + "\n\n");
 		
 		return emailIntent;

@@ -2,6 +2,10 @@ Change Log
 ===============================================================================
 
 
+Version BETA *(6/5-2013)*
+----------------------------
+Beta Release!  Rejoice!
+
 Version 1.4.4 *(5-30-2013)*
 ----------------------------
 * Fixed top of Trip layout - strings don't wrap now

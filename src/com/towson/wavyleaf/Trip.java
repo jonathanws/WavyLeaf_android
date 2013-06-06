@@ -224,6 +224,7 @@ public class Trip extends SherlockActivity {
 		switch (view.getId()) {
 			case R.id.bu_1:
 				tvper_summary.setText("0%");
+				etarea.setText("0");			// If user says they don't see any, then area infested is obviously zero
 				break;
 			case R.id.bu_2:
 				tvper_summary.setText("1-10%");
@@ -377,10 +378,11 @@ public class Trip extends SherlockActivity {
 	private void createJSONObject() {
 		Time now = new Time();
 		now.setToNow();
+		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
 		JSONObject trip = new JSONObject();
 		
 		try {
-			trip.put(UploadData.ARG_USER_ID, "1"); 	//spref.getString(Settings.KEY_USERNAME, "null"));
+			trip.put(UploadData.ARG_USER_ID, sp.getString(Settings.KEY_USER_ID, "null"));
 			trip.put(UploadData.ARG_PERCENT, getSelectedToggleButton());
 			trip.put(UploadData.ARG_AREAVALUE, getAreaText());
 			trip.put(UploadData.ARG_AREATYPE, shortenAreaType());

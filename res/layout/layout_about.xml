@@ -15,7 +15,6 @@
         android:src="@drawable/ic_launcher_about" />
 
     <TextView
-        android:id="@+id/tv_about_wavyleaf"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
@@ -26,52 +25,45 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="16dp"
         android:gravity="center"
         android:orientation="horizontal" >
 
         <TextView
-            android:id="@+id/tv_about_version"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Version - "
             android:textSize="14sp" />
         
         <TextView
-            android:id="@+id/tv_about_versionNum"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/version"
             android:textSize="14sp" />
         
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/tv_about_developed"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="4dp"
-        android:gravity="center"
-        android:text="@string/layout_about_developed"
-        android:textSize="16sp" />
-
+    
     <View
-        android:layout_width="180dp"
+        android:layout_width="220dp"
         android:layout_height="1dp"
         android:layout_marginBottom="4dp"
         android:background="#669900" />
-
+    
     <TextView
-        android:id="@+id/tv_about_towson"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
+        android:layout_marginBottom="4dp"
         android:gravity="center"
-        android:text="@string/towson_university"
+        android:text="@string/layout_about_supportedby"
         android:textSize="12sp" />
 
+    <View
+        android:layout_width="220dp"
+        android:layout_height="1dp"
+        android:layout_marginBottom="16dp"
+        android:background="#669900" />
+
     <TextView
-        android:id="@+id/tv_about_developers"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
@@ -79,19 +71,28 @@
         android:text="@string/layout_about_developers"
         android:textSize="16sp" />
 
-    <View
-        android:layout_width="180dp"
-        android:layout_height="1dp"
-        android:layout_marginBottom="4dp"
-        android:background="#669900" />
-
     <TextView
-        android:id="@+id/tv_about_authors"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
+        android:layout_marginBottom="16dp"
         android:gravity="center"
         android:text="@string/layout_about_authors"
+        android:textSize="12sp" />
+    
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:gravity="center"
+        android:text="@string/layout_about_specialthanks"
+        android:textSize="16sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:gravity="center"
+        android:text="@string/layout_about_thanksto"
         android:textSize="12sp" />
 
 </LinearLayout>

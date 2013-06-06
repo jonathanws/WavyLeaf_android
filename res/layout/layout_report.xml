@@ -237,6 +237,16 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:background="#669900" />
+            
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="24dp"
+                android:layout_marginLeft="8dp"
+                android:gravity="center_vertical"
+                android:textColor="#CC0000"
+                android:textStyle="italic"
+                android:textSize="14sp"
+                android:text="This may take a few moments" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -256,7 +266,7 @@
                         android:layout_height="wrap_content"
                         android:paddingBottom="6dp"
                         android:paddingLeft="8dp"
-                        android:paddingTop="12dp"
+                        android:paddingTop="4dp"
                         android:text="@string/latitude"
                         android:textColor="@android:color/black"
                         android:textSize="14sp" />

@@ -8,10 +8,12 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.Time;
@@ -267,6 +269,7 @@ public class Report extends SherlockFragmentActivity {
 		switch (view.getId()) {
 			case R.id.bu_1:
 				tvper_summary.setText("0%");
+				etarea.setText("0");			// If user says they don't see any, then area infested is obviously zero
 				break;
 			case R.id.bu_2:
 				tvper_summary.setText("1-10%");
@@ -583,10 +586,11 @@ public class Report extends SherlockFragmentActivity {
 	private void createJSONObject() {
 		Time now = new Time();
 		now.setToNow();
+		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
 		JSONObject report = new JSONObject();
 		
 		try {
-			report.put(UploadData.ARG_USER_ID, "1"); 	//spref.getString(Settings.KEY_USERNAME, "null"));
+			report.put(UploadData.ARG_USER_ID, sp.getString(Settings.KEY_USER_ID, "null"));
 			report.put(UploadData.ARG_PERCENT, getSelectedToggleButton());
 			report.put(UploadData.ARG_AREAVALUE, getAreaText());
 			report.put(UploadData.ARG_AREATYPE, shortenAreaType());

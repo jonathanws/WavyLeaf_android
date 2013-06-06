@@ -7,9 +7,11 @@
             android:key="preference_name"
             android:title="Name" />
         
+        <!--
         <Preference
-            android:key="preference_username"
+            android:key="preference_user_id"
             android:title="User ID" />
+            -->
         
         <Preference
             android:key="preference_birthyear"
