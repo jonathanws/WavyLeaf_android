@@ -24,7 +24,7 @@ public class About extends Activity {
 		LinearLayout ll = (LinearLayout) findViewById(R.id.ll_about);
 		
 		// Set typeface to every TextView
-		for (int i = 0; i <ll.getChildCount(); i++) {
+		for (int i = 0; i < ll.getChildCount(); i++) {
 			View child = ll.getChildAt(i);
 			
 			if (child instanceof TextView)

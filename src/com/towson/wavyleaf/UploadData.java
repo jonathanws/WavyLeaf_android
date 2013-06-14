@@ -20,7 +20,6 @@ import android.content.SharedPreferences.Editor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
-import android.widget.Toast;
 
 public class UploadData extends AsyncTask<JSONObject, Void, String> {
 
@@ -172,8 +171,9 @@ public class UploadData extends AsyncTask<JSONObject, Void, String> {
 			
 			ed.commit();
 			
-		} else
-			Toast.makeText(this.context, "Error submitting. Saved for later.", Toast.LENGTH_LONG).show();
+		} 
+//		else
+//			Toast.makeText(this.context, "Error submitting. Saved for later.", Toast.LENGTH_LONG).show();
 		
 	}
 

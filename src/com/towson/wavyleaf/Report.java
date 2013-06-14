@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
@@ -67,6 +68,7 @@ public class Report extends SherlockFragmentActivity {
 	private boolean editedCoordinatesInOtherActivitySoDontGetGPSLocation = false;
 	private boolean mapHasMarker = false; // onResume keeps adding markers to map, this should stop it
 	protected CameraPosition userCurrentPosition;
+	protected CheckBox cb;
 	protected EditText notes, etarea;
 	protected GoogleMap mMap;
 	protected Location currentEditableLocation; // Used by edit feature
@@ -113,6 +115,7 @@ public class Report extends SherlockFragmentActivity {
 		b4 = (ToggleButton) findViewById(R.id.bu_4);
 		b5 = (ToggleButton) findViewById(R.id.bu_5);
 		b6 = (ToggleButton) findViewById(R.id.bu_6);
+		cb = (CheckBox) findViewById(R.id.cb_confirm);
 		rg = (RadioGroup) findViewById(R.id.toggleGroup);
 		sp = (Spinner) findViewById(R.id.sp_areainfested);
 		mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -150,6 +153,9 @@ public class Report extends SherlockFragmentActivity {
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		sp.setAdapter(adapter);
 		
+		// Just to be safe
+		cb.setChecked(false);
+		
 		//set all the beautiful typefaces
 		tvlat.setTypeface(tf_light);
 		tvlong.setTypeface(tf_light);
@@ -159,6 +165,7 @@ public class Report extends SherlockFragmentActivity {
 		tvper.setTypeface(tf_bold);
 		tvper_summary.setTypeface(tf_bold);
 		tvpicnotes.setTypeface(tf_bold);
+		cb.setTypeface(tf_light);
 		b1.setTypeface(tf_light);
 		b2.setTypeface(tf_light);
 		b3.setTypeface(tf_light);
@@ -269,7 +276,7 @@ public class Report extends SherlockFragmentActivity {
 		switch (view.getId()) {
 			case R.id.bu_1:
 				tvper_summary.setText("0%");
-				etarea.setText("0");			// If user says they don't see any, then area infested is obviously zero
+				etarea.setText("0");
 				break;
 			case R.id.bu_2:
 				tvper_summary.setText("1-10%");
@@ -485,6 +492,9 @@ public class Report extends SherlockFragmentActivity {
         	currentEditableLocation.setLatitude(fixedLocation.getLatitude());
         	currentEditableLocation.setLongitude(fixedLocation.getLongitude());
         	
+        	// Since user edited their coordinates, they obviously know it's right
+        	cb.setChecked(true);
+        	
         	Toast.makeText(getApplicationContext(), "New position set", Toast.LENGTH_SHORT).show();
 		}
 		
@@ -509,11 +519,15 @@ public class Report extends SherlockFragmentActivity {
 		boolean result = false;
 		
 		if (isToggleSelected()) {
-			if (isAreaSelected()) {
-				if (hasCoordinates())
+			if (hasCoordinates()) {
+				if (cb.isChecked()) {
 					result = true;
-			}
-		}
+				} else
+					Toast.makeText(getApplicationContext(), "Verify your coordinates with the checkbox", Toast.LENGTH_SHORT).show();
+			} else
+				Toast.makeText(getApplicationContext(), "Error determining position", Toast.LENGTH_SHORT).show();
+		} else
+			Toast.makeText(getApplicationContext(), "Select a percentage", Toast.LENGTH_SHORT).show();
 		
 		return result;
 	}
@@ -534,21 +548,6 @@ public class Report extends SherlockFragmentActivity {
 			}
 		}
 		
-		if (result == false)
-			Toast.makeText(getApplicationContext(), "Select a percentage", Toast.LENGTH_SHORT).show();
-		
-		return result;
-	}
-	
-	// See if user selected an area
-	public boolean isAreaSelected() {
-		boolean result = false;
-		
-		if (etarea.getText().toString().trim().length() > 0)
-			result = true;
-		else
-			Toast.makeText(getApplicationContext(), "Select an area", Toast.LENGTH_SHORT).show();
-
 		return result;
 	}
 	
@@ -558,17 +557,15 @@ public class Report extends SherlockFragmentActivity {
 		
 		if (!(currentEditableLocation == null))
 			result = true;
-		else
-			Toast.makeText(getApplicationContext(), "Error determining position", Toast.LENGTH_SHORT).show();
 		
 		return result;
 	}
 	
 	private String shortenAreaType() {
 		String str = sp.getSelectedItem().toString();
-		if (str.equals("Square Miles"))
+		if (str.equals("Square Metres"))
 			str = "SM";
-		else if (str.equals("Square Acres"))
+		else if (str.equals("Acres"))
 			str = "SA";
 		else
 			str = "SF";

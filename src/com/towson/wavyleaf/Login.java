@@ -27,16 +27,16 @@ public class Login extends SherlockActivity {
 	
 	TextView createAccount, description;
 	EditText name, year, email;
-	public static final int EMAIL = 1;
+	
 	protected String[] globalArray;
+	public static final int EMAIL = 1;
 	
 	@Override
 	protected void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
-		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		setContentView(R.layout.layout_login);
 		init();
-		showDialog(EMAIL);
+		showDialog(EMAIL); // Calls onCreateDialog()
 	}
 	
 	@Override
@@ -48,15 +48,7 @@ public class Login extends SherlockActivity {
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		
-			case android.R.id.home:
-				Intent mainIntent = new Intent(this, Main.class);
-				mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-				startActivity(mainIntent);
-				finish();
-				return true;
-				
+		switch (item.getItemId()) {				
 			case R.id.menu_next:
 				if (hasText()) {
 					submit();
@@ -71,12 +63,13 @@ public class Login extends SherlockActivity {
 		return super.onOptionsItemSelected(item);
 	}
 	
+	// This list dialog pops up and offers users to use any of the email addresses already found on their device
+	// It is not required to use any pre-existing emails
 	@Override
 	protected Dialog onCreateDialog(int id) {
 		switch (id) {
 			case EMAIL:
-				return new AlertDialog.Builder(this)
-						.setItems(seeAccounts(), new DialogInterface.OnClickListener() {
+				return new AlertDialog.Builder(this).setItems(seeAccounts(), new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int which) {
 						email.setText(globalArray[which]);
 					}
@@ -90,6 +83,7 @@ public class Login extends SherlockActivity {
 	}
 	
 	protected void init() {
+		// Set beautiful typefaces
 		Typeface tf_light = Typeface.createFromAsset(getAssets(), "fonts/roboto_thin.ttf");
 		
 		createAccount = (TextView) findViewById(R.id.login_tv_createaccount);
@@ -102,14 +96,14 @@ public class Login extends SherlockActivity {
 		description.setTypeface(tf_light);
 	}
 	
-	/** Verify existing text, and verify not only spaces **/
+	/** Verify all fields have text, and verify not only spaces **/
 	protected boolean hasText() {
 		if (!name.getText().toString().trim().equals("")
 				&& (validYear(year.getText().toString()) == true)
 				&& (validEmail(email.getText().toString()) == true))
 			return true;
 		else {
-			Toast.makeText(getApplicationContext(), "Please complete all fields", Toast.LENGTH_SHORT).show();
+			Toast.makeText(getApplicationContext(), "Please complete all fields with realistic values", Toast.LENGTH_SHORT).show();
 			return false;
 		}
 	}
@@ -126,7 +120,7 @@ public class Login extends SherlockActivity {
 	protected boolean validYear(String s) {
 		if (s.trim().equals(""))				// If blank string
 			return false;
-		else if (s.length() < 4)				// or not an actual year
+		else if ((s.length() < 4) || Integer.parseInt(s) < 1900)				// or not an actual year
 			return false;
 		else
 			return true;
@@ -158,8 +152,7 @@ public class Login extends SherlockActivity {
 		if (all.startsWith("null"))
 			all = all.substring(5, all.length());
 		
-		// We have a huge-ass string, make it an array, then a list, then HashSet.
-		// We do ALL of this just so we can remove duplicates
+		// We have a huge-ass string, so make it an array, then a list, then HashSet.
 		ArrayList<String> al = new ArrayList<String>(Arrays.asList(all.split(",")));
 		HashSet<String> h = new HashSet<String>(al);
 		al.clear();
@@ -169,6 +162,7 @@ public class Login extends SherlockActivity {
 		globalArray = al.toArray(globalArray);
 		
 		return globalArray;
+		// Ya crybaby
 	}
 	
 }

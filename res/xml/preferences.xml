@@ -19,7 +19,7 @@
         
     </PreferenceCategory>
     
-    <PreferenceCategory android:title="Statistics" >
+    <PreferenceCategory android:title="Sightings" >
         
         <Preference
             android:key="preference_singletally"
@@ -30,6 +30,17 @@
             android:key="preference_triptally"
             android:title="Trip points submitted"
             android:summary="0" />
+        
+        <Preference
+            android:key="preference_push"
+            android:title="Push unsent sightings" >
+            
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:targetPackage="com.towson.wavyleaf"
+                android:targetClass="com.towson.wavyleaf.UploadActivity" />
+            
+        </Preference>
                
     </PreferenceCategory>
     

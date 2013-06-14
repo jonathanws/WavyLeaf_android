@@ -33,7 +33,8 @@
                 android:gravity="right|bottom"
                 android:text="@string/layout_novalue"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="#669900" />
+                android:textColor="#669900"
+                android:textStyle="bold" />
             
         </LinearLayout>
 
@@ -58,7 +59,7 @@
                 android:gravity="right|bottom"
                 android:text="@string/layout_novalue"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="#669900" />
+                android:textColor="#0099cc" />
             
         </LinearLayout>
 

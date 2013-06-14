@@ -62,11 +62,9 @@ public class Trip extends SherlockActivity {
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		init();
 		
+		// Apparently useless code if this is called in onResume()?
 		nm = ((NotificationManager) getSystemService(NOTIFICATION_SERVICE));
-		nm.cancel(Main.mUniqueId);
-		
-		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-		tallyNumber.setText(sp.getInt(Settings.KEY_TRIPTALLY_CURRENT, 0) + "");
+		nm.cancel(Main.notifTripID);
 	}
 	
 	private void init() {
@@ -160,7 +158,9 @@ public class Trip extends SherlockActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		nm.cancel(Main.mUniqueId);
+		if (nm != null)
+			nm.cancel(Main.notifTripID);
+		
 		determineTally();
 		determineTimeIntervalTextViews();
 		
@@ -228,18 +228,23 @@ public class Trip extends SherlockActivity {
 				break;
 			case R.id.bu_2:
 				tvper_summary.setText("1-10%");
+				etarea.setText("");
 				break;
 			case R.id.bu_3:
 				tvper_summary.setText("10-25%");
+				etarea.setText("");
 				break;
 			case R.id.bu_4:
 				tvper_summary.setText("25-50%");
+				etarea.setText("");
 				break;
 			case R.id.bu_5:
 				tvper_summary.setText("50-75%");
+				etarea.setText("");
 				break;
 			case R.id.bu_6:
 				tvper_summary.setText("75-100%");
+				etarea.setText("");
 				break;
 			default:
 				tvper_summary.setText("");
@@ -301,10 +306,8 @@ public class Trip extends SherlockActivity {
 		boolean result = false;
 		
 		if (isToggleSelected()) {
-			if (isAreaSelected()) {
-				if (hasCoordinates())
-					result = true;
-			}
+			if (hasCoordinates())
+				result = true;
 		}
 		
 		return result;
@@ -332,18 +335,6 @@ public class Trip extends SherlockActivity {
 		return result;
 	}
 	
-	// See if user selected an area
-	public boolean isAreaSelected() {
-		boolean result = false;
-		
-		if (etarea.getText().toString().trim().length() > 0)
-			result = true;
-		else
-			Toast.makeText(getApplicationContext(), "Select an area", Toast.LENGTH_SHORT).show();
-		
-		return result;
-	}
-	
 	// See if user has coordinates
 	public boolean hasCoordinates() {
 		boolean result = false;
@@ -358,9 +349,9 @@ public class Trip extends SherlockActivity {
 	
 	private String shortenAreaType() {
 		String str = sp.getSelectedItem().toString();
-		if (str.equals("Square Miles"))
+		if (str.equals("Square Metres"))
 			str = "SM";
-		else if (str.equals("Square Acres"))
+		else if (str.equals("Acres"))
 			str = "SA";
 		else
 			str = "SF";
@@ -399,23 +390,9 @@ public class Trip extends SherlockActivity {
 		new UploadData(this, UploadData.TASK_SUBMIT_POINT).execute(trip);
 	}
 	
-	protected void determineTally() {
-		
-		// Read values from local storage
+	protected void determineTally() {		
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-		String string_tripcurrent = sp.getInt(Settings.KEY_TRIPTALLY_CURRENT, 0) + "";
-		
-		// Span to set text color to green
-		final ForegroundColorSpan fcsGreen = new ForegroundColorSpan(Color.parseColor("#669900"));
-		
-		// Span to make text bold
-		final StyleSpan bss = new StyleSpan(android.graphics.Typeface.BOLD);
-		
-		final SpannableStringBuilder sb = new SpannableStringBuilder(string_tripcurrent);
-		sb.setSpan(fcsGreen, 0, sb.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-		sb.setSpan(bss, 0, sb.length(), Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
-		
-		this.tallyNumber.setText(sb);
+		tallyNumber.setText(sp.getInt(Settings.KEY_TRIPTALLY, 0) + "");
 	}
 	
 	protected void determineTimeIntervalTextViews() {

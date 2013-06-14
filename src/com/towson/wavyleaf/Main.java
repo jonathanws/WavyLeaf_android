@@ -36,11 +36,11 @@ public class Main extends SherlockActivity implements OnClickListener {
 	
 	private static final int ONSTART = 6;
 	private static final int HELP = 0;
-	protected static final int mUniqueId = 24885251; // Used for notifications
+	protected static final int notifReminderID = 24885250, notifTripID = 24885251; // Used for notifications
 	protected Button bu_new, bu_trip;
 	protected TextView tripInterval, tripSelection, tally, tallyNumber;
 	NotificationManager nm;
-	public CountDownTimer ctd;
+//	public CountDownTimer ctd;
 	public AlarmManager am;
 	
 	@Override
@@ -80,16 +80,21 @@ public class Main extends SherlockActivity implements OnClickListener {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-		nm.cancel(mUniqueId);
 		determineTallys();
+//		if (ctd != null) {
+//			SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+//			restartTimer(sp.getInt(Settings.CURRENT_COUNTDOWN_SECOND, 0));
+//		}
 	}
 
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
 		BugSenseHandler.closeSession(Main.this);
-		nm.cancel(mUniqueId);
+		if (nm != null) {
+			nm.cancel(notifReminderID);
+			nm.cancel(notifTripID);
+		}
 	}
 
 	@Override
@@ -133,6 +138,8 @@ public class Main extends SherlockActivity implements OnClickListener {
 			
 			if (sp.getBoolean(Settings.TRIP_ENABLED_KEY, false) == false) { // if user wants to start a new trip
 				showDialog(ONSTART);
+				
+				// 6 hour reminder service
 				startService(new Intent(Main.this, ReminderService.class));
 			}
 			else if (sp.getBoolean(Settings.TRIP_ENABLED_KEY, false) == true) { // If trip already in session
@@ -140,16 +147,18 @@ public class Main extends SherlockActivity implements OnClickListener {
 				tripSelection.setText("- - -");
 				determineButtonDrawable();
 				
+				// 6 hour reminder service
 				stopService(new Intent(Main.this, ReminderService.class));
 				
+				// Trip notification service
 				Intent alarmIntent = new Intent(this, AlarmReceiver.class);
 				PendingIntent sender = PendingIntent.getBroadcast(this, 1, alarmIntent, 0);
 				
 				am = (AlarmManager) getSystemService(ALARM_SERVICE);
 				am.cancel(sender);
 				
-				if (ctd != null)
-					ctd.cancel();
+//				if (ctd != null)
+//					ctd.cancel();
 			}
 		}
 	}
@@ -179,7 +188,7 @@ public class Main extends SherlockActivity implements OnClickListener {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {						
 						if (which == 0) {
-							intervalSelected("5:00", "Five Minutes", 300000);
+							intervalSelected("5:00", "Five Minutes", 10000); //300000
 						}
 						else if(which == 1) {
 							intervalSelected("10:00", "Ten Minutes", 600000);
@@ -212,12 +221,12 @@ public class Main extends SherlockActivity implements OnClickListener {
 		Editor ed = sp.edit();
 		ed.putString(Settings.TRIP_INTERVAL, timeNum);
 		ed.putBoolean(Settings.TRIP_ENABLED_KEY, true);
+		ed.putInt(Settings.TRIP_INTERVAL_MILLI, milli);
 	    ed.commit();
 	    
 	    setEditText(this.tripSelection, timeNum);
 	    determineButtonDrawable();
-	    Toast.makeText(getApplicationContext(), timeString, Toast.LENGTH_SHORT).show();
-	    startTimer(milli);
+//	    startTimer(milli);
 	    
 	    // Set alarm intent
 		Intent alarmIntent = new Intent(this, AlarmReceiver.class);
@@ -241,18 +250,43 @@ public class Main extends SherlockActivity implements OnClickListener {
 		tv.setText(message);
 	}
 	
-	protected void startTimer(int countDownFrom) {
-		ctd = new CountDownTimer(countDownFrom, 1000) {
-			public void onTick(long millisUntilFinished) {
-				tripSelection.setText(String.format("%d:%02d",
-						((millisUntilFinished / 1000) / 60),
-						((millisUntilFinished / 1000) % 60)));
-			}
-			public void onFinish() {
-				tripSelection.setText("- - -");
-			}
-		}.start();
-	}
+//	protected void restartTimer(int num) {
+//		final SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+//		CountDownTimer c = new CountDownTimer(num, 1000) {
+//			public void onTick (long millsLeft) {
+//				sp.edit().putInt(Settings.CURRENT_COUNTDOWN_SECOND, (int) millsLeft / 1000);
+//				tripSelection.setText(String.format("%d:%02d",
+//						((millsLeft / 1000) / 60),
+//						((millsLeft / 1000) % 60)));
+//			}
+//			public void onFinish() {
+//				if (sp.getBoolean(Settings.TRIP_ENABLED_KEY, false) == true)
+//					startTimer(sp.getInt(Settings.TRIP_INTERVAL_MILLI, 0));
+//			}
+//		}.start();
+//	}
+//	
+//	protected void startTimer(final int countDownFrom) {
+//		final SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+//		final int num = sp.getInt(Settings.TRIP_INTERVAL_MILLI, countDownFrom);
+//		
+//		ctd = new CountDownTimer(num, 1000) {
+//			public void onTick(long millisUntilFinished) {
+//				sp.edit().putInt(Settings.CURRENT_COUNTDOWN_SECOND, (int) millisUntilFinished / 1000);
+//				tripSelection.setText(String.format("%d:%02d",
+//						((millisUntilFinished / 1000) / 60),
+//						((millisUntilFinished / 1000) % 60)));
+//			}
+//			public void onFinish() {
+//				if (sp.getBoolean(Settings.TRIP_ENABLED_KEY, false) == true)
+//					startTimer(num);
+//				else {
+//					sp.edit().putInt(Settings.CURRENT_COUNTDOWN_SECOND, 0).commit();
+//					tripSelection.setText("- - -");
+//				}
+//			}
+//		}.start();
+//	}
 	
 	protected void checkForFirstRun() {
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
@@ -293,6 +327,12 @@ public class Main extends SherlockActivity implements OnClickListener {
         sb.setSpan(bss, 0, sb.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
         
         this.tallyNumber.setText(sb);
+        
+        // temporary
+        if (sp.getBoolean(Settings.TRIP_ENABLED_KEY, false) == true)
+        	this.tripSelection.setText(sp.getString(Settings.TRIP_INTERVAL, "0:00"));
+        else
+        	this.tripSelection.setText("- - -");
 	}
 	
 	protected Intent assembleEmail() {
@@ -338,6 +378,7 @@ public class Main extends SherlockActivity implements OnClickListener {
 		}
 	}
 	
+	// My name is Android.
 	// Since i'm stupid, I make developers call extaneous methods to run code instead of implementing it right there
 	protected void goToHelp() {
 		Intent helpIntent = new Intent(this, Help.class);

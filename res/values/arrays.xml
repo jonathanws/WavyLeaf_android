@@ -7,9 +7,9 @@
     </string-array>
     
     <string-array name="areainfested_array">
-        <item>Square Miles</item>
-        <item>Square Acres</item>
         <item>Square Feet</item>
+        <item>Square Metres</item>
+        <item>Acres</item>
     </string-array>
     
     <string-array name="tripinterval_array">

@@ -68,6 +68,8 @@ public class LoginContinued extends SherlockActivity {
 		
 		createAccount.setTypeface(tf_light);
 		
+		// Anywhere you see "array" (what the user picks from for education/confidence etc) these values are in arrays.xml, near the bottom
+		
 		// For Education
 		ArrayAdapter<CharSequence> educationAdapter = ArrayAdapter.createFromResource(this, R.array.education_array, android.R.layout.simple_spinner_item);
 		educationAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -100,7 +102,6 @@ public class LoginContinued extends SherlockActivity {
 		ed.commit();
 	}
 	
-	//moved this here from Login.java
 	protected void uploadData() {
 		JSONObject json = new JSONObject();
 		try {

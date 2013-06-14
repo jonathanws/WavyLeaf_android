@@ -40,7 +40,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         if (sp.getBoolean(Settings.KEY_CHECKBOX_VIBRATE, true))
         	mBuilder.setVibrate(vibrationPattern());
 	    
-	    nm.notify(Main.mUniqueId, mBuilder.build());
+	    nm.notify(Main.notifTripID, mBuilder.build());
 	}
 	
 	protected long[] vibrationPattern() {

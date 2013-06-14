@@ -50,7 +50,7 @@ public class ReminderService extends Service {
 		
 		if (!isDBEmpty()) {				// If there are unsent points, start the timer again
 			timer = new Timer(true);	// Run as daemon thread
-			timer.schedule(new mainTask(), 21600000);	//6 hours = 21600000
+			timer.schedule(new mainTask(), 21600000);	//6 hours = 21600000 milliseconds
 			isTimerRunning = true;
 		} else 							// If all points are sent
 			isTimerRunning = false;
@@ -78,7 +78,7 @@ public class ReminderService extends Service {
         public void run() {
         	isTimerRunning = false;
         	nm = ((NotificationManager) getSystemService(NOTIFICATION_SERVICE));
-        	nm.cancel(Main.mUniqueId);
+        	nm.cancel(Main.notifReminderID);
         	showReminderNotification(getBaseContext());
 			//Need to stop service -- calling stopService which is same as stopService(Intent)
 			stopSelf();

@@ -41,6 +41,7 @@
     <string name="layout_report_area">AREA INFESTED</string>
     <string name="layout_report_coordinates">COORDINATES</string>
     <string name="layout_report_camera">Choose a picture</string>
+    <string name="layout_report_confirmcoordinates">Coordinates are correct</string>
     <string name="latitude">Latitude</string>
     <string name="longitude">Longitude</string>
     

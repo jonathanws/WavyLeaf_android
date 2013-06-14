@@ -300,6 +300,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="144dp" />
             
+            <CheckBox
+                android:id="@+id/cb_confirm"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:text="@string/layout_report_confirmcoordinates" />
+            
         </LinearLayout>
 
         <View
