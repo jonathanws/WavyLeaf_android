@@ -47,7 +47,7 @@
             android:layout_marginBottom="8dp"
             android:ellipsize="end"
             android:hint="@string/layout_login_name"
-            android:inputType="textEmailAddress"
+            android:inputType="textPersonName"
             android:singleLine="true" />
 
         <EditText

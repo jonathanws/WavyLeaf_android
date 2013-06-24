@@ -36,7 +36,16 @@ public class Login extends SherlockActivity {
 		super.onCreate(bundle);
 		setContentView(R.layout.layout_login);
 		init();
-		showDialog(EMAIL); // Calls onCreateDialog()
+		
+		// If a user has done this all already, proceed to main
+		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+		if (!((sp.getBoolean(Settings.FIRST_RUN, false)) || (sp.getString(Settings.KEY_NAME, "null")) == "null")) {
+			Intent mainIntent = new Intent(this, Main.class);
+			mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+			startActivity(mainIntent);
+			finish();
+		} else
+			showDialog(EMAIL); // Calls onCreateDialog()
 	}
 	
 	@Override
@@ -83,6 +92,7 @@ public class Login extends SherlockActivity {
 	}
 	
 	protected void init() {
+		setTitle("Create Account");
 		// Set beautiful typefaces
 		Typeface tf_light = Typeface.createFromAsset(getAssets(), "fonts/roboto_thin.ttf");
 		

@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">Wavyleaf</string>
-    <string name="version">BETA</string>
+    <string name="version">1.0</string>
     <string name="website">http://skappsrv.towson.edu/wavyleaf/website/</string>
     <string name="email">wavyleaf@towson.edu</string>
     <string-array name="email_array"><item>wavyleaf@towson.edu</item></string-array>
@@ -17,6 +17,7 @@
     <string name="layout_main_new">New Sighting</string>
     <string name="layout_main_trip">Start Trip</string>
     <string name="layout_main_endtrip">End Trip</string>
+    <string name="layout_main_uploadsightings">Upload sightings</string>
     
     <string name="layout_numrecorded">Your Sightings/Trips</string>
     <string name="layout_tripinterval">Reminder Interval</string>

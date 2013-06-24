@@ -191,8 +191,9 @@ public class Trip extends SherlockActivity {
 				if (requestUpdatesFromProvider() == null) // If no GPS
 					Toast.makeText(getApplicationContext(), "Cannot submit without GPS signal", Toast.LENGTH_SHORT).show();
 				else {
-					// If all fields are filled out, minus Notes
+					// If all fields are filled out, minus Notes/Area infested
 					if (verifyFields() == true) {
+						Toast.makeText(getApplicationContext(), "Sighting recorded", Toast.LENGTH_SHORT).show();
 						createJSONObject();
 						finish();
 					}

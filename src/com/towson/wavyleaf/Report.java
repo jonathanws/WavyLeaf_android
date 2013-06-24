@@ -46,8 +46,6 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-//TODO (later) obtain signature map key
-
 /*
 * This class requires the Google Play Services apk, and provides access to Google Maps v2.
 * It is available on all phones with OpenGL v2.0 and Android 2.2+.  Requirements set in manifest
@@ -189,19 +187,35 @@ public class Report extends SherlockFragmentActivity {
 		// User edited coordinates, so don't get them again from gps
 		if (!editedCoordinatesInOtherActivitySoDontGetGPSLocation) {
 			
-			// Check for GPS
-			LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-			gpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-			playAPKEnabled = doesDeviceHaveGooglePlayServices();
-			
-			// If GPS is disabled
-			if (!gpsEnabled) {
-				buildAlertMessageNoGps();
-			} else if(gpsEnabled) {
-				if (playAPKEnabled) {
-					setUpMapIfNeeded();
-					wheresWaldo();
-				}
+			refresh();
+//			// Check for GPS
+//			LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+//			gpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+//			playAPKEnabled = doesDeviceHaveGooglePlayServices();
+//			
+//			if (!gpsEnabled) { // If GPS is disabled
+//				buildAlertMessageNoGps();
+//			} else if(gpsEnabled) {
+//				if (playAPKEnabled) {
+//					setUpMapIfNeeded();
+//					wheresWaldo();
+//				}
+//			}
+		}
+	}
+	
+	protected void refresh() {
+		// Check for GPS
+		LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+		gpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+		playAPKEnabled = doesDeviceHaveGooglePlayServices();
+		
+		if (!gpsEnabled) { // If GPS is disabled
+			buildAlertMessageNoGps();
+		} else if(gpsEnabled) {
+			if (playAPKEnabled) {
+				setUpMapIfNeeded();
+				wheresWaldo();
 			}
 		}
 	}
@@ -233,16 +247,24 @@ public class Report extends SherlockFragmentActivity {
         		finish();
         		return true;
         case R.id.menu_submit:
+//        	Toast.makeText(getApplicationContext(), String.valueOf(currentEditableLocation.getTime()), Toast.LENGTH_SHORT).show();
     		if (requestUpdatesFromProvider() == null) // If no GPS
     			Toast.makeText(getApplicationContext(), "Cannot submit without GPS signal", Toast.LENGTH_SHORT).show();
     		else {
-            	// If all fields are filled out, minus Notes
+            	// If all fields are filled out, minus Notes/Area infested
     			if (verifyFields() == true) {
+    				Toast.makeText(getApplicationContext(), "Sighting recorded", Toast.LENGTH_SHORT).show();
             		createJSONObject();
             		finish();
             	}
     		}
     		return true;
+        case R.id.menu_refresh:
+        	mMap.clear();
+        	mapHasMarker = false;
+        	refresh();
+        	Toast.makeText(getApplicationContext(), "Location refreshed", Toast.LENGTH_SHORT).show();
+        	return true;
         case R.id.menu_legal:
         	showDialog(LEGAL);
         	return true;
@@ -280,18 +302,23 @@ public class Report extends SherlockFragmentActivity {
 				break;
 			case R.id.bu_2:
 				tvper_summary.setText("1-10%");
+				etarea.setText("");
 				break;
 			case R.id.bu_3:
 				tvper_summary.setText("10-25%");
+				etarea.setText("");
 				break;
 			case R.id.bu_4:
 				tvper_summary.setText("25-50%");
+				etarea.setText("");
 				break;
 			case R.id.bu_5:
 				tvper_summary.setText("50-75%");
+				etarea.setText("");
 				break;
 			case R.id.bu_6:
 				tvper_summary.setText("75-100%");
+				etarea.setText("");
 				break;
 			default:
 				tvper_summary.setText("");

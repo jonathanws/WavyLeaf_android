@@ -81,7 +81,7 @@ public class Settings extends SherlockPreferenceActivity implements OnSharedPref
 		// Instantiation
 		Preference p_age = (Preference) findPreference(KEY_BIRTHYEAR);
 		Preference p_name = (Preference) findPreference(KEY_NAME);
-		Preference p_push = (Preference) findPreference(KEY_PUSH);
+//		Preference p_push = (Preference) findPreference(KEY_PUSH);
 		Preference p_tally_single = findPreference(KEY_SINGLETALLY);
 		Preference p_tally_trip = findPreference(KEY_TRIPTALLY);
 		CheckBoxPreference cbp_vibrate = (CheckBoxPreference) findPreference(KEY_CHECKBOX_VIBRATE);
@@ -94,7 +94,7 @@ public class Settings extends SherlockPreferenceActivity implements OnSharedPref
 		int int_tally_trip = sp.getInt(KEY_TRIPTALLY, 0);
 		boolean boolean_vibrate = sp.getBoolean(KEY_CHECKBOX_VIBRATE, true);
 		boolean boolean_noise = sp.getBoolean(KEY_CHECKBOX_NOISE, true);
-		boolean isEmpty = isDBEmpty();
+//		boolean isEmpty = isDBEmpty();
 		
 		// Set Summaries
 		p_name.setSummary(capitalizeFirstLetter(string_name));
@@ -103,7 +103,7 @@ public class Settings extends SherlockPreferenceActivity implements OnSharedPref
 		p_tally_trip.setSummary(int_tally_trip + "");
 		cbp_vibrate.setChecked(boolean_vibrate);
 		cbp_noise.setChecked(boolean_noise);
-		p_push.setEnabled(!isEmpty);
+//		p_push.setEnabled(!isEmpty);
 	}
 	
 	private String capitalizeFirstLetter(String paramString) {
@@ -117,15 +117,15 @@ public class Settings extends SherlockPreferenceActivity implements OnSharedPref
 	}
 	
 	// http://stackoverflow.com/questions/11251901/check-whether-database-is-empty
-	protected boolean isDBEmpty() {
-		DatabaseListJSONData m_dbListData = new DatabaseListJSONData(this);
-		SQLiteDatabase db = m_dbListData.getWritableDatabase();
-		
-		Cursor cur = db.rawQuery("SELECT * FROM " + DatabaseConstants.TABLE_NAME, null);
-		if (cur.moveToFirst())
-			return false;
-		else
-			return true;
-	}
+//	protected boolean isDBEmpty() {
+//		DatabaseListJSONData m_dbListData = new DatabaseListJSONData(this);
+//		SQLiteDatabase db = m_dbListData.getWritableDatabase();
+//		
+//		Cursor cur = db.rawQuery("SELECT * FROM " + DatabaseConstants.TABLE_NAME, null);
+//		if (cur.moveToFirst())
+//			return false;
+//		else
+//			return true;
+//	}
 	
 }

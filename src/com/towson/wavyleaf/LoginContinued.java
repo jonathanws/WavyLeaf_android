@@ -50,8 +50,11 @@ public class LoginContinued extends SherlockActivity {
 			case R.id.menu_createaccount:
 	        	submit();
 	        	uploadData();
-	        	finish();
 	        	Toast.makeText(getApplicationContext(), "Account Details Recorded", Toast.LENGTH_SHORT).show();
+	        	Intent mainIntent = new Intent(this, Main.class);
+				mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+				startActivity(mainIntent);
+				finish();
 	        	return true;
 		}
 		return super.onOptionsItemSelected(item);

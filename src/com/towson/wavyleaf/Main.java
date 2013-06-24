@@ -10,12 +10,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.res.Resources;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
@@ -35,10 +36,9 @@ import com.bugsense.trace.BugSenseHandler;
 public class Main extends SherlockActivity implements OnClickListener {
 	
 	private static final int ONSTART = 6;
-	private static final int HELP = 0;
 	protected static final int notifReminderID = 24885250, notifTripID = 24885251; // Used for notifications
-	protected Button bu_new, bu_trip;
-	protected TextView tripInterval, tripSelection, tally, tallyNumber;
+	protected Button bu_new, bu_trip, bu_push;
+	protected TextView tripInterval, tripSelection;//, tally, tallyNumber;
 	NotificationManager nm;
 //	public CountDownTimer ctd;
 	public AlarmManager am;
@@ -53,7 +53,7 @@ public class Main extends SherlockActivity implements OnClickListener {
 		setContentView(R.layout.layout_main);
 		initLayout();
 		determineButtonDrawable();
-		checkForFirstRun();
+		toggleFirstRun();
     }
 	
 	protected void initLayout() {
@@ -61,20 +61,22 @@ public class Main extends SherlockActivity implements OnClickListener {
 		
 		bu_new = (Button) findViewById(R.id.button_new);
 		bu_trip = (Button) findViewById(R.id.button_trip);
+		bu_push = (Button) findViewById(R.id.button_pushpoints);
 		tripInterval = (TextView) findViewById(R.id.tv_tripinterval);
 		tripSelection = (TextView) findViewById(R.id.tv_tripselection);
-		tally = (TextView) findViewById(R.id.tv_triptally);
-		tallyNumber = (TextView) findViewById(R.id.tv_triptallynumber);
 		
 		bu_new.setTypeface(tf_light);
 		bu_trip.setTypeface(tf_light);
+		bu_push.setTypeface(tf_light);
 		tripInterval.setTypeface(tf_light);
 		tripSelection.setTypeface(tf_light);
-		tally.setTypeface(tf_light);
-		tallyNumber.setTypeface(tf_light);
 		
 		bu_new.setOnClickListener(this);
 		bu_trip.setOnClickListener(this);
+		bu_push.setOnClickListener(this);
+		
+		if (isDBEmpty())
+			bu_push.setVisibility(View.GONE);
 	}
 	
 	@Override
@@ -147,8 +149,13 @@ public class Main extends SherlockActivity implements OnClickListener {
 				tripSelection.setText("- - -");
 				determineButtonDrawable();
 				
+				// Cancel any existing trip notifications in system bar, since trip is now finished
+				nm = ((NotificationManager) getSystemService(NOTIFICATION_SERVICE));
+				nm.cancel(Main.notifTripID);
+				
+				//TODO I really don't think this code should be here
 				// 6 hour reminder service
-				stopService(new Intent(Main.this, ReminderService.class));
+//				stopService(new Intent(Main.this, ReminderService.class));
 				
 				// Trip notification service
 				Intent alarmIntent = new Intent(this, AlarmReceiver.class);
@@ -160,6 +167,9 @@ public class Main extends SherlockActivity implements OnClickListener {
 //				if (ctd != null)
 //					ctd.cancel();
 			}
+		} else if (view == this.bu_push) {
+			Intent pushIntent = new Intent(this, UploadActivity.class);
+			this.startActivity(pushIntent);	
 		}
 	}
 	
@@ -201,6 +211,18 @@ public class Main extends SherlockActivity implements OnClickListener {
 				.create();
 		}
 		return super.onCreateDialog(id);
+	}
+	
+	// http://stackoverflow.com/questions/11251901/check-whether-database-is-empty
+	protected boolean isDBEmpty() {
+		DatabaseListJSONData m_dbListData = new DatabaseListJSONData(this);
+		SQLiteDatabase db = m_dbListData.getWritableDatabase();
+		
+		Cursor cur = db.rawQuery("SELECT * FROM " + DatabaseConstants.TABLE_NAME, null);
+		if (cur.moveToFirst())
+			return false;
+		else
+			return true;
 	}
 	
 	protected void determineButtonDrawable() {
@@ -288,12 +310,10 @@ public class Main extends SherlockActivity implements OnClickListener {
 //		}.start();
 //	}
 	
-	protected void checkForFirstRun() {
+	protected void toggleFirstRun() {
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 		if (sp.getBoolean(Settings.FIRST_RUN, true)) {
 			sp.edit().putBoolean(Settings.FIRST_RUN, false).commit();
-			Intent newReportIntent = new Intent(this, Login.class);
-			this.startActivity(newReportIntent);
 		}
 	}
 	
@@ -326,7 +346,7 @@ public class Main extends SherlockActivity implements OnClickListener {
         // make them also bold
         sb.setSpan(bss, 0, sb.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
         
-        this.tallyNumber.setText(sb);
+//        this.tallyNumber.setText(sb);
         
         // temporary
         if (sp.getBoolean(Settings.TRIP_ENABLED_KEY, false) == true)

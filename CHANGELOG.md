@@ -2,7 +2,16 @@ Change Log
 ===============================================================================
 
 
-Version BETA *(6/5-2013)*
+Version 2.0 *(6-23-2013)*
+----------------------------
+Lots of code committed at once.
+* Main screen has tallies removed
+* Main screen has different push button, but needs to be changed
+* Removed push points button from settings
+* Added refresh button to New Sighting
+* Removed countdowntimer (for now)
+
+Version BETA *(6-5-2013)*
 ----------------------------
 Beta Release!  Rejoice!
 

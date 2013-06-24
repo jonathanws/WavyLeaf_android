@@ -32,7 +32,20 @@
             android:textAppearance="?android:attr/textAppearanceLarge" />
         
     </com.towson.wavyleaf.DashboardLayout>
-
+    
+    <Button
+        android:id="@+id/button_pushpoints"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="32dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="40dp"
+        android:background="@drawable/button_drawable"
+        android:drawableLeft="@drawable/ic_pushpoints"
+        android:text="@string/layout_main_uploadsightings"
+        android:textColor="@color/white" />
+    
     <View
         android:layout_width="fill_parent"
         android:layout_height="1dp"
@@ -68,6 +81,8 @@
         
     </LinearLayout>
 
+    <!--
+    
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -94,5 +109,7 @@
             android:textColor="#669900" />
         
     </LinearLayout>
+    
+    -->
 
 </LinearLayout>

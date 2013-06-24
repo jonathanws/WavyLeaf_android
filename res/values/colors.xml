@@ -3,4 +3,5 @@
     <color name="pressed_greentheme">#CC99CC00</color>
     <color name="holo_darkgreen">#669900</color>
     <color name="holo_lightgreen">#99CC00</color>
+    <color name="white">#FFFFFF</color>
 </resources>
