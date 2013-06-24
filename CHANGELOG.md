@@ -2,6 +2,17 @@ Change Log
 ===============================================================================
 
 
+Version 1.01 (Google Play) *(6-24-2013)*
+-----------------------------------------
+* New google play version
+* Version code was changed from 1 to 2
+
+
+Commits above this line refer to actual version numbers
+-------------------------------------------------------
+
+
+
 Version 2.0 *(6-23-2013)*
 ----------------------------
 Lots of code committed at once.
