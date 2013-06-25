@@ -37,7 +37,7 @@ public class Main extends SherlockActivity implements OnClickListener {
 	
 	private static final int ONSTART = 6;
 	protected static final int notifReminderID = 24885250, notifTripID = 24885251; // Used for notifications
-	protected Button bu_new, bu_trip, bu_push;
+	protected Button bu_new, bu_trip, bu_upload;
 	protected TextView tripInterval, tripSelection;//, tally, tallyNumber;
 	NotificationManager nm;
 //	public CountDownTimer ctd;
@@ -61,28 +61,26 @@ public class Main extends SherlockActivity implements OnClickListener {
 		
 		bu_new = (Button) findViewById(R.id.button_new);
 		bu_trip = (Button) findViewById(R.id.button_trip);
-		bu_push = (Button) findViewById(R.id.button_pushpoints);
+		bu_upload = (Button) findViewById(R.id.button_uploadsightings);
 		tripInterval = (TextView) findViewById(R.id.tv_tripinterval);
 		tripSelection = (TextView) findViewById(R.id.tv_tripselection);
 		
 		bu_new.setTypeface(tf_light);
 		bu_trip.setTypeface(tf_light);
-		bu_push.setTypeface(tf_light);
+		bu_upload.setTypeface(tf_light);
 		tripInterval.setTypeface(tf_light);
 		tripSelection.setTypeface(tf_light);
 		
 		bu_new.setOnClickListener(this);
 		bu_trip.setOnClickListener(this);
-		bu_push.setOnClickListener(this);
-		
-		if (isDBEmpty())
-			bu_push.setVisibility(View.GONE);
+		bu_upload.setOnClickListener(this);
 	}
 	
 	@Override
 	protected void onResume() {
 		super.onResume();
 		determineTallys();
+		determineButtonDrawable();
 //		if (ctd != null) {
 //			SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 //			restartTimer(sp.getInt(Settings.CURRENT_COUNTDOWN_SECOND, 0));
@@ -167,7 +165,7 @@ public class Main extends SherlockActivity implements OnClickListener {
 //				if (ctd != null)
 //					ctd.cancel();
 			}
-		} else if (view == this.bu_push) {
+		} else if (view == this.bu_upload) {
 			Intent pushIntent = new Intent(this, UploadActivity.class);
 			this.startActivity(pushIntent);	
 		}
@@ -225,17 +223,34 @@ public class Main extends SherlockActivity implements OnClickListener {
 			return true;
 	}
 	
+	// Determine state for Trip button, and for Upload sightings button
 	protected void determineButtonDrawable() {
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 		
+		// Trip button
 		if (sp.getBoolean(Settings.TRIP_ENABLED_KEY, false) == true) { // There is a trip in progress
-        	setButtonDrawable(R.drawable.ic_main_end); // Set to red button
+        	setButtonDrawable(bu_trip, R.drawable.ic_main_end); // Set to red button
         	bu_trip.setText(R.string.layout_main_endtrip);	// Set text to "End Trip"
         } 
         else {
-        	setButtonDrawable(R.drawable.ic_main_start_light); // Set to blue button
+        	setButtonDrawable(bu_trip, R.drawable.ic_main_start_light); // Set to blue button
         	bu_trip.setText(R.string.layout_main_trip);	// Set text back to "Start Trip"
         }
+		
+		// Upload sightings button
+		if (isDBEmpty()) {
+			bu_upload.setClickable(false);
+			bu_upload.setTextColor(getResources().getColor(R.color.grey));
+			setButtonDrawable(bu_upload, R.drawable.ic_main_upload_light);
+		}
+		// TODO
+		//
+		// ***I'm not sure if this will be taken care of by xml, or if we really need this***
+		else {
+			bu_upload.setClickable(true);
+			bu_upload.setTextColor(getResources().getColor(R.color.black));
+			setButtonDrawable(bu_upload, R.drawable.ic_main_upload);
+		}
 	}
 	
 	protected void intervalSelected(String timeNum, String timeString, int milli) {
@@ -259,9 +274,9 @@ public class Main extends SherlockActivity implements OnClickListener {
 		am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + milli, milli, sender);
 	}
 	
-	protected void setButtonDrawable(int button) {
-		Drawable img = getBaseContext().getResources().getDrawable(button);
-		bu_trip.setCompoundDrawablesWithIntrinsicBounds(img, null, null, null);
+	protected void setButtonDrawable(Button button, int newImage) {
+		Drawable img = getBaseContext().getResources().getDrawable(newImage);
+		button.setCompoundDrawablesWithIntrinsicBounds(img, null, null, null);
 	}
 	
 	protected void setButtonText(Button button, String text) {

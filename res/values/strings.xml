@@ -17,7 +17,7 @@
     <string name="layout_main_new">New Sighting</string>
     <string name="layout_main_trip">Start Trip</string>
     <string name="layout_main_endtrip">End Trip</string>
-    <string name="layout_main_uploadsightings">Upload sightings</string>
+    <string name="layout_main_uploadsightings">Upload Sightings</string>
     
     <string name="layout_numrecorded">Your Sightings/Trips</string>
     <string name="layout_tripinterval">Reminder Interval</string>

@@ -2,6 +2,12 @@ Change Log
 ===============================================================================
 
 
+Version 1.01b *(6-24-2013)*
+----------------------------
+* Changed push button on main screen
+* push button now changes state based on state of database
+* Replaced classpath, hopefully this should work regardless of machine
+
 Version 1.01 (Google Play) *(6-24-2013)*
 -----------------------------------------
 * New google play version
