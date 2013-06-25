@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">Wavyleaf</string>
-    <string name="version">1.0</string>
+    <string name="version">1.01</string>
     <string name="website">http://skappsrv.towson.edu/wavyleaf/website/</string>
     <string name="email">wavyleaf@towson.edu</string>
     <string-array name="email_array"><item>wavyleaf@towson.edu</item></string-array>

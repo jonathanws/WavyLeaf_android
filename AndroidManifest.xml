@@ -1,7 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.towson.wavyleaf"
     android:versionCode="2"
-    android:versionName="1.01" >
+    android:versionName="@string/version" >
+    <!-- If this call to version doesn't work, replace it with 1.02 -->
 
     <uses-sdk
         android:minSdkVersion="7"
