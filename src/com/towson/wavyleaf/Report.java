@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -77,6 +78,9 @@ public class Report extends SherlockFragmentActivity {
 	protected ToggleButton b1, b2, b3, b4, b5, b6;
 	private UiSettings mUiSettings;
 	
+	private static final int ONE_MINUTE = 1000*60; //in ms
+	private static final int TEN_METERS = 10; //in m
+	
 	// private static final int CAMERA = 3;
 	// private static final int GALLERY_REQUEST = 1339;
 	// private static final int CAMERA_REQUEST = 1337;
@@ -117,6 +121,30 @@ public class Report extends SherlockFragmentActivity {
 		rg = (RadioGroup) findViewById(R.id.toggleGroup);
 		sp = (Spinner) findViewById(R.id.sp_areainfested);
 		mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+		
+		//Location Listener
+		// Define a listener that responds to location updates
+		LocationListener locationListener = new LocationListener() {
+		    public void onLocationChanged(Location location) {
+		      // Called when a new location is found by the network location provider.
+		    	currentEditableLocation = location;
+    			//Toast.makeText(getApplicationContext(), "Location Found!", Toast.LENGTH_SHORT).show();
+		    	updateUILocation(location);
+		    }
+
+		    public void onStatusChanged(String provider, int status, Bundle extras) {}
+
+		    public void onProviderEnabled(String provider) {}
+
+		    public void onProviderDisabled(String provider) {}
+		  };
+
+		// Register the listener with the Location Manager to receive location updates
+		mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+		
+		
+		
+		
 		
 		// Listener for EditText in Area Infested
 		etarea.addTextChangedListener(new TextWatcher() {
@@ -186,8 +214,12 @@ public class Report extends SherlockFragmentActivity {
 		
 		// User edited coordinates, so don't get them again from gps
 		if (!editedCoordinatesInOtherActivitySoDontGetGPSLocation) {
-			
-			refresh();
+			if(!isAccurateLocation(currentEditableLocation))
+				refresh();
+			else{
+				updateUILocation(currentEditableLocation);
+				setUpMapIfNeeded();
+			}
 //			// Check for GPS
 //			LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 //			gpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
@@ -210,14 +242,19 @@ public class Report extends SherlockFragmentActivity {
 		gpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
 		playAPKEnabled = doesDeviceHaveGooglePlayServices();
 		
-		if (!gpsEnabled) { // If GPS is disabled
-			buildAlertMessageNoGps();
-		} else if(gpsEnabled) {
-			if (playAPKEnabled) {
-				setUpMapIfNeeded();
-				wheresWaldo();
+		if(!isAccurateLocation(currentEditableLocation)){ // If location isn't accurate
+		
+				
+			if (!gpsEnabled) { // If GPS is disabled
+				buildAlertMessageNoGps();
+			} else if(gpsEnabled) {
+				if (playAPKEnabled) {
+					setUpMapIfNeeded();
+					wheresWaldo();
+				}
 			}
-		}
+		}else
+			setUpMapIfNeeded();
 	}
 
 	protected boolean doesDeviceHaveGooglePlayServices() {
@@ -248,7 +285,14 @@ public class Report extends SherlockFragmentActivity {
         		return true;
         case R.id.menu_submit:
 //        	Toast.makeText(getApplicationContext(), String.valueOf(currentEditableLocation.getTime()), Toast.LENGTH_SHORT).show();
-    		if (requestUpdatesFromProvider() == null) // If no GPS
+    		if (isAccurateLocation(currentEditableLocation)){//if LocationListener is accurate
+            	// If all fields are filled out, minus Notes/Area infested
+    			if (verifyFields() == true) {
+    				Toast.makeText(getApplicationContext(), "Sighting recorded", Toast.LENGTH_SHORT).show();
+            		createJSONObject();
+            		finish();
+            	}
+    		} else if (requestUpdatesFromProvider() == null) // If no GPS
     			Toast.makeText(getApplicationContext(), "Cannot submit without GPS signal", Toast.LENGTH_SHORT).show();
     		else {
             	// If all fields are filled out, minus Notes/Area infested
@@ -377,6 +421,10 @@ public class Report extends SherlockFragmentActivity {
 		setEditTexts(location.getLatitude(), location.getLongitude());
 		if (!mapHasMarker)
 			setCurrentPositionMarker(location);
+		else {
+			mMap.clear();
+			setCurrentPositionMarker(location);
+		}
 	}
 	
 	// Method won't be called unless Play APK in installed
@@ -391,12 +439,31 @@ public class Report extends SherlockFragmentActivity {
 		}
 	}
 	
+	private boolean isAccurateLocation(Location location){
+		
+		if(location == null)
+			return false;
+		
+		boolean isRecent = (location.getTime() + ONE_MINUTE) > System.currentTimeMillis();
+		
+		if(isRecent){
+			//if recent, it is accurate
+			return true;
+		}
+		
+		return false;
+		
+	}
+	
 	private Location requestUpdatesFromProvider() {
+        if(isAccurateLocation(currentEditableLocation))
+        	return currentEditableLocation;
+		
 		Location location = null;
 		if (mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             location = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             // Also set global location variable so if user selects edit, it has something to pass
-            currentEditableLocation = location;
+           	currentEditableLocation = location;
         }
 		return location;
 	}
@@ -634,6 +701,7 @@ public class Report extends SherlockFragmentActivity {
 //	protected void takePicture() {
 //		startActivityForResult(new Intent("android.media.action.IMAGE_CAPTURE"), CAMERA_REQUEST);
 //	}
+	
 
 }
 

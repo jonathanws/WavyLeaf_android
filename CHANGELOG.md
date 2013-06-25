@@ -17,7 +17,11 @@ Version 1.01 (Google Play) *(6-24-2013)*
 Commits above this line refer to actual version numbers
 -------------------------------------------------------
 
-
+Version 2.0.1 *(6-25-2013)*
+------------------------------
+Changes to the way GPS is found
+* Added Location Listener to report
+* If the previous location isn't less than 1 minute old, it then requests a new location
 
 Version 2.0 *(6-23-2013)*
 ----------------------------
