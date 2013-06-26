@@ -14,6 +14,8 @@ public class LocationApplication extends Application{
 	private static final long THIRTY_SECONDS = 30*1000; //IN MS
 	private Location location;
 	private LocationManager locationManager;
+	private LocationListener locationListener;
+	private boolean isSearching = false;
 	
 	public void init(){
 	
@@ -22,7 +24,7 @@ public class LocationApplication extends Application{
 		
 		//Location Listener
 		// Define a listener that responds to location updates
-		LocationListener locationListener = new LocationListener() {
+		locationListener = new LocationListener() {
 		    public void onLocationChanged(Location loc) {
 		      // Called when a new location is found by the network location provider.
 		    	if(isAccurateLocation(loc)){
@@ -42,6 +44,13 @@ public class LocationApplication extends Application{
 		// Register the listener with the Location Manager to receive location updates
 		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
 		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, THIRTY_SECONDS, 0, locationListener);
+		
+		isSearching = true;
+	}
+	
+	public void stop(){
+		locationManager.removeUpdates(locationListener);
+		isSearching = false;
 	}
 	
 	public Location getLocation(){
@@ -124,6 +133,10 @@ public class LocationApplication extends Application{
 	      return provider2 == null;
 	    }
 	    return provider1.equals(provider2);
+	}
+	
+	public boolean isSearching(){
+		return isSearching;
 	}
 	
 }

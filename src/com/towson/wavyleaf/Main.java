@@ -59,7 +59,7 @@ public class Main extends SherlockActivity implements OnClickListener {
 		initLayout();
 		determineButtonDrawable();
 		toggleFirstRun();
-		findUsersLocation();
+		//findUsersLocation();
     }
 	
 	
@@ -137,6 +137,9 @@ public class Main extends SherlockActivity implements OnClickListener {
 	@Override
 	public void onClick(View view) {
 		if (view == this.bu_new) {
+			//start searching for location
+			findUsersLocation();
+			
 			Intent newReportIntent = new Intent(this, Report.class);
 			this.startActivity(newReportIntent);	
 			
@@ -146,6 +149,9 @@ public class Main extends SherlockActivity implements OnClickListener {
 			if (sp.getBoolean(Settings.TRIP_ENABLED_KEY, false) == false) { // if user wants to start a new trip
 				showDialog(ONSTART);
 				
+				//start searching for location
+				findUsersLocation();
+				
 				// 6 hour reminder service
 				startService(new Intent(Main.this, ReminderService.class));
 			}
@@ -153,6 +159,9 @@ public class Main extends SherlockActivity implements OnClickListener {
 				sp.edit().putBoolean(Settings.TRIP_ENABLED_KEY, false).commit(); // Turn it off
 				tripSelection.setText("- - -");
 				determineButtonDrawable();
+				
+				//stop searching for location
+				stopSearchingForLocation();
 				
 				// Cancel any existing trip notifications in system bar, since trip is now finished
 				nm = ((NotificationManager) getSystemService(NOTIFICATION_SERVICE));
@@ -431,6 +440,11 @@ public class Main extends SherlockActivity implements OnClickListener {
 	private void findUsersLocation(){
 		locationData = (LocationApplication) getApplication();
 		locationData.init();
+	}
+	
+	private void stopSearchingForLocation(){
+		locationData = (LocationApplication) getApplication();
+		locationData.stop();
 	}
 		
 }

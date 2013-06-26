@@ -194,6 +194,9 @@ public class Report extends SherlockFragmentActivity {
 		b5.setTypeface(tf_light);
 		b6.setTypeface(tf_light);
 		
+		if(!locationData.isSearching())
+			findUsersLocation();
+		
 //		ib = (ImageButton) findViewById(R.id.report_imagebutton);
 		// Listener for camera button
 //		ib.setOnClickListener(new OnClickListener() {
@@ -307,6 +310,13 @@ public class Report extends SherlockFragmentActivity {
     			if (verifyFields() == true) {
     				Toast.makeText(getApplicationContext(), "Sighting recorded", Toast.LENGTH_SHORT).show();
             		createJSONObject();
+            		// Restore preferences
+            		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+            	    boolean tripEnabled = sp.getBoolean("TRIP_ENABLED",false);
+            	    if(!tripEnabled){
+            			locationData.stop();	
+            	    }
+            		updateLocationTimer.cancel();
             		finish();
             	}
     		}
@@ -739,6 +749,11 @@ public class Report extends SherlockFragmentActivity {
 	
 		}
 	};
+	
+	private void findUsersLocation(){
+		locationData = (LocationApplication) getApplication();
+		locationData.init();
+	}
 	
 
 }
