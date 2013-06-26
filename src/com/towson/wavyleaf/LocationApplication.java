@@ -49,7 +49,8 @@ public class LocationApplication extends Application{
 	}
 	
 	public void stop(){
-		locationManager.removeUpdates(locationListener);
+		if (locationManager != null && locationListener != null)
+			locationManager.removeUpdates(locationListener);
 		isSearching = false;
 	}
 	
