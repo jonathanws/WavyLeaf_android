@@ -677,7 +677,9 @@ public class Report extends SherlockFragmentActivity {
 	
 	private String shortenAreaType() {
 		String str = sp.getSelectedItem().toString();
-		if (str.equals("Square Metres"))
+		if (str.equals("Hectares"))
+			str = "HA";
+		else if (str.equals("Square Metres"))
 			str = "SM";
 		else if (str.equals("Acres"))
 			str = "SA";

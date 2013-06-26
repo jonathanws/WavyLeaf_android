@@ -10,6 +10,7 @@
         <item>Square Feet</item>
         <item>Square Metres</item>
         <item>Acres</item>
+        <item>Hectares</item>
     </string-array>
     
     <string-array name="tripinterval_array">
@@ -51,7 +52,7 @@
     
     <string-array name="confidence_plant_array">
         <item>Not confident</item>
-        <item>Somewhat Confident</item>
+        <item>Somewhat confident</item>
         <item>Fairly confident</item>
         <item>Expert</item>
     </string-array>
