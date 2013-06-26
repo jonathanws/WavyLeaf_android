@@ -1,5 +1,8 @@
 package com.towson.wavyleaf;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -77,8 +80,11 @@ public class Report extends SherlockFragmentActivity {
 	protected TextView tvlat, tvlong, tvpicnotes, tvper, tvper_summary, tvcoor, tvarea, tvarea_summary;
 	protected ToggleButton b1, b2, b3, b4, b5, b6;
 	private UiSettings mUiSettings;
+	private LocationApplication locationData;	
+	private Timer updateLocationTimer;
 	
 	private static final int ONE_MINUTE = 1000*60; //in ms
+	private static final int FIVE_SECONDS = 1000*5; //in ms
 	private static final int TEN_METERS = 10; //in m
 	
 	// private static final int CAMERA = 3;
@@ -122,29 +128,18 @@ public class Report extends SherlockFragmentActivity {
 		sp = (Spinner) findViewById(R.id.sp_areainfested);
 		mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		
-		//Location Listener
-		// Define a listener that responds to location updates
-		LocationListener locationListener = new LocationListener() {
-		    public void onLocationChanged(Location location) {
-		      // Called when a new location is found by the network location provider.
-		    	currentEditableLocation = location;
-    			//Toast.makeText(getApplicationContext(), "Location Found!", Toast.LENGTH_SHORT).show();
-		    	updateUILocation(location);
-		    }
-
-		    public void onStatusChanged(String provider, int status, Bundle extras) {}
-
-		    public void onProviderEnabled(String provider) {}
-
-		    public void onProviderDisabled(String provider) {}
-		  };
-
-		// Register the listener with the Location Manager to receive location updates
-		mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+		locationData = (LocationApplication) getApplication();
+		currentEditableLocation = locationData.getLocation();
 		
-		
-		
-		
+		updateLocationTimer = new Timer();
+		TimerTask updateLocationTask = new TimerTask(){			
+			@Override
+			public void run() {
+				checkLocation();
+			}
+			
+		};
+		updateLocationTimer.scheduleAtFixedRate(updateLocationTask , 0, FIVE_SECONDS);
 		
 		// Listener for EditText in Area Infested
 		etarea.addTextChangedListener(new TextWatcher() {
@@ -242,6 +237,8 @@ public class Report extends SherlockFragmentActivity {
 		gpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
 		playAPKEnabled = doesDeviceHaveGooglePlayServices();
 		
+		currentEditableLocation = locationData.getLocation();
+		
 		if(!isAccurateLocation(currentEditableLocation)){ // If location isn't accurate
 		
 				
@@ -253,6 +250,17 @@ public class Report extends SherlockFragmentActivity {
 					wheresWaldo();
 				}
 			}
+			
+			updateLocationTimer = new Timer();
+			TimerTask updateLocationTask = new TimerTask(){			
+				@Override
+				public void run() {
+					checkLocation();
+				}
+				
+			};
+			updateLocationTimer.scheduleAtFixedRate(updateLocationTask , 0, FIVE_SECONDS);
+			
 		}else
 			setUpMapIfNeeded();
 	}
@@ -404,7 +412,7 @@ public class Report extends SherlockFragmentActivity {
 	}
 	
 	private void setUpMap() {
-        updateMyLocation();
+        //updateMyLocation();
         mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
         mUiSettings = mMap.getUiSettings();
         mUiSettings.setCompassEnabled(false);
@@ -419,10 +427,13 @@ public class Report extends SherlockFragmentActivity {
 	private void updateUILocation(Location location) {
 		goToCurrentPosition(location);
 		setEditTexts(location.getLatitude(), location.getLongitude());
-		if (!mapHasMarker)
+		if (!mapHasMarker){
+			setUpMapIfNeeded();
 			setCurrentPositionMarker(location);
+		}
 		else {
 			mMap.clear();
+			setUpMapIfNeeded();
 			setCurrentPositionMarker(location);
 		}
 	}
@@ -446,6 +457,8 @@ public class Report extends SherlockFragmentActivity {
 		
 		boolean isRecent = (location.getTime() + ONE_MINUTE) > System.currentTimeMillis();
 		
+		//Toast.makeText(this, String.valueOf(location.getTime()) + " current: " + String.valueOf(System.currentTimeMillis()), Toast.LENGTH_SHORT).show();
+		
 		if(isRecent){
 			//if recent, it is accurate
 			return true;
@@ -456,15 +469,12 @@ public class Report extends SherlockFragmentActivity {
 	}
 	
 	private Location requestUpdatesFromProvider() {
+		currentEditableLocation = locationData.getLocation();
+		
         if(isAccurateLocation(currentEditableLocation))
         	return currentEditableLocation;
 		
 		Location location = null;
-		if (mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            location = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            // Also set global location variable so if user selects edit, it has something to pass
-           	currentEditableLocation = location;
-        }
 		return location;
 	}
 	
@@ -701,6 +711,34 @@ public class Report extends SherlockFragmentActivity {
 //	protected void takePicture() {
 //		startActivityForResult(new Intent("android.media.action.IMAGE_CAPTURE"), CAMERA_REQUEST);
 //	}
+
+
+	private void checkLocation()
+	{
+		//This method is called directly by the timer
+		//and runs in the same thread as the timer.
+
+		//We call the method that will work with the UI
+		//through the runOnUiThread method.
+		this.runOnUiThread(Timer_UI_Thread);
+	}
+
+
+	private Runnable Timer_UI_Thread = new Runnable() {
+		public void run() {
+		
+		//This method runs in the same thread as the UI.    	       
+		locationData = (LocationApplication) getApplication();
+		currentEditableLocation = locationData.getLocation();
+		
+		if (currentEditableLocation != null){
+			updateUILocation(currentEditableLocation);
+			setUpMapIfNeeded();
+		}else
+			wheresWaldo();
+	
+		}
+	};
 	
 
 }

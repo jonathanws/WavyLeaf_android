@@ -1,6 +1,11 @@
 Change Log
 ===============================================================================
 
+Version 1.01c *(6-26-2013)*
+----------------------------
+* Changes to GPS
+* Uses Application class to find Location
+* Report refers to this Application class and uses a timer to check for updates
 
 Version 1.01b *(6-24-2013)*
 ----------------------------
