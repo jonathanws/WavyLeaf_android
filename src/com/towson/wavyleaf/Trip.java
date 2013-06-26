@@ -334,10 +334,13 @@ public class Trip extends SherlockActivity {
 	}
 	
 	private Location requestUpdatesFromProvider() {
-		if (mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
-			currentEditableLocation = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+		currentEditableLocation = locationData.getLocation();
 		
-		return currentEditableLocation;
+        if(isAccurateLocation(currentEditableLocation))
+        	return currentEditableLocation;
+		
+		Location location = null;
+		return location;
 	}
 
 //	@Override
