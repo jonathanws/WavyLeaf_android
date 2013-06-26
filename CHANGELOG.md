@@ -6,6 +6,7 @@ Version 1.01d *(6-26-2013)*
 * Searches for location when trip is enabled and when the user clicks new sighting
 * After a sighting is submitted, the location listener is deactivated if trip isn't enabled.
 * It is also deactivated if a trip is canceled
+* Added changes to Trip.java (soon to be removed)
 
 Version 1.01c *(6-26-2013)*
 ----------------------------

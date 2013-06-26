@@ -1,5 +1,8 @@
 package com.towson.wavyleaf;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -43,13 +46,20 @@ public class Trip extends SherlockActivity {
 	private boolean gpsEnabled = false;
 	protected Button doneTrip, b1, b2, b3, b4, b5, b6;
 	protected EditText notes, etarea;
-	protected Location gpsLocation;
+	protected Location currentEditableLocation;
 	protected LocationManager mLocationManager;
 	protected RadioGroup rg;
 	protected Spinner sp;
 	protected TextView tripInterval, tripSelection, tally, tallyNumber, tvlat, tvlong, tvpicnotes,
 		tvper, tvper_summary, tvcoor, tvarea, tvarea_summary;
 	NotificationManager nm;
+	private LocationApplication locationData;	
+	private Timer updateLocationTimer;
+	
+
+	private static final int ONE_MINUTE = 1000*60; //in ms
+	private static final int FIVE_SECONDS = 1000*5; //in ms
+	
 	// private static final int CAMERA = 3;
 	// private static final int GALLERY_REQUEST = 1339;
 	// private static final int CAMERA_REQUEST = 1337;
@@ -96,6 +106,21 @@ public class Trip extends SherlockActivity {
 		rg = (RadioGroup) findViewById(R.id.toggleGroup);
 		sp = (Spinner) findViewById(R.id.sp_areainfested);
 		mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+		
+		
+		locationData = (LocationApplication) getApplication();
+		currentEditableLocation = locationData.getLocation();
+		
+		updateLocationTimer = new Timer();
+		TimerTask updateLocationTask = new TimerTask(){			
+			@Override
+			public void run() {
+				checkLocation();
+			}
+			
+		};
+		updateLocationTimer.scheduleAtFixedRate(updateLocationTask , 0, FIVE_SECONDS);
+		
 		
 		// Listener for EditText in Area Infested
 		etarea.addTextChangedListener(new TextWatcher() {
@@ -168,6 +193,19 @@ public class Trip extends SherlockActivity {
 		LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		gpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
 		
+		locationData = (LocationApplication) getApplication();
+		currentEditableLocation = locationData.getLocation();
+		
+		updateLocationTimer = new Timer();
+		TimerTask updateLocationTask = new TimerTask(){			
+			@Override
+			public void run() {
+				checkLocation();
+			}
+			
+		};
+		updateLocationTimer.scheduleAtFixedRate(updateLocationTask , 0, FIVE_SECONDS);
+		
 		wheresWaldo();
 	}
 	
@@ -188,17 +226,33 @@ public class Trip extends SherlockActivity {
 				finish();
 				return true;
 			case R.id.menu_submit:
-				if (requestUpdatesFromProvider() == null) // If no GPS
-					Toast.makeText(getApplicationContext(), "Cannot submit without GPS signal", Toast.LENGTH_SHORT).show();
-				else {
-					// If all fields are filled out, minus Notes/Area infested
-					if (verifyFields() == true) {
-						Toast.makeText(getApplicationContext(), "Sighting recorded", Toast.LENGTH_SHORT).show();
-						createJSONObject();
-						finish();
-					}
-				}
-			return true;
+
+//	        	Toast.makeText(getApplicationContext(), String.valueOf(currentEditableLocation.getTime()), Toast.LENGTH_SHORT).show();
+	    		if (isAccurateLocation(currentEditableLocation)){//if LocationListener is accurate
+	            	// If all fields are filled out, minus Notes/Area infested
+	    			if (verifyFields() == true) {
+	    				Toast.makeText(getApplicationContext(), "Sighting recorded", Toast.LENGTH_SHORT).show();
+	            		createJSONObject();
+	            		finish();
+	            	}
+	    		} else if (requestUpdatesFromProvider() == null) // If no GPS
+	    			Toast.makeText(getApplicationContext(), "Cannot submit without GPS signal", Toast.LENGTH_SHORT).show();
+	    		else {
+	            	// If all fields are filled out, minus Notes/Area infested
+	    			if (verifyFields() == true) {
+	    				Toast.makeText(getApplicationContext(), "Sighting recorded", Toast.LENGTH_SHORT).show();
+	            		createJSONObject();
+	            		// Restore preferences
+	            		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+	            	    boolean tripEnabled = sp.getBoolean("TRIP_ENABLED",false);
+	            	    if(!tripEnabled){
+	            			locationData.stop();	
+	            	    }
+	            		updateLocationTimer.cancel();
+	            		finish();
+	            	}
+	    		}
+	    		return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -270,20 +324,20 @@ public class Trip extends SherlockActivity {
 	
 	// Method won't be called unless Play APK in installed
 	public void wheresWaldo() {
-		gpsLocation = requestUpdatesFromProvider();
+		currentEditableLocation = requestUpdatesFromProvider();
 		
-		if (!(gpsLocation == null))
-			setEditTexts(gpsLocation.getLatitude(), gpsLocation.getLongitude());
+		if (!(currentEditableLocation == null))
+			setEditTexts(currentEditableLocation.getLatitude(), currentEditableLocation.getLongitude());
 		
-		else if (gpsLocation == null)
+		else if (currentEditableLocation == null)
 			Toast.makeText(getApplicationContext(), "No GPS signal", Toast.LENGTH_SHORT).show();
 	}
 	
 	private Location requestUpdatesFromProvider() {
 		if (mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
-			gpsLocation = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+			currentEditableLocation = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 		
-		return gpsLocation;
+		return currentEditableLocation;
 	}
 
 //	@Override
@@ -340,7 +394,7 @@ public class Trip extends SherlockActivity {
 	public boolean hasCoordinates() {
 		boolean result = false;
 		
-		if (!(gpsLocation == null))
+		if (!(currentEditableLocation == null))
 			result = true;
 		else
 			Toast.makeText(getApplicationContext(), "Error determining position", Toast.LENGTH_SHORT).show();
@@ -350,7 +404,9 @@ public class Trip extends SherlockActivity {
 	
 	private String shortenAreaType() {
 		String str = sp.getSelectedItem().toString();
-		if (str.equals("Square Metres"))
+		if (str.equals("Hectares"))
+			str = "HA";
+		else if (str.equals("Square Metres"))
 			str = "SM";
 		else if (str.equals("Acres"))
 			str = "SA";
@@ -378,8 +434,8 @@ public class Trip extends SherlockActivity {
 			trip.put(UploadData.ARG_PERCENT, getSelectedToggleButton());
 			trip.put(UploadData.ARG_AREAVALUE, getAreaText());
 			trip.put(UploadData.ARG_AREATYPE, shortenAreaType());
-			trip.put(UploadData.ARG_LATITUDE, gpsLocation.getLatitude());
-			trip.put(UploadData.ARG_LONGITUDE, gpsLocation.getLongitude());
+			trip.put(UploadData.ARG_LATITUDE, currentEditableLocation.getLatitude());
+			trip.put(UploadData.ARG_LONGITUDE, currentEditableLocation.getLongitude());
 			trip.put(UploadData.ARG_NOTES, notes.getText());
 			trip.put(UploadData.ARG_DATE, now.year + "-" + (now.month + 1) + "-" + now.monthDay + " " + now.hour + ":" + now.minute + ":" + now.second);
 			//bitmap would go here
@@ -410,6 +466,59 @@ public class Trip extends SherlockActivity {
 //	protected void takePicture() {
 //		startActivityforResult(new Intent("android.media.action.IMAGE_CAPTURE"), CAMERA_REQUEST);
 //	}
+	
+	private void checkLocation()
+	{
+		//This method is called directly by the timer
+		//and runs in the same thread as the timer.
+
+		//We call the method that will work with the UI
+		//through the runOnUiThread method.
+		this.runOnUiThread(Timer_UI_Thread);
+	}
+
+
+	private Runnable Timer_UI_Thread = new Runnable() {
+		public void run() {
+		
+		//This method runs in the same thread as the UI.    	       
+		locationData = (LocationApplication) getApplication();
+		currentEditableLocation = locationData.getLocation();
+		
+		if (currentEditableLocation != null){
+			updateUILocation(currentEditableLocation);
+		}else
+			wheresWaldo();
+	
+		}
+	};
+	
+	private void findUsersLocation(){
+		locationData = (LocationApplication) getApplication();
+		locationData.init();
+	}
+	
+	private void updateUILocation(Location location) {
+		setEditTexts(location.getLatitude(), location.getLongitude());
+	}
+	
+private boolean isAccurateLocation(Location location){
+		
+		if(location == null)
+			return false;
+		
+		boolean isRecent = (location.getTime() + ONE_MINUTE) > System.currentTimeMillis();
+		
+		//Toast.makeText(this, String.valueOf(location.getTime()) + " current: " + String.valueOf(System.currentTimeMillis()), Toast.LENGTH_SHORT).show();
+		
+		if(isRecent){
+			//if recent, it is accurate
+			return true;
+		}
+		
+		return false;
+		
+	}
 
 }
 
