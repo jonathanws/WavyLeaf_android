@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -16,9 +15,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -30,7 +26,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
@@ -59,7 +54,11 @@ public class Main extends SherlockActivity implements OnClickListener {
 		initLayout();
 		determineButtonDrawable();
 		toggleFirstRun();
-		//findUsersLocation();
+		
+		if (!isDBEmpty()) {
+			Intent uploadIntent = new Intent(this, UploadActivity.class);
+			startActivity(uploadIntent);
+		}
     }
 	
 	
@@ -74,13 +73,15 @@ public class Main extends SherlockActivity implements OnClickListener {
 		
 		bu_new.setTypeface(tf_light);
 		bu_trip.setTypeface(tf_light);
-		bu_upload.setTypeface(tf_light);
+//		bu_upload.setTypeface(tf_light);
 		tripInterval.setTypeface(tf_light);
 		tripSelection.setTypeface(tf_light);
 		
 		bu_new.setOnClickListener(this);
 		bu_trip.setOnClickListener(this);
-		bu_upload.setOnClickListener(this);
+//		bu_upload.setOnClickListener(this);
+		
+		bu_upload.setVisibility(View.INVISIBLE);
 	}
 	
 	@Override
@@ -253,20 +254,22 @@ public class Main extends SherlockActivity implements OnClickListener {
         	bu_trip.setText(R.string.layout_main_trip);	// Set text back to "Start Trip"
         }
 		
-		// Upload sightings button
-		if (isDBEmpty()) {
-			bu_upload.setClickable(false);
-			bu_upload.setTextColor(getResources().getColor(R.color.grey));
-			setButtonDrawable(bu_upload, R.drawable.ic_main_upload_light);
-		}
-		// TODO
-		//
-		// ***I'm not sure if this will be taken care of by xml, or if we really need this***
-		else {
-			bu_upload.setClickable(true);
-			bu_upload.setTextColor(getResources().getColor(R.color.black));
-			setButtonDrawable(bu_upload, R.drawable.ic_main_upload);
-		}
+		//TODO fix upload button... kinda
+//		// Upload sightings button
+//		if (isDBEmpty()) {
+//			bu_upload.setClickable(false);
+//			bu_upload.setTextColor(getResources().getColor(R.color.grey));
+//			setButtonDrawable(bu_upload, R.drawable.ic_main_upload_light);
+//		}
+//		// TODO
+//		//
+//		// ***I'm not sure if this will be taken care of by xml, or if we really need this***
+//		else {
+//			bu_upload.setClickable(true);
+//			bu_upload.setTextColor(getResources().getColor(R.color.black));
+//			setButtonDrawable(bu_upload, R.drawable.ic_main_upload);
+//		}
+		bu_upload.setVisibility(View.INVISIBLE);
 	}
 	
 	protected void intervalSelected(String timeNum, String timeString, int milli) {

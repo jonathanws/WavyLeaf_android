@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.towson.wavyleaf"
-    android:versionCode="2"
+    android:versionCode="3"
     android:versionName="@string/version" >
     <!-- If this call to version doesn't work, replace it with 1.02 -->
 

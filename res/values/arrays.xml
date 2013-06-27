@@ -45,8 +45,8 @@
     
     <string-array name="experience_array">
 		<item>Less than a month</item>
-        <item>Once a month</item>
-        <item>Once a week</item>
+        <item>About once a month</item>
+        <item>About once a week</item>
         <item>Multiple times a week</item>
     </string-array>
     

@@ -12,6 +12,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
 import android.location.Location;
 import android.location.LocationListener;
@@ -460,6 +462,16 @@ public class Report extends SherlockFragmentActivity {
 		}
 	}
 	
+	// Same method as wheresWaldo() without toast. Call this method when checking location in a thread.
+	public void wheresCarmenSandiego() {
+		Location gpsLocation = requestUpdatesFromProvider();
+		if (gpsLocation != null) {
+			// Set global location variable so if user selects edit, it has something to pass
+			currentEditableLocation = gpsLocation;
+			updateUILocation(gpsLocation);
+		}
+	}
+	
 	private boolean isAccurateLocation(Location location){
 		
 		if(location == null)
@@ -747,7 +759,7 @@ public class Report extends SherlockFragmentActivity {
 			updateUILocation(currentEditableLocation);
 			setUpMapIfNeeded();
 		}else
-			wheresWaldo();
+			wheresCarmenSandiego();
 	
 		}
 	};
@@ -757,6 +769,17 @@ public class Report extends SherlockFragmentActivity {
 		locationData.init();
 	}
 	
+	// http://stackoverflow.com/questions/11251901/check-whether-database-is-empty
+	protected boolean isDBEmpty() {
+		DatabaseListJSONData m_dbListData = new DatabaseListJSONData(this);
+		SQLiteDatabase db = m_dbListData.getWritableDatabase();
+		
+		Cursor cur = db.rawQuery("SELECT * FROM " + DatabaseConstants.TABLE_NAME, null);
+		if (cur.moveToFirst())
+			return false;
+		else
+			return true;
+	}
 
 }
 

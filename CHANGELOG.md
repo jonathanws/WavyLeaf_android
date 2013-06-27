@@ -1,6 +1,17 @@
 Change Log
 ===============================================================================
 
+
+Version 1.02 *(6-27-2013)*
+----------------------------
+* Report sometimes would get stuck spamming toasts when looking for location.
+    Made duplicate method without toast
+* Application tries to upload unsent sightings every time app is opened to main screen
+* Updated strings for login activity
+* Hid upload button on main screen
+* Cried
+
+
 Version 1.01d *(6-26-2013)*
 ----------------------------
 * Searches for location when trip is enabled and when the user clicks new sighting
@@ -28,6 +39,7 @@ Version 1.01 (Google Play) *(6-24-2013)*
 
 Commits above this line refer to actual version numbers
 -------------------------------------------------------
+
 
 Version 2.0.1 *(6-25-2013)*
 ------------------------------
