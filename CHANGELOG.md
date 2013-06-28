@@ -1,6 +1,11 @@
 Change Log
 ===============================================================================
 
+Version 1.03 *(6-27-2013)*
+----------------------------
+* Fixed bug where LocationListener wasn't disabled
+* Moved About from Settings to main menu
+* Added Rate This App to Settings (why not)
 
 Version 1.02 *(6-27-2013)*
 ----------------------------
@@ -9,7 +14,7 @@ Version 1.02 *(6-27-2013)*
 * Application tries to upload unsent sightings every time app is opened to main screen
 * Updated strings for login activity
 * Hid upload button on main screen
-* Cried
+* Cried //lol
 
 
 Version 1.01d *(6-26-2013)*

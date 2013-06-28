@@ -2,7 +2,6 @@
     package="com.towson.wavyleaf"
     android:versionCode="3"
     android:versionName="@string/version" >
-    <!-- If this call to version doesn't work, replace it with 1.02 -->
 
     <uses-sdk
         android:minSdkVersion="7"
