@@ -166,7 +166,8 @@ public class UploadData extends AsyncTask<JSONObject, Void, String> {
 				ed.putInt(Settings.KEY_TRIPTALLY, sp.getInt(Settings.KEY_TRIPTALLY, 0) + 1);
 			
 			// Increment tally if this was a single point
-			else if ((context.getClass() + "").contains("Report"))
+			else if ((context.getClass() + "").contains("Report") ||
+					(context.getClass() + "").contains("Sighting"))
 				ed.putInt(Settings.KEY_SINGLETALLY, sp.getInt(Settings.KEY_SINGLETALLY, 0) + 1);
 			
 			ed.commit();

@@ -146,8 +146,8 @@ public class Main extends SherlockActivity implements OnClickListener {
 			//start searching for location
 			findUsersLocation();
 			
-			Intent newReportIntent = new Intent(this, Report.class);
-			this.startActivity(newReportIntent);	
+			Intent newSightingIntent = new Intent(this, Sighting.class);
+			this.startActivity(newSightingIntent);	
 			
 		} else if (view == this.bu_trip) {
 			SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getBaseContext());

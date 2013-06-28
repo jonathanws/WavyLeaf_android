@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    
+    <item
+        android:id="@+id/menu_legal"
+        android:showAsAction="never"
+        android:title="Legal Notice"/>
+    
+    <item
+        android:id="@+id/menu_submit"
+        android:orderInCategory="100"
+        android:showAsAction="always"
+        android:title="Done" />
+    
+    <item
+        android:id="@+id/menu_refresh"
+        android:orderInCategory="200"
+        android:showAsAction="never"
+        android:title="Refresh location" />
+
+</menu>

@@ -7,12 +7,6 @@
             android:key="preference_name"
             android:title="Name" />
         
-        <!--
-        <Preference
-            android:key="preference_user_id"
-            android:title="User ID" />
-            -->
-        
         <Preference
             android:key="preference_birthyear"
             android:title="Birth Year" />
@@ -30,18 +24,6 @@
             android:key="preference_triptally"
             android:title="Trip points submitted"
             android:summary="0" />
-        <!--
-        <Preference
-            android:key="preference_push"
-            android:title="Push unsent sightings" >
-            
-            <intent
-                android:action="android.intent.action.VIEW"
-                android:targetPackage="com.towson.wavyleaf"
-                android:targetClass="com.towson.wavyleaf.UploadActivity" />
-            
-        </Preference>
-        -->
                
     </PreferenceCategory>
     
@@ -59,25 +41,9 @@
     
     <PreferenceCategory android:title="Other" >
         
-        <!--  
-        
-        <Preference 
-            android:title="About" >
-            
-            <intent
-                android:action="android.intent.action.VIEW"
-                android:targetPackage="com.towson.wavyleaf"
-                android:targetClass="com.towson.wavyleaf.About" />
-            
-        </Preference>
-        
-        -->
-        
         <Preference
             android:title="Version"
             android:summary="@string/version" />
-        
-         
         
         <Preference
             android:title="Rate this application"
@@ -88,8 +54,6 @@
                 android:data="market://details?id=com.towson.wavyleaf" />
             
         </Preference>
-        
-        
             
     </PreferenceCategory>
     

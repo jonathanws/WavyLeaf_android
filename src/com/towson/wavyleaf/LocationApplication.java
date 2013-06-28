@@ -63,7 +63,7 @@ public class LocationApplication extends Application{
 	public void setLocation(Location loc){
 		this.location = loc;
 		
-//		Intent intent = new Intent(this, Report.class);
+//		Intent intent = new Intent(this, Sighting.class);
 //		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //		this.startActivity(intent);
 	}

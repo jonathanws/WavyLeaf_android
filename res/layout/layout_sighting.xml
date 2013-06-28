@@ -32,7 +32,7 @@
                 	android:background="#FFFFFF"
                 	android:gravity="center_vertical"
                 	android:paddingLeft="8dp"
-                	android:text="@string/layout_report_percentage" />
+                	android:text="@string/layout_sighting_percentage" />
             	
             	<TextView
             	    android:id="@+id/tv_percentageseen_summary"
@@ -164,7 +164,7 @@
                 	android:background="#FFFFFF"
                 	android:gravity="center_vertical"
                 	android:paddingLeft="8dp"
-                	android:text="@string/layout_report_area" />
+                	android:text="@string/layout_sighting_area" />
             	
             	<TextView
             	    android:id="@+id/tv_areainfested_summary"
@@ -229,7 +229,7 @@
                 android:background="#FFFFFF"
                 android:gravity="center_vertical"
                 android:paddingLeft="8dp"
-                android:text="@string/layout_report_coordinates" />
+                android:text="@string/layout_sighting_coordinates" />
             
             <View
                 android:layout_width="match_parent"
@@ -304,7 +304,7 @@
                 android:id="@+id/cb_confirm"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:text="@string/layout_report_confirmcoordinates" />
+                android:text="@string/layout_sighting_confirmcoordinates" />
             
         </LinearLayout>
 
@@ -346,11 +346,11 @@
 
                 <!-- 
                 <ImageButton
-                    android:id="@+id/report_imagebutton"
+                    android:id="@+id/sighting_imagebutton"
                     android:layout_width="120dp"
                     android:layout_height="120dp"
                     android:layout_marginRight="4dp"
-                    android:contentDescription="@string/layout_report_camera"
+                    android:contentDescription="@string/layout_sighting_camera"
                     android:src="@drawable/ib_camera" />
                 -->
 

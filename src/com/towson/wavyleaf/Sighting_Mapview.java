@@ -30,7 +30,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class Report_Mapview extends SherlockFragmentActivity implements OnClickListener {
+public class Sighting_Mapview extends SherlockFragmentActivity implements OnClickListener {
 	
 	private static final int LEGAL = 1, MAPTYPE = 2; // Used for calling dialogs. arbitrary numbers
 	private boolean mapHasMarker = false; // onResume keeps adding markers to map, this should stop it
@@ -48,7 +48,7 @@ public class Report_Mapview extends SherlockFragmentActivity implements OnClickL
 		super.onCreate(bundle);
 		getWindow().requestFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
 		getSupportActionBar().setBackgroundDrawable(new ColorDrawable(0x90000000));
-		setContentView(R.layout.layout_report_mapview);
+		setContentView(R.layout.layout_sighting_mapview);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		
 		// Most setup methods are in onResume()
@@ -80,7 +80,7 @@ public class Report_Mapview extends SherlockFragmentActivity implements OnClickL
 		
 		setUpMapIfNeeded();
 		
-		// Get location from Report.java. Default to this on button click
+		// Get location from Sighting.java. Default to this on button click
 		in = getIntent();
 		receivedLocation = in.getExtras().getParcelable("location");
 		if (receivedLocation != null)
@@ -92,7 +92,7 @@ public class Report_Mapview extends SherlockFragmentActivity implements OnClickL
 	@Override
     public boolean onCreateOptionsMenu(Menu menu) {
     	super.onCreateOptionsMenu(menu);
-    	getSupportMenuInflater().inflate(R.menu.menu_report_mapview, menu);
+    	getSupportMenuInflater().inflate(R.menu.menu_sighting_mapview, menu);
     	return true;
 	}
 	
@@ -100,7 +100,7 @@ public class Report_Mapview extends SherlockFragmentActivity implements OnClickL
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
         case android.R.id.home:
-        	Intent mainIntent = new Intent(this, Report.class);
+        	Intent mainIntent = new Intent(this, Sighting.class);
             mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(mainIntent);
             finish();

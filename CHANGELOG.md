@@ -1,6 +1,10 @@
 Change Log
 ===============================================================================
 
+Version 1.04 *(6-27-2013)*
+----------------------------
+* Merged (hopefully) all references to Trip and Report to Sighting
+
 Version 1.03 *(6-27-2013)*
 ----------------------------
 * Fixed bug where LocationListener wasn't disabled

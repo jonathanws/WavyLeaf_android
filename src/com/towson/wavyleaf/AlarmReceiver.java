@@ -24,7 +24,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 		
 		NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(ctx);
-	    PendingIntent contentIntent = PendingIntent.getActivity(context, 0, new Intent(context, Trip.class), 0);
+	    PendingIntent contentIntent = PendingIntent.getActivity(context, 0, new Intent(context, Sighting.class), 0);
 
 	    NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context)
 	    		.setAutoCancel(true)
