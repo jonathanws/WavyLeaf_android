@@ -303,6 +303,13 @@ public class Report extends SherlockFragmentActivity {
     			if (verifyFields() == true) {
     				Toast.makeText(getApplicationContext(), "Sighting recorded", Toast.LENGTH_SHORT).show();
             		createJSONObject();
+            		// Restore preferences
+            		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+            	    boolean tripEnabled = sp.getBoolean("TRIP_ENABLED",false);
+            	    if(!tripEnabled){
+            			locationData.stop();	
+            	    }
+            		updateLocationTimer.cancel();
             		finish();
             	}
     		} else if (requestUpdatesFromProvider() == null) // If no GPS

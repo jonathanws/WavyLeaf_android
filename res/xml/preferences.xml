@@ -59,6 +59,8 @@
     
     <PreferenceCategory android:title="Other" >
         
+        <!--  
+        
         <Preference 
             android:title="About" >
             
@@ -69,11 +71,13 @@
             
         </Preference>
         
+        -->
+        
         <Preference
             android:title="Version"
             android:summary="@string/version" />
         
-        <!-- 
+         
         
         <Preference
             android:title="Rate this application"
@@ -81,11 +85,11 @@
             
             <intent
                 android:action="android.intent.action.VIEW"
-                android:data="market://details?id=jmd.rainymood" />
+                android:data="market://details?id=com.towson.wavyleaf" />
             
         </Preference>
         
-         -->
+        
             
     </PreferenceCategory>
     

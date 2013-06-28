@@ -130,6 +130,11 @@ public class Main extends SherlockActivity implements OnClickListener {
 				intent = assembleEmail();
 				startActivity(Intent.createChooser(intent, "Send mail"));
 				return true;
+				
+			case R.id.menu_about:
+				Intent aboutIntent = new Intent(this, About.class);
+				this.startActivity(aboutIntent);
+				return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
