@@ -1,5 +1,6 @@
 package com.towson.wavyleaf;
 
+import java.io.ByteArrayOutputStream;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -14,22 +15,25 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.Time;
+import android.util.Base64;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -60,10 +64,12 @@ public class Sighting extends SherlockFragmentActivity {
 	private boolean playAPKEnabled = false;
 	private boolean mapHasMarker = false; // OnResume keeps adding markers to map, this should stop it
 	private boolean editedCoordinatesInOtherActivitySoDontGetGPSLocation = false;
+	public String _64BitEncoding = ""; // Underscore because variables can't start with numbers
 	protected CameraPosition userCurrentPosition;
 	protected CheckBox cb;
 	protected EditText notes, etarea;
 	protected GoogleMap mMap;
+	protected ImageButton ib;
 	protected Location currentEditableLocation; // Used by edit feature
 	protected LocationManager mLocationManager;
 	protected RadioGroup rg;
@@ -77,11 +83,10 @@ public class Sighting extends SherlockFragmentActivity {
 	private static final int ONE_MINUTE = 1000 * 60;  // in ms
 	private static final int FIVE_SECONDS = 1000 * 5; // in ms
 	private static final int TEN_METERS = 10;         // in m
+	private static final int CAMERA_REQUEST = 1337;
 	
 	// private static final int CAMERA = 3;
 	// private static final int GALLERY_REQUEST = 1339;
-	// private static final int CAMERA_REQUEST = 1337;
-	// protected ImageButton ib;
 	
 	@Override
 	protected void onCreate(Bundle bundle) {
@@ -213,13 +218,13 @@ public class Sighting extends SherlockFragmentActivity {
 		if (!locationData.isSearching())
 			findUsersLocation();
 		
-//		ib = (ImageButton) findViewById(R.id.sighting_imagebutton);
-//		// Listener for camera button
-//		ib.setOnClickListener(new OnClickListener() {
-//			public void onClick(View v) {
-//				takePicture();
-//			}
-//		});
+		ib = (ImageButton) findViewById(R.id.imagebutton_sighting);
+		// Listener for camera button
+		ib.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				takePicture();
+			}
+		});
 	}
 	
 	protected void refresh() {
@@ -601,10 +606,19 @@ public class Sighting extends SherlockFragmentActivity {
 			Toast.makeText(getApplicationContext(), "New position set", Toast.LENGTH_SHORT).show();
 		}
 		
-//		else if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
-//			Bitmap bm = (Bitmap) data.getExtras().get("data");
-//			ib.setImageBitmap(bm);
-//		} else if (requestCode == GALLERY_REQUEST && resultCode == RESULT_OK) {
+		// http://stackoverflow.com/a/15432979/1097170
+		else if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
+			
+			// Set global string (_64bitencoding) immediately
+			Bitmap bm = (Bitmap) data.getExtras().get("data");
+			ib.setImageBitmap(bm);
+			
+			// Encode
+			_64BitEncoding = Base64.encodeToString(encodeInBase64(bm), Base64.DEFAULT);
+			
+//			Toast.makeText(getApplicationContext(), _64BitEncoding, Toast.LENGTH_LONG).show();
+			
+		} //else if (requestCode == GALLERY_REQUEST && resultCode == RESULT_OK) {
 //			Uri selectedImage = data.getData();
 //			InputStream imageStream = null;
 //			
@@ -697,7 +711,12 @@ public class Sighting extends SherlockFragmentActivity {
 			sighting.put(UploadData.ARG_LONGITUDE, currentEditableLocation.getLongitude());
 			sighting.put(UploadData.ARG_NOTES, notes.getText());
 			sighting.put(UploadData.ARG_DATE, now.year + "-" + (now.month + 1) + "-" + now.monthDay + " " + now.hour + ":" + now.minute + ":" + now.second);
-			//bitmap would go here
+			
+			if (!_64BitEncoding.equals("")) { // Picture was taken
+				// Server should also check to see if this value is an empty string
+				sighting.put(UploadData.ARG_PICTURE, _64BitEncoding);
+			} else // No picture was taken
+				sighting.put(UploadData.ARG_PICTURE, "null");
 
 		} catch (JSONException e) {
 			Toast.makeText(getApplicationContext(), "Data not saved, try again", Toast.LENGTH_SHORT).show();
@@ -706,9 +725,9 @@ public class Sighting extends SherlockFragmentActivity {
 		new UploadData(this, UploadData.TASK_SUBMIT_POINT).execute(sighting);
 	}
 	
-//	protected void takePicture() {
-//		startActivityForResult(new Intent("android.media.action.IMAGE_CAPTURE"), CAMERA_REQUEST);
-//	}
+	protected void takePicture() {
+		startActivityForResult(new Intent("android.media.action.IMAGE_CAPTURE"), CAMERA_REQUEST);
+	}
 	
 	// This method is called directly by the timer and runs in the same thread as the timer
 	private void checkLocation() {
@@ -746,6 +765,14 @@ public class Sighting extends SherlockFragmentActivity {
 			return false;
 		else
 			return true;
+	}
+	
+	// http://stackoverflow.com/a/4830846/1097170
+	public byte[] encodeInBase64(Bitmap bm) {
+		
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		bm.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+		return baos.toByteArray();
 	}
 
 }

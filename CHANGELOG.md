@@ -1,6 +1,13 @@
 Change Log
 ===============================================================================
 
+
+Version 1.04b *(7-7-2013)*
+----------------------------
+* Added camera button that does nothing until we can test the new json
+* Added (but commented) code to send a 64-bit encoded string once the user takes a picture
+* Attempts to add to new script location, but images may be too large
+
 Version 1.04 *(6-27-2013)*
 ----------------------------
 * Merged (hopefully) all references to Trip and Report to Sighting
