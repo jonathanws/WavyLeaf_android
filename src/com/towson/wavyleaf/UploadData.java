@@ -20,14 +20,13 @@ import android.content.SharedPreferences.Editor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.widget.Toast;
 
 public class UploadData extends AsyncTask<JSONObject, Void, String> {
 
 	protected static final String SERVER_URL = "http://skappsrv.towson.edu/";
 	protected static final String SUBMIT_USER = "wavyleaf/submit_user.php";
-//	protected static final String SUBMIT_POINT = "wavyleaf/submit_point.php";
+	protected static final String SUBMIT_POINT = "wavyleaf/submit_point.php";
 	protected static final String SUBMIT_POINT_WITH_PICTURE = "wavyleaf/submit_point_with_pic.php";
 
 	protected static final String ARG_AREATYPE = "areatype";
@@ -76,7 +75,6 @@ public class UploadData extends AsyncTask<JSONObject, Void, String> {
 			// Read in the JSONObject from the JSONObject array
 			if (jobj.length > 0) {
 				final JSONObject json = jobj[0];
-				Log.d("wavy", json.toString());
 				
 				// Before we try to send the JSON, save it to local storage, but only if it is a point
 				if (this.task == TASK_SUBMIT_POINT)
@@ -151,7 +149,6 @@ public class UploadData extends AsyncTask<JSONObject, Void, String> {
 
 		if (suc.equalsIgnoreCase("1") || suc.contains("1")) { // Data was successfully sent
 			success = true;
-			Toast.makeText(this.context, "good, delete me", Toast.LENGTH_SHORT).show();
 			
 			if (this.task == TASK_SUBMIT_POINT)
 				deleteFirstEntry(); // delete entry because it was successfully submitted
@@ -164,7 +161,6 @@ public class UploadData extends AsyncTask<JSONObject, Void, String> {
 				
 		} else { // Data was not successfully sent
 			success = false;
-			Toast.makeText(this.context, "nope", Toast.LENGTH_SHORT).show();
 		}
 		
 		if (success == true) {

@@ -329,7 +329,7 @@
                 android:background="#FFFFFF"
                 android:gravity="center_vertical"
                 android:paddingLeft="8dp"
-                android:text="NOTES" />
+                android:text="@string/layout_sighting_picturenotes" />
             
             <View
                 android:layout_width="match_parent"
