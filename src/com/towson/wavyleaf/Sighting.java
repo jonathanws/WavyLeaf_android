@@ -1,6 +1,7 @@
 package com.towson.wavyleaf;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -9,6 +10,7 @@ import org.json.JSONObject;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -16,15 +18,21 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.location.Location;
 import android.location.LocationManager;
+import android.media.ThumbnailUtils;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.Time;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -84,6 +92,10 @@ public class Sighting extends SherlockFragmentActivity {
 	private static final int FIVE_SECONDS = 1000 * 5; // in ms
 	private static final int TEN_METERS = 10;         // in m
 	private static final int CAMERA_REQUEST = 1337;
+	
+	private static int TAKE_PICTURE = 1;    
+	private Uri imageUri;
+	private Bitmap image;
 	
 	// private static final int CAMERA = 3;
 	// private static final int GALLERY_REQUEST = 1339;
@@ -606,19 +618,45 @@ public class Sighting extends SherlockFragmentActivity {
 			Toast.makeText(getApplicationContext(), "New position set", Toast.LENGTH_SHORT).show();
 		}
 		
+		else if (requestCode == TAKE_PICTURE && resultCode == RESULT_OK) {
+			
+			//setup ContentResolver to retrieve saved image
+			Uri selectedImage = imageUri;
+            getContentResolver().notifyChange(selectedImage, null);
+            ContentResolver cr = getContentResolver();
+            
+            try {
+            	//retrieve bitmap from file
+                image = android.provider.MediaStore.Images.Media.getBitmap(cr, selectedImage);
+                //create thumbnail. The bitmap used for the UI cannot be recycled and since
+                //taking a picture twice will cause an OOM error without recycling the previous one,
+                //a thumbnail is necessary
+                Bitmap thumbnail = ThumbnailUtils.extractThumbnail(image, 150, 150);
+
+                ib.setImageBitmap(thumbnail);
+
+                //compression quality (in percent)
+    			int quality = 10;
+    			_64BitEncoding = Base64.encodeToString(encodeInBase64(image, quality), Base64.DEFAULT);
+
+            } catch (Exception e) {
+                Log.e("Camera", e.toString());
+            }
+		}
+		
 		// http://stackoverflow.com/a/15432979/1097170
-		else if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
+//		else if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
 			
 			// Set global string (_64bitencoding) immediately
-			Bitmap bm = (Bitmap) data.getExtras().get("data");
-			ib.setImageBitmap(bm);
+//			Bitmap bm = (Bitmap) data.getExtras().get("data");
+//			ib.setImageBitmap(bm);
 			
 			// Encode
-			_64BitEncoding = Base64.encodeToString(encodeInBase64(bm), Base64.DEFAULT);
+//			_64BitEncoding = Base64.encodeToString(encodeInBase64(bm), Base64.DEFAULT);
 			
 //			Toast.makeText(getApplicationContext(), _64BitEncoding, Toast.LENGTH_LONG).show();
 			
-		} //else if (requestCode == GALLERY_REQUEST && resultCode == RESULT_OK) {
+//		} //else if (requestCode == GALLERY_REQUEST && resultCode == RESULT_OK) {
 //			Uri selectedImage = data.getData();
 //			InputStream imageStream = null;
 //			
@@ -726,7 +764,19 @@ public class Sighting extends SherlockFragmentActivity {
 	}
 	
 	protected void takePicture() {
-		startActivityForResult(new Intent("android.media.action.IMAGE_CAPTURE"), CAMERA_REQUEST);
+		//release bitmap resource to prevent OOM error if picture is taken more than once
+		if(image != null)
+			image.recycle();
+		
+		Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+		
+		//create file 'wavyleaf.jpg' in external storage (sd card)
+	    File photo = new File(Environment.getExternalStorageDirectory(),  "wavyleaf.jpg");
+	    intent.putExtra(MediaStore.EXTRA_OUTPUT,Uri.fromFile(photo));
+	    
+	    //get file path. This way the file path is always correct instead of assuming the same path for all devices
+	    imageUri = Uri.fromFile(photo);
+	    startActivityForResult(intent, TAKE_PICTURE);
 	}
 	
 	// This method is called directly by the timer and runs in the same thread as the timer
@@ -768,10 +818,10 @@ public class Sighting extends SherlockFragmentActivity {
 	}
 	
 	// http://stackoverflow.com/a/4830846/1097170
-	public byte[] encodeInBase64(Bitmap bm) {
+	public byte[] encodeInBase64(Bitmap bm, int quality) {
 		
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		bm.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+		bm.compress(Bitmap.CompressFormat.JPEG, quality, baos);
 		return baos.toByteArray();
 	}
 

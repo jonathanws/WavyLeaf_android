@@ -1,6 +1,10 @@
 Change Log
 ===============================================================================
 
+Version 1.05 *(8-19-2013)*
+-----------------------------
+* Pictures are now sent in JSON object after being encoded in base 64
+* Bitmaps are compressed and recycled in order to avoid memory issues 
 
 Version 1.04b *(7-7-2013)*
 ----------------------------
