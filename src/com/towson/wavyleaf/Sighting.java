@@ -1,7 +1,6 @@
 package com.towson.wavyleaf;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -10,7 +9,6 @@ import org.json.JSONObject;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -18,21 +16,15 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.location.Location;
 import android.location.LocationManager;
-import android.media.ThumbnailUtils;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.preference.PreferenceManager;
-import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.Time;
 import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -77,12 +69,12 @@ public class Sighting extends SherlockFragmentActivity {
 	protected CheckBox cb;
 	protected EditText notes, etarea;
 	protected GoogleMap mMap;
-	protected ImageButton ib;
+	protected ImageButton ib, ib_treatment;
 	protected Location currentEditableLocation; // Used by edit feature
 	protected LocationManager mLocationManager;
 	protected RadioGroup rg;
-	protected Spinner sp;
-	protected TextView tvlat, tvlong, tvpicnotes, tvper, tvper_summary, tvcoor, tvarea, tvarea_summary;
+	protected Spinner sp, sp_treatment;
+	protected TextView tvlat, tvlong, tvpicnotes, tvper, tvper_summary, tvcoor, tvarea, tvarea_summary, tv_treatment;
 	protected ToggleButton b1, b2, b3, b4, b5, b6;
 	private UiSettings mUiSettings;
 	private LocationApplication locationData;
@@ -92,10 +84,6 @@ public class Sighting extends SherlockFragmentActivity {
 	private static final int FIVE_SECONDS = 1000 * 5; // in ms
 	private static final int TEN_METERS = 10;         // in m
 	private static final int CAMERA_REQUEST = 1337;
-	
-	private static int TAKE_PICTURE = 1;    
-	private Uri imageUri;
-	private Bitmap image;
 	
 	// private static final int CAMERA = 3;
 	// private static final int GALLERY_REQUEST = 1339;
@@ -152,6 +140,7 @@ public class Sighting extends SherlockFragmentActivity {
 		tvcoor = (TextView) findViewById(R.id.tv_coordinates);
 		tvarea = (TextView) findViewById(R.id.tv_areainfested);
 		tvarea_summary = (TextView) findViewById(R.id.tv_areainfested_summary);
+		tv_treatment = (TextView) findViewById(R.id.tv_treatment);
 		notes = (EditText) findViewById(R.id.notes);
 		etarea = (EditText) findViewById(R.id.et_areainfested);
 		b1 = (ToggleButton) findViewById(R.id.bu_1);
@@ -163,6 +152,7 @@ public class Sighting extends SherlockFragmentActivity {
 		cb = (CheckBox) findViewById(R.id.cb_confirm);
 		rg = (RadioGroup) findViewById(R.id.toggleGroup);
 		sp = (Spinner) findViewById(R.id.sp_areainfested);
+		sp_treatment = (Spinner) findViewById(R.id.sp_treatment);
 		mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		
 		locationData = (LocationApplication) getApplication();
@@ -203,9 +193,15 @@ public class Sighting extends SherlockFragmentActivity {
 			}
 		});
 		
+		// Adapter for area infested spinner
 		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.areainfested_array, android.R.layout.simple_spinner_item);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		sp.setAdapter(adapter);
+		
+		// Adapter for Treatment spinner
+		ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(this, R.array.treatment_array, android.R.layout.simple_spinner_item);
+		adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		sp_treatment.setAdapter(adapter2);
 		
 		// Just to be safe
 		cb.setChecked(false);
@@ -219,6 +215,7 @@ public class Sighting extends SherlockFragmentActivity {
 		tvper.setTypeface(tf_bold);
 		tvper_summary.setTypeface(tf_bold);
 		tvpicnotes.setTypeface(tf_bold);
+		tv_treatment.setTypeface(tf_bold);
 		cb.setTypeface(tf_light);
 		b1.setTypeface(tf_light);
 		b2.setTypeface(tf_light);
@@ -235,6 +232,14 @@ public class Sighting extends SherlockFragmentActivity {
 		ib.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				takePicture();
+			}
+		});
+		
+		ib_treatment = (ImageButton) findViewById(R.id.ib_treatment);
+		// Listener for help button in Treatment catgeory
+		ib_treatment.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				Toast.makeText(getApplicationContext(), "Specify the type of treatment that was done to this area", Toast.LENGTH_LONG).show();
 			}
 		});
 	}
@@ -618,45 +623,19 @@ public class Sighting extends SherlockFragmentActivity {
 			Toast.makeText(getApplicationContext(), "New position set", Toast.LENGTH_SHORT).show();
 		}
 		
-		else if (requestCode == TAKE_PICTURE && resultCode == RESULT_OK) {
-			
-			//setup ContentResolver to retrieve saved image
-			Uri selectedImage = imageUri;
-            getContentResolver().notifyChange(selectedImage, null);
-            ContentResolver cr = getContentResolver();
-            
-            try {
-            	//retrieve bitmap from file
-                image = android.provider.MediaStore.Images.Media.getBitmap(cr, selectedImage);
-                //create thumbnail. The bitmap used for the UI cannot be recycled and since
-                //taking a picture twice will cause an OOM error without recycling the previous one,
-                //a thumbnail is necessary
-                Bitmap thumbnail = ThumbnailUtils.extractThumbnail(image, 150, 150);
-
-                ib.setImageBitmap(thumbnail);
-
-                //compression quality (in percent)
-    			int quality = 10;
-    			_64BitEncoding = Base64.encodeToString(encodeInBase64(image, quality), Base64.DEFAULT);
-
-            } catch (Exception e) {
-                Log.e("Camera", e.toString());
-            }
-		}
-		
 		// http://stackoverflow.com/a/15432979/1097170
-//		else if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
+		else if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
 			
 			// Set global string (_64bitencoding) immediately
-//			Bitmap bm = (Bitmap) data.getExtras().get("data");
-//			ib.setImageBitmap(bm);
+			Bitmap bm = (Bitmap) data.getExtras().get("data");
+			ib.setImageBitmap(bm);
 			
 			// Encode
-//			_64BitEncoding = Base64.encodeToString(encodeInBase64(bm), Base64.DEFAULT);
+			_64BitEncoding = Base64.encodeToString(encodeInBase64(bm), Base64.DEFAULT);
 			
-//			Toast.makeText(getApplicationContext(), _64BitEncoding, Toast.LENGTH_LONG).show();
+//			Toast.makeText(getApplicationContext(), _64BitEncoding, Toast.LENGTH_SHORT).show();
 			
-//		} //else if (requestCode == GALLERY_REQUEST && resultCode == RESULT_OK) {
+		} //else if (requestCode == GALLERY_REQUEST && resultCode == RESULT_OK) {
 //			Uri selectedImage = data.getData();
 //			InputStream imageStream = null;
 //			
@@ -749,6 +728,7 @@ public class Sighting extends SherlockFragmentActivity {
 			sighting.put(UploadData.ARG_LONGITUDE, currentEditableLocation.getLongitude());
 			sighting.put(UploadData.ARG_NOTES, notes.getText());
 			sighting.put(UploadData.ARG_DATE, now.year + "-" + (now.month + 1) + "-" + now.monthDay + " " + now.hour + ":" + now.minute + ":" + now.second);
+//			sighting.put(UploadData.ARG_TREATMENT, sp_treatment.getSelectedItem().toString());
 			
 			if (!_64BitEncoding.equals("")) { // Picture was taken
 				// Server should also check to see if this value is an empty string
@@ -764,19 +744,7 @@ public class Sighting extends SherlockFragmentActivity {
 	}
 	
 	protected void takePicture() {
-		//release bitmap resource to prevent OOM error if picture is taken more than once
-		if(image != null)
-			image.recycle();
-		
-		Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-		
-		//create file 'wavyleaf.jpg' in external storage (sd card)
-	    File photo = new File(Environment.getExternalStorageDirectory(),  "wavyleaf.jpg");
-	    intent.putExtra(MediaStore.EXTRA_OUTPUT,Uri.fromFile(photo));
-	    
-	    //get file path. This way the file path is always correct instead of assuming the same path for all devices
-	    imageUri = Uri.fromFile(photo);
-	    startActivityForResult(intent, TAKE_PICTURE);
+		startActivityForResult(new Intent("android.media.action.IMAGE_CAPTURE"), CAMERA_REQUEST);
 	}
 	
 	// This method is called directly by the timer and runs in the same thread as the timer
@@ -818,10 +786,10 @@ public class Sighting extends SherlockFragmentActivity {
 	}
 	
 	// http://stackoverflow.com/a/4830846/1097170
-	public byte[] encodeInBase64(Bitmap bm, int quality) {
+	public byte[] encodeInBase64(Bitmap bm) {
 		
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		bm.compress(Bitmap.CompressFormat.JPEG, quality, baos);
+		bm.compress(Bitmap.CompressFormat.JPEG, 100, baos);
 		return baos.toByteArray();
 	}
 

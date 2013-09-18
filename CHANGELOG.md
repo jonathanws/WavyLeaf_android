@@ -1,6 +1,10 @@
 Change Log
 ===============================================================================
 
+Version 1.06 *(9-18-2103)*
+-----------------------------
+* Inserted Treatment spinner and help button. Currently does not send JSON
+
 Version 1.05 *(8-19-2013)*
 -----------------------------
 * Pictures are now sent in JSON object after being encoded in base 64

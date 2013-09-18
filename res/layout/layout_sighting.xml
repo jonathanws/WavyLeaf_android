@@ -213,6 +213,73 @@
             android:layout_height="3dp"
             android:layout_marginBottom="16dp"
             android:background="@drawable/drop_shadow" />
+        
+<!-- ================================================== Treatment ================================================== -->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#FFFFFF"
+            android:orientation="vertical" >
+            
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="24dp" >
+            
+            	<TextView
+	                android:id="@+id/tv_treatment"
+                	android:layout_width="0dp"
+                	android:layout_height="match_parent"
+                	android:layout_weight="1"
+                	android:background="#FFFFFF"
+                	android:gravity="center_vertical"
+                	android:paddingLeft="8dp"
+                	android:text="@string/layout_sighting_treatment" />
+            
+            </LinearLayout>
+            
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:background="#669900" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp" >
+
+                <EditText
+                    android:id="@+id/et_treatment"
+                    android:layout_width="96dp"
+                    android:layout_height="48dp"
+                    android:inputType="number"
+                    android:maxLength="4" />
+
+                <Spinner
+                    android:id="@+id/sp_treatment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:layout_alignParentLeft="true" />
+                
+                <ImageButton
+                    android:id="@+id/ib_treatment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:layout_alignParentRight="true"
+                    android:src="@drawable/ic_help" />"
+                
+            </RelativeLayout>
+            
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/drop_shadow" />
 
 <!-- ================================================== Coordinates ================================================== -->
 
