@@ -58,7 +58,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 public class Sighting extends SherlockFragmentActivity {
 	
-	private static final int LEGAL = 1, NO_GPS = 4; // Used for calling dialogs; arbitrary numbers
+	private static final int LEGAL = 1, HELP = 2, NO_GPS = 4; // Used for calling dialogs; arbitrary numbers
 	private static final int EDIT_REQUEST = 1338;
 	private boolean gpsEnabled = false;
 	private boolean playAPKEnabled = false;
@@ -239,7 +239,8 @@ public class Sighting extends SherlockFragmentActivity {
 		// Listener for help button in Treatment catgeory
 		ib_treatment.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				Toast.makeText(getApplicationContext(), "Specify the type of treatment that was done to this area", Toast.LENGTH_LONG).show();
+				showDialog(HELP);
+//				Toast.makeText(getApplicationContext(), "Specify the type of treatment that was done to this area", Toast.LENGTH_LONG).show();
 			}
 		});
 	}
@@ -581,6 +582,14 @@ public class Sighting extends SherlockFragmentActivity {
 				})
 				.create();
 				
+			case HELP:
+				return new AlertDialog.Builder(this)
+				.setTitle("Title")
+				.setMessage("Message")
+				.setPositiveButton("Got it", null)
+				.setNegativeButton("Cancel", null)
+				.create();
+				
 //			case CAMERA:
 //				return new AlertDialog.Builder(this)
 //				.setItems(R.array.camera_array, new DialogInterface.OnClickListener() {
@@ -728,7 +737,7 @@ public class Sighting extends SherlockFragmentActivity {
 			sighting.put(UploadData.ARG_LONGITUDE, currentEditableLocation.getLongitude());
 			sighting.put(UploadData.ARG_NOTES, notes.getText());
 			sighting.put(UploadData.ARG_DATE, now.year + "-" + (now.month + 1) + "-" + now.monthDay + " " + now.hour + ":" + now.minute + ":" + now.second);
-//			sighting.put(UploadData.ARG_TREATMENT, sp_treatment.getSelectedItem().toString());
+			sighting.put(UploadData.ARG_TREATMENT, sp_treatment.getSelectedItem().toString());
 			
 			if (!_64BitEncoding.equals("")) { // Picture was taken
 				// Server should also check to see if this value is an empty string

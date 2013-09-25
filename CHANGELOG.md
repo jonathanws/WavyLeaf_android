@@ -1,7 +1,13 @@
 Change Log
 ===============================================================================
 
-Version 1.06 *(9-18-2103)*
+
+Version 1.07 *(9-25-2013)*
+-----------------------------
+* Treatment attribute in json
+* Help button dialogs replace toasts
+
+Version 1.06 *(9-18-2013)*
 -----------------------------
 * Inserted Treatment spinner and help button. Currently does not send JSON
 
