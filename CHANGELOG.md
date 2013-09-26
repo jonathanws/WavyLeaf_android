@@ -2,7 +2,16 @@ Change Log
 ===============================================================================
 
 
-Version 1.07 *(9-25-2013)*
+Version 1.06c *(9-26-2013)*
+-----------------------------
+* Changed weights of textview headers for Percentage so longer string can fit. What to do about help icons?
+* Removed red "This may take a few moments" string
+* Changed submission button from "Done" to "Save"
+* Changed Percentage string to "Percent area infested"
+* Removed feedback easter egg. Lame.
+* Removed empty space on main screen for "upload sightings". Raw resources are still there, though
+
+Version 1.06b *(9-25-2013)*
 -----------------------------
 * Treatment attribute in json
 * Help button dialogs replace toasts

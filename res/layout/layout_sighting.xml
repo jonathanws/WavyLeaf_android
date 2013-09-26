@@ -28,7 +28,7 @@
 	                android:id="@+id/tv_percentageseen"
                 	android:layout_width="0dp"
                 	android:layout_height="match_parent"
-                	android:layout_weight="1"
+                	android:layout_weight="3"
                 	android:background="#FFFFFF"
                 	android:gravity="center_vertical"
                 	android:paddingLeft="8dp"
@@ -238,6 +238,7 @@
                 android:layout_marginRight="8dp"
                 android:background="#669900" />
             
+            <!--
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="24dp"
@@ -247,6 +248,7 @@
                 android:textStyle="italic"
                 android:textSize="14sp"
                 android:text="This may take a few moments" />
+                -->
 
             <LinearLayout
                 android:layout_width="match_parent"

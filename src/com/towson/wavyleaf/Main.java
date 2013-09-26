@@ -36,7 +36,7 @@ public class Main extends SherlockActivity implements OnClickListener {
 	
 	private static final int ONSTART = 6;
 	protected static final int notifReminderID = 24885250, notifTripID = 24885251; // Used for notifications
-	protected Button bu_new, bu_trip, bu_upload;
+	protected Button bu_new, bu_trip;//, bu_upload;
 	protected TextView tripInterval, tripSelection;//, tally, tallyNumber;
 	NotificationManager nm;
 //	public CountDownTimer ctd;
@@ -67,7 +67,7 @@ public class Main extends SherlockActivity implements OnClickListener {
 		
 		bu_new = (Button) findViewById(R.id.button_new);
 		bu_trip = (Button) findViewById(R.id.button_trip);
-		bu_upload = (Button) findViewById(R.id.button_uploadsightings);
+//		bu_upload = (Button) findViewById(R.id.button_uploadsightings);
 		tripInterval = (TextView) findViewById(R.id.tv_tripinterval);
 		tripSelection = (TextView) findViewById(R.id.tv_tripselection);
 		
@@ -81,7 +81,7 @@ public class Main extends SherlockActivity implements OnClickListener {
 		bu_trip.setOnClickListener(this);
 //		bu_upload.setOnClickListener(this);
 		
-		bu_upload.setVisibility(View.INVISIBLE);
+//		bu_upload.setVisibility(View.INVISIBLE);
 	}
 	
 	@Override
@@ -187,10 +187,10 @@ public class Main extends SherlockActivity implements OnClickListener {
 //				if (ctd != null)
 //					ctd.cancel();
 			}
-		} else if (view == this.bu_upload) {
-			Intent pushIntent = new Intent(this, UploadActivity.class);
-			this.startActivity(pushIntent);	
-		}
+		} //else if (view == this.bu_upload) {
+//			Intent pushIntent = new Intent(this, UploadActivity.class);
+//			this.startActivity(pushIntent);	
+//		}
 	}
 	
 	@Deprecated
@@ -274,7 +274,7 @@ public class Main extends SherlockActivity implements OnClickListener {
 //			bu_upload.setTextColor(getResources().getColor(R.color.black));
 //			setButtonDrawable(bu_upload, R.drawable.ic_main_upload);
 //		}
-		bu_upload.setVisibility(View.INVISIBLE);
+//		bu_upload.setVisibility(View.INVISIBLE);
 	}
 	
 	protected void intervalSelected(String timeNum, String timeString, int milli) {
@@ -411,8 +411,8 @@ public class Main extends SherlockActivity implements OnClickListener {
 				"Name:\t\t\t\t\t\t" + name + "\n" +
 				"Email:\t\t\t\t\t\t\t" + source_email + "\n" +
 				"Version:\t\t\t\t\t" + version + "\n" +
-				"Device:\t\t\t\t\t\t" + getDeviceName() + "\n" +
-				"User Cool:\t\t\tenh, not sure" + "\n\n" +
+				"Device:\t\t\t\t\t\t" + getDeviceName() + "\n\n" +
+//				"User Cool:\t\t\tenh, not sure" + "\n\n" +
 				"- - - - - - - - - - -" + "\n\n");
 		
 		return emailIntent;

@@ -10,7 +10,7 @@
         android:id="@+id/menu_submit"
         android:orderInCategory="100"
         android:showAsAction="always"
-        android:title="Done" />
+        android:title="Save" />
     
     <item
         android:id="@+id/menu_refresh"

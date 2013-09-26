@@ -31,6 +31,7 @@
             android:text="@string/layout_main_trip"
             android:textAppearance="?android:attr/textAppearanceLarge" />
         
+        <!--
         <Button
             android:id="@+id/button_uploadsightings"
             style="@style/DashboardButton"
@@ -40,7 +41,7 @@
             android:gravity="left|center_vertical"
             android:text="@string/layout_main_uploadsightings"
             android:textAppearance="?android:attr/textAppearanceLarge" />
-            
+           --> 
         
     </com.towson.wavyleaf.DashboardLayout>
     
