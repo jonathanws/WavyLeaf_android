@@ -2,6 +2,11 @@ Change Log
 ===============================================================================
 
 
+Version 1.06d *(10-3-2013)*
+-----------------------------
+* Added grotesque help buttons.
+* Cried internally.
+
 Version 1.06c *(9-26-2013)*
 -----------------------------
 * Changed weights of textview headers for Percentage so longer string can fit. What to do about help icons?

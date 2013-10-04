@@ -58,7 +58,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 public class Sighting extends SherlockFragmentActivity {
 	
-	private static final int LEGAL = 1, HELP = 2, NO_GPS = 4; // Used for calling dialogs; arbitrary numbers
+	private static final int LEGAL = 1, HELP_TREATMENT = 2, HELP_PERCENT = 3, NO_GPS = 4; // Used for calling dialogs; arbitrary numbers
 	private static final int EDIT_REQUEST = 1338;
 	private boolean gpsEnabled = false;
 	private boolean playAPKEnabled = false;
@@ -69,7 +69,7 @@ public class Sighting extends SherlockFragmentActivity {
 	protected CheckBox cb;
 	protected EditText notes, etarea;
 	protected GoogleMap mMap;
-	protected ImageButton ib, ib_treatment;
+	protected ImageButton ib, ib_percent, ib_treatment;
 	protected Location currentEditableLocation; // Used by edit feature
 	protected LocationManager mLocationManager;
 	protected RadioGroup rg;
@@ -235,11 +235,19 @@ public class Sighting extends SherlockFragmentActivity {
 			}
 		});
 		
+		ib_percent = (ImageButton) findViewById(R.id.ib_percent);
+		// Listener for help button in Percentage Infested category
+		ib_percent.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				showDialog(HELP_PERCENT);
+			}
+		});
+		
 		ib_treatment = (ImageButton) findViewById(R.id.ib_treatment);
 		// Listener for help button in Treatment catgeory
 		ib_treatment.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				showDialog(HELP);
+				showDialog(HELP_TREATMENT);
 //				Toast.makeText(getApplicationContext(), "Specify the type of treatment that was done to this area", Toast.LENGTH_LONG).show();
 			}
 		});
@@ -582,13 +590,21 @@ public class Sighting extends SherlockFragmentActivity {
 				})
 				.create();
 				
-			case HELP:
+			case HELP_PERCENT:
 				return new AlertDialog.Builder(this)
-				.setTitle("Title")
-				.setMessage("Message")
+				.setTitle("Help")
+				.setMessage(getResources().getString(R.string.layout_sighting_help_percent))
 				.setPositiveButton("Got it", null)
 				.setNegativeButton("Cancel", null)
 				.create();
+				
+			case HELP_TREATMENT:
+				return new AlertDialog.Builder(this)
+				.setTitle("Help")
+				.setMessage(getResources().getString(R.string.layout_sighting_help_treatment))
+				.setPositiveButton("Got it", null)
+				.setNegativeButton("Cancel", null)
+				.create(); 
 				
 //			case CAMERA:
 //				return new AlertDialog.Builder(this)

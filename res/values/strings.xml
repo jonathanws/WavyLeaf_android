@@ -38,12 +38,14 @@
     <string name="layout_login_confidence_question_wavyleaf">Confidence in wavyleaf Identification?</string>
     
     <string name="layout_sighting_picturenotes">PICTURE/NOTES</string>
-    <string name="layout_sighting_percentage">PERCENT AREA INFESTED</string>
+    <string name="layout_sighting_percentage">PERCENT INFESTED</string>
     <string name="layout_sighting_area">AREA INFESTED</string>
     <string name="layout_sighting_coordinates">COORDINATES</string>
     <string name="layout_sighting_camera">Choose a picture</string>
     <string name="layout_sighting_confirmcoordinates">Coordinates are correct</string>
     <string name="layout_sighting_treatment">TREATMENT</string>
+    <string name="layout_sighting_help_percent">How much of the area seen is covered by wavyleaf?</string>
+    <string name="layout_sighting_help_treatment">What treatment, if any, was conducted?</string>
     <string name="latitude">Latitude</string>
     <string name="longitude">Longitude</string>
     
