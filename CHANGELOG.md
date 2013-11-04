@@ -2,6 +2,12 @@ Change Log
 ===============================================================================
 
 
+Version 1.06e *(11-3-2013)*
+-----------------------------
+** This version needs minor changes before it can go out **
+* Menu / intents at minimum need to be corrected
+* Added additional Help class, and Help class 2.
+
 Version 1.06d *(10-3-2013)*
 -----------------------------
 * Added grotesque help buttons.

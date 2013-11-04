@@ -120,6 +120,11 @@ public class Main extends SherlockActivity implements OnClickListener {
 				goToHelp();
 				return true;
 				
+			case R.id.menu_help_expanded:
+				Intent helpIntent = new Intent(this, HelpExpanded.class);
+				this.startActivity(helpIntent);
+				return true;
+				
 			case R.id.menu_settings:
 				Intent settingsIntent = new Intent(this, Settings.class);
 				this.startActivity(settingsIntent);
@@ -440,7 +445,7 @@ public class Main extends SherlockActivity implements OnClickListener {
 	// My name is Android.
 	// Since i'm stupid, I make developers call extaneous methods to run code instead of implementing it right there
 	protected void goToHelp() {
-		Intent helpIntent = new Intent(this, Help.class);
+		Intent helpIntent = new Intent(this, Help2.class);
 		helpIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 		startActivity(helpIntent);
 	}

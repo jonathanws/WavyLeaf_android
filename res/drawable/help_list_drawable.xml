@@ -1,0 +1,8 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    
+    <item android:state_checked="true" android:state_pressed="true" android:drawable="@drawable/ic_minus_green"/>
+    <item android:state_checked="false" android:state_pressed="true" android:drawable="@drawable/ic_plus_green"/>    
+    <item android:state_checked="false" android:drawable="@drawable/ic_plus"/>
+    <item android:drawable="@drawable/ic_minus"/>
+
+</selector>

@@ -65,6 +65,16 @@
             android:theme="@style/Theme.greeeeeen" />
         
         <activity
+            android:name="com.towson.wavyleaf.Help2"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.greeeeeen" />
+        
+        <activity
+            android:name="com.towson.wavyleaf.HelpExpanded"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.greeeeeen" />
+        
+        <activity
             android:name="com.towson.wavyleaf.Login"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
