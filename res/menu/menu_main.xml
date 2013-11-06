@@ -5,10 +5,12 @@
         android:showAsAction="never"
         android:title="Help" />
     
+    <!-- 
     <item
         android:id="@+id/menu_help_expanded"
         android:showAsAction="never"
         android:title="Help 2" />
+    -->
 
     <item
         android:id="@+id/menu_settings"
