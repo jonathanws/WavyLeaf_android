@@ -5,7 +5,7 @@ Wavyleaf
   <img src="http://i.imgur.com/OtqzV7d.png" alt="Wavyleaf"/>
 </p>
 
-Wavyleaf is an Android application made for Scouting/reporting Wavy Leaf sightings
+Wavyleaf is an Android application made for scouting/reporting Wavy Leaf sightings
 
 GitHub: https://github.com/jonathanws/WavyLeaf_android/
 
@@ -15,6 +15,7 @@ Developed By
 * Jon Smoley - jsmole1@students.towson.edu
 * Mohsin Majid - mmajid1@students.towson.edu
 * Eric Forbes - eforbe2@students.towson.edu
+* Jesse Day - jday3@students.towson.edu
 
 Setup
 =====
