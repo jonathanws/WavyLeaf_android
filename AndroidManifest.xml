@@ -5,7 +5,7 @@
 
     <uses-sdk
         android:minSdkVersion="8"
-        android:targetSdkVersion="17" />
+        android:targetSdkVersion="18" />
 
     <uses-feature
         android:glEsVersion="0x00020000"
@@ -59,18 +59,8 @@
             android:theme="@style/Theme.Sherlock.Light.Dialog" />
         
         <activity
-            android:name="com.towson.wavyleaf.Help"
-            android:label="Help"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.greeeeeen" />
-        
-        <activity
-            android:name="com.towson.wavyleaf.Help2"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.greeeeeen" />
-        
-        <activity
             android:name="com.towson.wavyleaf.HelpExpanded"
+            android:label="Help"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.greeeeeen" />
         
@@ -128,7 +118,7 @@
 
         <receiver android:name=".AlarmReceiver" />
 
-        <service android:name=".ReminderService" ></service>
+        <service android:name=".ReminderService" />
         
     </application>
 

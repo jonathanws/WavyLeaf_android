@@ -676,13 +676,16 @@ public class Sighting extends SherlockFragmentActivity {
 		boolean result = false;
 		
 		if (isToggleSelected()) {
-			if (hasCoordinates()) {
-				if (cb.isChecked()) {
-					result = true;
+			if (hasAreaInfested()) {
+				if (hasCoordinates()) {
+					if (cb.isChecked()) {
+						result = true;
+					} else
+						Toast.makeText(getApplicationContext(), "Verify your coordinates with the checkbox", Toast.LENGTH_SHORT).show();
 				} else
-					Toast.makeText(getApplicationContext(), "Verify your coordinates with the checkbox", Toast.LENGTH_SHORT).show();
+					Toast.makeText(getApplicationContext(), "Error determining position", Toast.LENGTH_SHORT).show();
 			} else
-				Toast.makeText(getApplicationContext(), "Error determining position", Toast.LENGTH_SHORT).show();
+				Toast.makeText(getApplicationContext(), "Enter a value for Area Infested", Toast.LENGTH_SHORT).show();
 		} else
 			Toast.makeText(getApplicationContext(), "Select a percentage", Toast.LENGTH_SHORT).show();
 		
@@ -712,6 +715,16 @@ public class Sighting extends SherlockFragmentActivity {
 		boolean result = false;
 		
 		if (!(currentEditableLocation == null))
+			result = true;
+		
+		return result;
+	}
+	
+	// See if user has entered an area infested
+	public boolean hasAreaInfested() {
+		boolean result = false;
+		
+		if (!(etarea.getText().toString().trim().equals("")))
 			result = true;
 		
 		return result;

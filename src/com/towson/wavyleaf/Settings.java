@@ -18,7 +18,6 @@ public class Settings extends SherlockPreferenceActivity implements OnSharedPref
 	public static final String KEY_CHECKBOX_NOISE = "preference_noise";
 	public static final String KEY_EMAIL = "preference_email";
 	public static final String KEY_NAME = "preference_name";
-	public static final String KEY_PUSH = "preference_push";
 	public static final String KEY_USER_ID = "preference_user_id";
 	public static final String KEY_SINGLETALLY = "preference_singletally";
 	public static final String KEY_TRIPTALLY = "preference_triptally";
@@ -81,20 +80,18 @@ public class Settings extends SherlockPreferenceActivity implements OnSharedPref
 		// Instantiation
 		Preference p_age = (Preference) findPreference(KEY_BIRTHYEAR);
 		Preference p_name = (Preference) findPreference(KEY_NAME);
-//		Preference p_push = (Preference) findPreference(KEY_PUSH);
 		Preference p_tally_single = findPreference(KEY_SINGLETALLY);
 		Preference p_tally_trip = findPreference(KEY_TRIPTALLY);
 		CheckBoxPreference cbp_vibrate = (CheckBoxPreference) findPreference(KEY_CHECKBOX_VIBRATE);
 		CheckBoxPreference cbp_noise = (CheckBoxPreference) findPreference(KEY_CHECKBOX_NOISE);
 		
 		// Read values
-		String string_name = sp.getString(KEY_NAME, "null");
 		String string_age = sp.getString(KEY_BIRTHYEAR, "null");
+		String string_name = sp.getString(KEY_NAME, "null");
 		int int_tally_single = sp.getInt(KEY_SINGLETALLY, 0);
 		int int_tally_trip = sp.getInt(KEY_TRIPTALLY, 0);
 		boolean boolean_vibrate = sp.getBoolean(KEY_CHECKBOX_VIBRATE, true);
 		boolean boolean_noise = sp.getBoolean(KEY_CHECKBOX_NOISE, true);
-//		boolean isEmpty = isDBEmpty();
 		
 		// Set Summaries
 		p_name.setSummary(capitalizeFirstLetter(string_name));
@@ -103,7 +100,6 @@ public class Settings extends SherlockPreferenceActivity implements OnSharedPref
 		p_tally_trip.setSummary(int_tally_trip + "");
 		cbp_vibrate.setChecked(boolean_vibrate);
 		cbp_noise.setChecked(boolean_noise);
-//		p_push.setEnabled(!isEmpty);
 	}
 	
 	private String capitalizeFirstLetter(String paramString) {

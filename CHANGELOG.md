@@ -2,6 +2,13 @@ Change Log
 ===============================================================================
 
 
+Version 1.06e *(11-24-2013)*
+-----------------------------
+* Incremented build for kitkat.
+* Deleted old Help classes
+* Added up navigation to new Help class
+* Added check for Area Infested
+
 Version 1.06e *(11-3-2013)*
 -----------------------------
 ** This version needs minor changes before it can go out **

@@ -3,6 +3,7 @@ package com.towson.wavyleaf;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 
 import com.actionbarsherlock.app.SherlockExpandableListActivity;
+import com.actionbarsherlock.view.MenuItem;
 
 public class HelpExpanded extends SherlockExpandableListActivity implements OnChildClickListener {
 
@@ -20,7 +22,7 @@ public class HelpExpanded extends SherlockExpandableListActivity implements OnCh
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-//		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		
 		ExpandableListView expandbleLis = getExpandableListView();
 		expandbleLis.setDividerHeight(0);
@@ -34,6 +36,19 @@ public class HelpExpanded extends SherlockExpandableListActivity implements OnCh
 		mNewAdapter.setInflater((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE), this);
 		getExpandableListView().setAdapter(mNewAdapter);
 		expandbleLis.setOnChildClickListener(this);
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+        case android.R.id.home:
+        		Intent mainIntent = new Intent(this, Main.class);
+        		mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        		startActivity(mainIntent);
+        		finish();
+        		return true;
+        }
+		return super.onOptionsItemSelected(item);
 	}
 
 	public void setGroupData() {
