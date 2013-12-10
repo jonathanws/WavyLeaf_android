@@ -1,53 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
-    <PreferenceCategory android:title="User" >
+    <PreferenceCategory android:title="@string/preference_user" >
         
         <Preference
             android:key="preference_name"
-            android:title="Name" />
+            android:title="@string/preference_user_name" />
         
         <Preference
             android:key="preference_birthyear"
-            android:title="Birth Year" />
+            android:title="@string/preference_user_birthyear" />
         
     </PreferenceCategory>
     
-    <PreferenceCategory android:title="Sightings" >
+    <PreferenceCategory android:title="@string/preference_sightings" >
         
         <Preference
             android:key="preference_singletally"
-            android:title="Single points submitted"
+            android:title="@string/preference_sightings_single"
             android:summary="0" />
         
         <Preference
             android:key="preference_triptally"
-            android:title="Trip points submitted"
+            android:title="@string/preference_sightings_trip"
             android:summary="0" />
                
     </PreferenceCategory>
     
-    <PreferenceCategory android:title="Noise" >
+    <PreferenceCategory android:title="@string/preference_noiseandvisual" >
         
         <CheckBoxPreference 
             android:key="preference_vibrate"
-            android:title="Vibrate during trips" />
+            android:title="@string/preference_noiseandvisual_vibrate" />
         
         <CheckBoxPreference 
             android:key="preference_noise"
-            android:title="Play sound during trips" />
+            android:title="@string/preference_noiseandvisual_playsound" />
+        
+        <CheckBoxPreference
+            android:key="preference_splash"
+            android:title="@string/preference_noiseandvisual_splash" />
         
     </PreferenceCategory>
     
-    <PreferenceCategory android:title="Other" >
+    <PreferenceCategory android:title="@string/preference_other" >
         
         <Preference
-            android:title="Version"
+            android:title="@string/preference_other_version"
             android:summary="@string/version" />
         
         <Preference
-            android:title="Rate this application"
-            android:summary="Google Play Store" >
+            android:title="@string/preference_other_rate"
+            android:summary="@string/preference_other_googleplaystore" >
             
             <intent
                 android:action="android.intent.action.VIEW"

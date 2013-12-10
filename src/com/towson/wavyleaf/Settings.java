@@ -13,15 +13,18 @@ import com.actionbarsherlock.view.MenuItem;
 
 public class Settings extends SherlockPreferenceActivity implements OnSharedPreferenceChangeListener {
 	
+	public static final String PREFERENCE = "preference_";
+	
 	public static final String KEY_BIRTHYEAR = "preference_birthyear";
-	public static final String KEY_CHECKBOX_VIBRATE = "preference_vibrate";
 	public static final String KEY_CHECKBOX_NOISE = "preference_noise";
+	public static final String KEY_CHECKBOX_VIBRATE = "preference_vibrate";
 	public static final String KEY_EMAIL = "preference_email";
 	public static final String KEY_NAME = "preference_name";
-	public static final String KEY_USER_ID = "preference_user_id";
 	public static final String KEY_SINGLETALLY = "preference_singletally";
+	public static final String KEY_SPLASH = PREFERENCE + "splash";
 	public static final String KEY_TRIPTALLY = "preference_triptally";
 	public static final String KEY_TRIPTALLY_CURRENT = "preference_triptally_current"; // Key for tally for only current trip
+	public static final String KEY_USER_ID = "preference_user_id";
 	
 	public static final String TRIP_ENABLED_KEY = "trip_enabled";
 	public static final String TRIP_INTERVAL = "trip_interval";
@@ -84,6 +87,7 @@ public class Settings extends SherlockPreferenceActivity implements OnSharedPref
 		Preference p_tally_trip = findPreference(KEY_TRIPTALLY);
 		CheckBoxPreference cbp_vibrate = (CheckBoxPreference) findPreference(KEY_CHECKBOX_VIBRATE);
 		CheckBoxPreference cbp_noise = (CheckBoxPreference) findPreference(KEY_CHECKBOX_NOISE);
+		CheckBoxPreference cbp_splash = (CheckBoxPreference) findPreference(KEY_SPLASH);
 		
 		// Read values
 		String string_age = sp.getString(KEY_BIRTHYEAR, "null");
@@ -92,6 +96,7 @@ public class Settings extends SherlockPreferenceActivity implements OnSharedPref
 		int int_tally_trip = sp.getInt(KEY_TRIPTALLY, 0);
 		boolean boolean_vibrate = sp.getBoolean(KEY_CHECKBOX_VIBRATE, true);
 		boolean boolean_noise = sp.getBoolean(KEY_CHECKBOX_NOISE, true);
+		boolean boolean_splash = sp.getBoolean(KEY_SPLASH, true);
 		
 		// Set Summaries
 		p_name.setSummary(capitalizeFirstLetter(string_name));
@@ -100,6 +105,7 @@ public class Settings extends SherlockPreferenceActivity implements OnSharedPref
 		p_tally_trip.setSummary(int_tally_trip + "");
 		cbp_vibrate.setChecked(boolean_vibrate);
 		cbp_noise.setChecked(boolean_noise);
+		cbp_splash.setChecked(boolean_splash);
 	}
 	
 	private String capitalizeFirstLetter(String paramString) {

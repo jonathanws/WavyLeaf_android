@@ -2,7 +2,16 @@ Change Log
 ===============================================================================
 
 
-Version 1.06e *(11-24-2013)*
+Version 1.06g *(12-10-2013)*
+-----------------------------
+** This version is not meant to be pushed until we receive drawables for the splash activity**
+* Added splash activity
+* Added splash layout
+* Added ability to disable splash activity. This also coincidentally removes the green action bar that would appear from the login activity when it shouldn't have. woop.
+* Changed preferences file to reference strings file
+* Added close() statements to database read()s
+
+Version 1.06f *(11-24-2013)*
 -----------------------------
 * Incremented build for kitkat.
 * Deleted old Help classes

@@ -72,10 +72,12 @@
             android:uiOptions="splitActionBarWhenNarrow"
             android:windowSoftInputMode="stateHidden" >
         
+            <!--
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            -->
         
         </activity>
         
@@ -108,6 +110,19 @@
             android:label="New Sighting"
             android:theme="@style/Theme.greeeeeen"
             android:windowSoftInputMode="stateHidden" />
+        
+        <activity
+            android:name="com.towson.wavyleaf.Splash"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Sherlock.Light.NoActionBar" >
+            
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            
+            </activity>
         
         <activity
             android:name="com.towson.wavyleaf.UploadActivity"

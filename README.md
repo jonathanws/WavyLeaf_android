@@ -20,7 +20,7 @@ Developed By
 Setup
 =====
 
-* This project requires both the [ActionBar Sherlock][3] and [Google Play Services libraries][2].
+* This project requires both the [ActionBar Sherlock][3] (4.2) and [Google Play Services libraries][2].
 * This project requires the Google Play Services Library in order to make use of Google Maps v2, and is available on all phones with OpenGl v2.0 and Android 2.2+.
 
 * For instructions on setting up [Google Play Services][1],

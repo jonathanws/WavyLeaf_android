@@ -89,5 +89,21 @@
     <string name="toggle_fifty_bold"><b>50-75%</b></string>
     <string name="toggle_seventyfive_reg">75-100%</string>
     <string name="toggle_seventyfive_bold"><b>75-100%</b></string>
+    
+    <string name="preference_noiseandvisual">NOISE / VISUAL</string>
+    <string name="preference_other">OTHER</string>
+    <string name="preference_sightings">SIGHTINGS</string>
+    <string name="preference_user">USER</string>
+    
+    <string name="preference_user_name">Name</string>
+    <string name="preference_user_birthyear">Birth Year</string>
+    <string name="preference_sightings_single">Single points submitted</string>
+    <string name="preference_sightings_trip">Trip points submitted</string>
+    <string name="preference_noiseandvisual_vibrate">Vibrate during trips</string>
+    <string name="preference_noiseandvisual_playsound">Play sound during trips</string>
+    <string name="preference_noiseandvisual_splash">Splash screen</string>
+    <string name="preference_other_version">Version</string>
+    <string name="preference_other_rate">Rate this application</string>
+    <string name="preference_other_googleplaystore">Google Play Store</string>
 
 </resources>

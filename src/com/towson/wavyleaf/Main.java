@@ -240,10 +240,13 @@ public class Main extends SherlockActivity implements OnClickListener {
 		SQLiteDatabase db = m_dbListData.getWritableDatabase();
 		
 		Cursor cur = db.rawQuery("SELECT * FROM " + DatabaseConstants.TABLE_NAME, null);
-		if (cur.moveToFirst())
+		if (cur.moveToFirst()) {
+			db.close();
 			return false;
-		else
+		} else {
+			db.close();
 			return true;
+		}
 	}
 	
 	// Determine state for Trip button, and for Upload sightings button

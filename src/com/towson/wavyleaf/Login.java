@@ -39,7 +39,7 @@ public class Login extends SherlockActivity {
 		
 		// If a user has done this all already, proceed to main
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-		if (!((sp.getBoolean(Settings.FIRST_RUN, false)) || (sp.getString(Settings.KEY_NAME, "null")) == "null")) {
+		if (!((sp.getBoolean(Settings.FIRST_RUN, true)) || (sp.getString(Settings.KEY_NAME, "null")) == "null")) {
 			Intent mainIntent = new Intent(this, Main.class);
 			mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 			startActivity(mainIntent);
