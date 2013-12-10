@@ -2,12 +2,18 @@ package com.towson.wavyleaf;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
+import android.preference.PreferenceManager;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+
 import com.actionbarsherlock.app.SherlockPreferenceActivity;
 import com.actionbarsherlock.view.MenuItem;
 
@@ -22,6 +28,7 @@ public class Settings extends SherlockPreferenceActivity implements OnSharedPref
 	public static final String KEY_NAME = "preference_name";
 	public static final String KEY_SINGLETALLY = "preference_singletally";
 	public static final String KEY_SPLASH = PREFERENCE + "splash";
+	public static final String KEY_THEME =  PREFERENCE + "theme";
 	public static final String KEY_TRIPTALLY = "preference_triptally";
 	public static final String KEY_TRIPTALLY_CURRENT = "preference_triptally_current"; // Key for tally for only current trip
 	public static final String KEY_USER_ID = "preference_user_id";
@@ -31,16 +38,39 @@ public class Settings extends SherlockPreferenceActivity implements OnSharedPref
 	public static final String TRIP_INTERVAL_MILLI="trip_interval_milli";
 	public static final String FIRST_RUN = "first_run"; 
 	public static final String CURRENT_COUNTDOWN_SECOND = "current_countdown";
+	
+	public static final int DARK_THEME = R.style.Theme_Sherlock;
+	public static final int LIGHT_THEME = R.style.Theme_Sherlock_Light;
+	public static int current_theme = DARK_THEME;
 
 	@Deprecated
 	@Override
 	protected void onCreate(Bundle paramBundle) {
+		setTheme(current_theme);
 		super.onCreate(paramBundle);
 		
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		addPreferencesFromResource(R.xml.preferences);
 		getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
 		setSummaries();
+		
+		// Implement a long click listener for select elements
+		// http://kmansoft.com/2011/08/29/implementing-long-clickable-preferences/
+		ListView listView = getListView();
+        listView.setOnItemLongClickListener(new OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                ListView listView = (ListView) parent;
+                ListAdapter listAdapter = listView.getAdapter();
+                Object obj = listAdapter.getItem(position);
+                
+                if (obj != null && obj instanceof View.OnLongClickListener) {
+                    View.OnLongClickListener longListener = (View.OnLongClickListener) obj;
+                    return longListener.onLongClick(view);
+                }
+                return false;
+            }
+        });
 	}
 	
 	@Override

@@ -4,6 +4,12 @@ Change Log
 
 Version 1.06g *(12-10-2013)*
 -----------------------------
+** See notes below **
+* Added little easter egg in settings :)
+* Added easter egg helper class
+
+Version 1.06g *(12-10-2013)*
+-----------------------------
 ** This version is not meant to be pushed until we receive drawables for the splash activity**
 * Added splash activity
 * Added splash layout

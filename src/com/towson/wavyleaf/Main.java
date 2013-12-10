@@ -122,6 +122,14 @@ public class Main extends SherlockActivity implements OnClickListener {
 				return true;
 				
 			case R.id.menu_settings:
+				// This would be moved to before the super() call in the Settings() class, but
+				// apparently you cannot make a SharedPreferences call before the super() call.
+				SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+				if (sp.getBoolean(Settings.KEY_THEME, true))
+					Settings.current_theme = Settings.DARK_THEME;
+				else
+					Settings.current_theme = Settings.LIGHT_THEME;
+				
 				Intent settingsIntent = new Intent(this, Settings.class);
 				this.startActivity(settingsIntent);
 				return true;
